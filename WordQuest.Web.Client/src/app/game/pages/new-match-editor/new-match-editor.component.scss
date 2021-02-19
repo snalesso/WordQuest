@@ -1,0 +1,51 @@
+@import "~bootstrap/scss/bootstrap.scss";
+
+// .radio-card {
+//     border: $input-border-width solid $input-border-color;
+//     @include border-radius($input-border-radius, 0);
+//     background-color: $white;
+//     padding-top: $input-btn-padding-y;
+//     padding-bottom: $input-btn-padding-y;
+//     padding-left: $input-btn-padding-x;
+//     padding-right: $input-btn-padding-x;
+
+//     input[type=radio] {
+//         display: none;
+//         // :checked + .radio-card {
+//         //     border: 1px solid black !important;
+//         // }
+//     }
+
+//     :hover {
+//         cursor: pointer;
+//     }
+// }
+
+.radio-card {
+    width: 100%;
+    font-size: 1rem;
+    margin: 0;
+
+    :hover {
+        cursor: pointer;
+    }
+
+    input[type=radio] {
+      display: none;
+    }
+
+    input[type=radio] + .radio-card-content {
+        border: $input-border-width solid $input-border-color;
+        @include border-radius($input-border-radius, 0);
+        background-color: $white;
+        padding: map-get($spacers, 2);
+    }
+
+    input[type=radio]:checked + .radio-card-content {
+        border: $input-border-width solid $primary;
+    }
+
+    input[type=radio]:checked + .checkable-text {
+        color: $primary;
+    }
+  }

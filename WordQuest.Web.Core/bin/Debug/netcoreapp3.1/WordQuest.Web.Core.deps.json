@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "WordQuest.Web.Core/1.0.0": {
+        "dependencies": {
+          "WordQuest.Core": "1.0.0"
+        },
+        "runtime": {
+          "WordQuest.Web.Core.dll": {}
+        }
+      },
+      "WordQuest.Core/1.0.0": {
+        "runtime": {
+          "WordQuest.Core.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "WordQuest.Web.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "WordQuest.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

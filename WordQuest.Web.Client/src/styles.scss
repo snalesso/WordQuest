@@ -1,0 +1,77 @@
+/* You can add global styles to this file, and also import other style files */
+// @import "../node_modules/bootstrap/scss/variables.scss";
+// @import "~bootstrap/scss/mixins/_buttons.scss";
+@import "~bootstrap/scss/bootstrap.scss";
+@import "./variables.scss";
+
+// $ncb-color: #7859ff;
+// $ncb-color-hover: lighten($ncb-color, 10%);
+// @include button-outline-variant($color: $ncb-color, $color-hover: color-yiq($ncb-color), $active-background: $ncb-color, $active-border: $ncb-color);
+
+.border-transparent {
+    border: $input-border-width solid transparent;
+}
+
+.form-control-border {
+    border: $input-border-width solid $input-border-color;
+    // Note: This has no effect on <select>s in some browsers, due to the limited stylability of `<select>`s in CSS.
+    // @include border-radius($input-border-radius, 0);
+}
+
+// .grabbable{
+//   cursor: grab;
+// }
+
+// .clickable{
+//   cursor: pointer;
+// }
+
+// $token-bg-normal: rgb(248, 249, 250);
+// $token-border-normal: rgb(206, 212, 218);
+
+// $token-bg-selected: darken($token-bg-normal, 15%);
+// $token-border-selected: darken($token-border-normal, 15%);
+
+// $token-bg-disabled: lighten($token-bg-normal, 15%);
+// $token-border-disabled: lighten($token-border-normal, 15%);
+
+// $token-bg-selected-disabled: lighten($token-bg-selected, 15%);
+// $token-border-selected-disabled: lighten($token-border-selected, 15%);
+
+.wrap-panel {
+    // display: flex;
+    // flex-wrap: wrap;
+    border: $input-border-width solid $input-border-color;
+    background-color: $white;
+
+    // button:hover:not(.active){
+    //     color: $primary ;
+    //     background-color: transparent !important;
+    // }
+
+    // .wrap-panel-item {
+    //   border-style: solid;
+    //   border-width: 1px;
+    //   border-radius: 4px;
+
+    //   background-color: $token-bg-normal;
+    //   border-color: $token-border-normal;
+    // }
+    // .selected {
+    //   background-color: $token-bg-selected;
+    //   border-color: $token-border-selected;
+    // }
+
+    // &.disabled {
+    //   .wrap-panel-item {
+    //     background-color: $token-bg-disabled;
+    //     border-color: $token-border-disabled;
+    //     cursor: default !important;
+    //   }
+    //   .selected {
+    //     background-color: $token-bg-selected-disabled;
+    //     border-color: $token-border-selected-disabled;
+    //     cursor: default !important;
+    //   }
+    // }
+}

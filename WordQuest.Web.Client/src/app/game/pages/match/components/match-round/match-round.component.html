@@ -1,0 +1,10 @@
+<div class="row"
+     *ngIf="currentRound$ | async as round">
+    <div class="col">
+
+        <p>Round #{{round.index}}</p>
+
+        <app-match-round-phases></app-match-round-phases>
+
+    </div>
+</div>

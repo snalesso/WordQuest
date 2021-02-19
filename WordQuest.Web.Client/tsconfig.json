@@ -1,0 +1,27 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "target": "es2015",
+    "module": "es2020",
+    "lib": [
+      "es2017",
+      "es2015",
+      "dom"
+    ]
+  },
+  "angularCompilerOptions": {
+    // "strictInjectionParameters": true,
+    // "strictInputAccessModifiers": true,
+    // "strictTemplates": true
+  }
+}

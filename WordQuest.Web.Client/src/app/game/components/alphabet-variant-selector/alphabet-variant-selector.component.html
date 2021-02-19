@@ -1,0 +1,16 @@
+<select class="form-control"
+        id="languageSelect"
+        name="languageSelect"
+        [ngModel]="(selectedAlphabet$ | async)"
+        [disabled]="!availableAlphabets$"
+        (ngModelChange)="selectAlphabet($event)">
+    <option [ngValue]="null"
+            disabled
+            hidden>
+        <span>Select a language &hellip;</span>
+    </option>
+    <option [ngValue]="alph"
+            *ngFor="let alph of (availableAlphabets$ | async)">
+        <span>{{alph.language.nativeName}}</span>
+    </option>
+</select>

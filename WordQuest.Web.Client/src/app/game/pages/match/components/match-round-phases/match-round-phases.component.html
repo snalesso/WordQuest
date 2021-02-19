@@ -1,0 +1,11 @@
+<div class="row"
+     *ngIf="currentRound$ | async as currentRound">
+    <div class="col">
+
+        <p>Letter: {{currentRound.char}}</p>
+
+        <app-match-round-words-phase *ngIf="!currentRound.wordsPhase.endDateTime"></app-match-round-words-phase>
+        <app-match-round-validation-phase *ngIf="!!currentRound.validationPhase.endDateTime"></app-match-round-validation-phase>
+
+    </div>
+</div>

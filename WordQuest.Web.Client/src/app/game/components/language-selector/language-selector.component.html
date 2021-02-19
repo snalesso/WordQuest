@@ -1,0 +1,16 @@
+<select class="form-control"
+        id="languageSelect"
+        [disabled]="!(languages$ | async)"
+        [ngModel]="selectedLanguage$ | async"
+        (ngModelChange)="selectLanguage($event)">
+    <option [ngValue]="null"
+            disabled
+            hidden>
+        <span *ngIf="!(languages$ | async)">Loading &hellip;</span>
+        <span *ngIf="languages$ | async">Select a language &hellip;</span>
+    </option>
+    <option [ngValue]="lang.key"
+            *ngFor="let lang of languages$ | async | keyvalue">
+        <span>{{lang.value}}</span>
+    </option>
+</select>

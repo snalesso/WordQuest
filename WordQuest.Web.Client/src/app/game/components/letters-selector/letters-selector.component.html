@@ -1,0 +1,11 @@
+<div class="d-flex flex-wrap m-n1">
+    <button class="btn btn-outline-primary m-1 px-3"
+            [attr.aria-pressed]="!!item.isSelected"
+            [class.active]="!!item.isSelected"
+            type="button"
+            (click)="toggleSelection(item)"
+            *ngFor="let item of (selectableChars$ | async)">
+        <p class="text-monospace m-0">{{item.value}}</p>
+    </button>
+    <!-- <p *ngFor="let sc of (selectableChars$ | async)">{{sc.value}}</p> -->
+</div>

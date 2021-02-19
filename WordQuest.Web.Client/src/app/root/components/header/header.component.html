@@ -1,0 +1,128 @@
+<!-- Image and text -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light">
+
+    <a class="navbar-brand"
+       routerLink="/">
+        <!-- <img src="/docs/4.4/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
+        <!-- <fa-icon [icon]="['fas', 'wheelchair']" size="2x" class="mr-2 align-middle"></fa-icon> -->
+        <span class="mr-2 align-middle">
+            <fa-icon [icon]="['fas', 'spell-check']"
+                     size="2x"
+                     [fixedWidth]="true"></fa-icon>
+            <!-- <i class="fab fa-accessible-icon fa-2x fa-fw"></i> -->
+        </span>
+        <span class="align-middle">
+            <span>{{appDisplayName}}</span>
+            <!-- <span>Il gioco delle SEDIE</span> -->
+        </span>
+    </a>
+
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse"
+         id="navbarSupportedContent">
+
+        <ul class="navbar-nav mx-auto">
+
+            <!-- <li class="nav-item" *ngFor="let link of links">
+                <a class="nav-link" routerLink="./{{link.path}}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{link.data.UI.navbar.labelKey}}</a>
+            </li> -->
+
+            <li class="nav-item">
+                <a class="nav-link"
+                   routerLink="./matches/new"
+                   routerLinkActive="active"
+                   [routerLinkActiveOptions]="{ exact: true }">Create</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link"
+                   routerLink="./matches/eCbS7eKs87o"
+                   routerLinkActive="active"
+                   [routerLinkActiveOptions]="{ exact: true }">Fake match</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link"
+                   routerLink="./matches/test"
+                   routerLinkActive="active"
+                   [routerLinkActiveOptions]="{ exact: true }">Game tests</a>
+            </li>
+
+            <!-- <li class="nav-item">
+                <a class="nav-link" routerLink="./test" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Test</a>
+            </li> -->
+
+            <!-- <li class="nav-item">
+                <a class="nav-link" routerLink="./matches" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Join</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="./guide" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Guide</a>
+            </li> -->
+
+            <!-- <li class="nav-item">
+                <a class="nav-link" routerLink="./matches/new/sortableJS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">SortableJS</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" routerLink="./matches/new/amcdk" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Angular Material CDK</a>
+            </li> -->
+
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+
+            <li class="nav-item">
+                <button class="btn btn-outline nav-link active"
+                        role="button">
+                    <!-- <span>Sound FX</span>
+                    <span>&nbsp;</span> -->
+                    <!-- <span class="fas fa-volume-mute fa-fw"></span>
+                    <span class="far fa-bell fa-fw"></span> -->
+                    <fa-icon [icon]="['fas', 'bell-slash']"
+                             [fixedWidth]="true"></fa-icon>
+                </button>
+
+                <!-- <a class="nav-link" role="button" href="javascript:void(0);" title="Sound FX disabled. Click to enable.">
+                    <span class="fas fa-volume-mute 2x fa-fw"></span>
+                </a> -->
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle active"
+                   href="javascript:void(0);"
+                   id="navbarDropdownMenuLink"
+                   role="button"
+                   data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false">
+                    <span
+                          *ngIf="(selectedLanguage$ | async) as language; else noSelectedLang">{{language.nativeName}}</span>
+                    <ng-template #noSelectedLang>
+                        <span>-no lang-</span>
+                    </ng-template>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right"
+                     aria-labelledby="navbarDropdownMenuLink">
+                    <button class="dropdown-item"
+                            (click)="setLanguageAsync(lang)"
+                            *ngFor="let lang of (availableLanguages$ | async)">
+                        <span>{{lang.nativeName}}</span>
+                    </button>
+                </div>
+            </li>
+
+        </ul>
+
+    </div>
+
+</nav>

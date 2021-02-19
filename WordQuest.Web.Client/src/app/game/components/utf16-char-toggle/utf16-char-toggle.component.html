@@ -1,0 +1,13 @@
+<button class="btn btn-outline-primary m-1 px-3"
+        [class.active]="isSelected"
+        type="button"
+        data-toggle="button"
+        [attr.aria-pressed]="isSelected">
+    <p class="text-monospace text-uppercase m-0">{{char}}</p>
+</button>
+
+<!-- <p>{{char}}</p> -->
+
+<!-- <button class="btn btn-outline-primary m-1 px-3" [class.active]="item.isSelected" type="button" data-toggle="button" [attr.aria-pressed]="item.isSelected" *ngFor="let item of (selectableCharCodes$ | async)">
+    <p class="text-monospace text-uppercase m-0">{{getCharFromCharCode(item.value)}}</p>
+</button> -->

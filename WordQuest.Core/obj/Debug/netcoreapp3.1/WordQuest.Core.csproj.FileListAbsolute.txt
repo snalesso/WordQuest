@@ -1,0 +1,12 @@
+Z:\WordQuest\WordQuest.Core\bin\Debug\netcoreapp3.1\WordQuest.Core.deps.json
+Z:\WordQuest\WordQuest.Core\bin\Debug\netcoreapp3.1\WordQuest.Core.dll
+Z:\WordQuest\WordQuest.Core\bin\Debug\netcoreapp3.1\WordQuest.Core.pdb
+Z:\WordQuest\WordQuest.Core\obj\Debug\netcoreapp3.1\WordQuest.Core.csprojAssemblyReference.cache
+Z:\WordQuest\WordQuest.Core\obj\Debug\netcoreapp3.1\WordQuest.Core.AssemblyInfoInputs.cache
+Z:\WordQuest\WordQuest.Core\obj\Debug\netcoreapp3.1\WordQuest.Core.AssemblyInfo.cs
+Z:\WordQuest\WordQuest.Core\obj\Debug\netcoreapp3.1\WordQuest.Core.csproj.CoreCompileInputs.cache
+Z:\WordQuest\WordQuest.Core\obj\Debug\netcoreapp3.1\WordQuest.Core.dll
+Z:\WordQuest\WordQuest.Core\obj\Debug\netcoreapp3.1\WordQuest.Core.pdb
+Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Core.deps.json
+Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Core.dll
+Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Core.pdb

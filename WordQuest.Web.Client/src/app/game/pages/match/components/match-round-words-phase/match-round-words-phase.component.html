@@ -1,0 +1,20 @@
+<div class="row"
+     *ngIf="match$ | async as match">
+    <div class="col">
+
+        <form>
+
+            <div class="row"
+                 *ngFor="let cat of (categories$ | async)">
+                <div class="col">
+
+                    <app-word-input [category]="cat"
+                                    [matchSettings]="matchSettings"></app-word-input>
+
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>
