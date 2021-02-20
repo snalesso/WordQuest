@@ -1,9 +1,7 @@
-﻿using WordQuest.Culture.Domain;
-using WordQuest.Web.DTOs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using WordQuest.Culture.Domain;
 
 namespace WordQuest.Web.Functions.MSAzure.Functions.v2
 {

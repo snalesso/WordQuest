@@ -21,9 +21,9 @@ namespace WordQuest.Culture.Domain
 
     public class Language
     {
-        public int Id { get; init; }
+        public int Id { get; set; }
 
-        public string NativeName { get; init; }
+        public string NativeName { get; set; }
 
         public LCID LCID { get; set; }
         public string ISO_639_1 { get; set; }

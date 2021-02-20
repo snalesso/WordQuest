@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using WordQuest.Web.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using WordQuest.Web.DTOs;
 
 namespace WordQuest.Web.Functions.MSAzure.Functions.v2
 {
@@ -86,12 +86,14 @@ namespace WordQuest.Web.Functions.MSAzure.Functions.v2
             //    ));
 
             return categoryNames
-                .Select((categoryName, index) => new CategoryHeaderDto(
+                .Select((categoryName, index) => new CategoryHeaderDto()
+                {
                     //AlphabetId = alphabetId,
                     //LanguageId = languageId,
-                    index, // + (alphabetId * 100) + (languageId * 1000),
-                     categoryName,
-                    $"Description for \"{categoryName}\" of language #{languageId} ..."));
+                    Id = index, // + (alphabetId * 100) + (languageId * 1000),
+                    Name = categoryName,
+                    Description = $"Description for \"{categoryName}\" of language #{languageId} ..."
+                });
         }
     }
 }

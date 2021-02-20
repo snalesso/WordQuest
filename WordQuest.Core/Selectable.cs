@@ -9,7 +9,7 @@
         }
         public Selectable(T value) : this(value, false) { }
 
-        public T Value { get; init; }
+        public T Value { get; set; }
         public bool IsSelected { get; set; }
     }
 

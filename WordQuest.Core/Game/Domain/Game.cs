@@ -19,29 +19,29 @@ namespace WordQuest.Game.Domain
 
     public class Category
     {
-        public int LanguageId { get; init; }
-        //public AlphabetFamily AlphabetFamily { get; init; }
-        public string Name { get; init; }
-        public string Description { get; init; }
+        public int LanguageId { get; set; }
+        //public AlphabetFamily AlphabetFamily { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
         [Obsolete("temporary: on net5 use IReadOnlySet")]
-        public ISet<int> TagIds { get; init; }
-        public bool IsCustom { get; init; }
+        public ISet<int> TagIds { get; set; }
+        public bool IsCustom { get; set; }
     }
 
-    public record Word
-    {
-        public string Value { get; init; }
-    }
-    public record ValidatedWord : Word
-    {
-        public IReadOnlyDictionary<string, bool> Votes { get; init; } // player id, vote
-    }
+    //public record Word
+    //{
+    //    public string Value { get; set; }
+    //}
+    //public record ValidatedWord : Word
+    //{
+    //    public IReadOnlyDictionary<string, bool> Votes { get; set; } // player id, vote
+    //}
 
-    public record MatchRound
-    {
-        public DateTime StartDateTime { get; init; }
-        public IReadOnlyDictionary<string, ValidatedWord> PlayerWords { get; init; }
-    }
+    //public record MatchRound
+    //{
+    //    public DateTime StartDateTime { get; set; }
+    //    public IReadOnlyDictionary<string, ValidatedWord> PlayerWords { get; set; }
+    //}
 
     public enum MatchMode
     {

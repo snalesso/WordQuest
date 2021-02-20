@@ -3,18 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Primitives;
-using WordQuest.Culture.Domain;
+using System;
+using System.Linq;
 using WordQuest.Web.Data;
 using WordQuest.Web.DTOs;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace WordQuest.Web.Functions.MSAzure.Functions.v2
 {

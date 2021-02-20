@@ -1,3 +1,6 @@
+Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Web.Core.deps.json
+Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Web.Core.dll
+Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Web.Core.pdb
 Z:\WordQuest\WordQuest.Web.Core\bin\Debug\netcoreapp3.1\WordQuest.Web.Core.deps.json
 Z:\WordQuest\WordQuest.Web.Core\bin\Debug\netcoreapp3.1\WordQuest.Web.Core.dll
 Z:\WordQuest\WordQuest.Web.Core\bin\Debug\netcoreapp3.1\WordQuest.Web.Core.pdb
@@ -10,6 +13,3 @@ Z:\WordQuest\WordQuest.Web.Core\obj\Debug\netcoreapp3.1\WordQuest.Web.Core.cspro
 Z:\WordQuest\WordQuest.Web.Core\obj\Debug\netcoreapp3.1\WordQuest.Web.Core.csproj.CopyComplete
 Z:\WordQuest\WordQuest.Web.Core\obj\Debug\netcoreapp3.1\WordQuest.Web.Core.dll
 Z:\WordQuest\WordQuest.Web.Core\obj\Debug\netcoreapp3.1\WordQuest.Web.Core.pdb
-Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Web.Core.deps.json
-Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Web.Core.dll
-Z:\WordQuest\WordQuest.Web.FunctionsAzure\bin\output\WordQuest.Web.Core.pdb
