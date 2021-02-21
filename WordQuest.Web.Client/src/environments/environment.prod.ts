@@ -6,6 +6,6 @@ export const environment: IEnvironment = {
         displayName: "SaltinSEDIA"
     },
     api: {
-        getHostAddress: () => window.location.host + "/api"
+        getHostAddress: () => 'http://' + window.location.host + "/api"
     }
 }
