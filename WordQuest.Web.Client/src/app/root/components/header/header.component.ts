@@ -20,6 +20,7 @@ export class HeaderComponent extends ReactiveComponent {
     }
 
     public get appDisplayName(): string { return environment.website.displayName; }
+    public get hostAddress(): string { return environment.api.getHostAddress(); }
 
     public get availableLanguages$() { return this._globalizationService.availableLanguages$; }
     public get availableLanguagesMap$() { return this._globalizationService.availableLanguagesMap$; }

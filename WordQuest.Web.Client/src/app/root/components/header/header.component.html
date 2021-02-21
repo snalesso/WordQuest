@@ -12,7 +12,7 @@
             <!-- <i class="fab fa-accessible-icon fa-2x fa-fw"></i> -->
         </span>
         <span class="align-middle">
-            <span>{{appDisplayName}}</span>
+            <span [title]="hostAddress">{{appDisplayName}}</span>
             <!-- <span>Il gioco delle SEDIE</span> -->
         </span>
     </a>
@@ -105,8 +105,7 @@
                    data-toggle="dropdown"
                    aria-haspopup="true"
                    aria-expanded="false">
-                    <span
-                          *ngIf="(selectedLanguage$ | async) as language; else noSelectedLang">{{language.nativeName}}</span>
+                    <span *ngIf="(selectedLanguage$ | async) as language; else noSelectedLang">{{language.nativeName}}</span>
                     <ng-template #noSelectedLang>
                         <span>-no lang-</span>
                     </ng-template>

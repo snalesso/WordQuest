@@ -3,4 +3,7 @@ export interface IEnvironment {
     website: {
         displayName: string;
     };
+    api: {
+        getHostAddress: () => string;
+    }
 }

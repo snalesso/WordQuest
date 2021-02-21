@@ -4,5 +4,8 @@ export const environment: IEnvironment = {
     production: true,
     website: {
         displayName: "SaltinSEDIA"
+    },
+    api: {
+        getHostAddress: () => window.location.host + "/api"
     }
 }

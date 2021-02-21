@@ -8,6 +8,9 @@ export const environment: IEnvironment = {
     production: false,
     website: {
         displayName: "SaltinSEDIA - Dev"
+    },
+    api: {
+        getHostAddress: () => "http://localhost:7071/api"
     }
 };
 
