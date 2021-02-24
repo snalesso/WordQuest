@@ -1,7 +1,0 @@
-{
-    "routes": [
-        {
-            "route": "/matches/new"
-        }
-    ]
-}
