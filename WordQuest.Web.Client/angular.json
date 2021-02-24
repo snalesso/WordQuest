@@ -30,8 +30,7 @@
             "assets": [
               "src/favicon.ico",
               "src/staticwebapp.config.json",
-              "src/assets",
-              "src/assets/staticwebapp.config.json"
+              "src/assets"
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
