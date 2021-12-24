@@ -4,12 +4,16 @@ import { ReactiveComponent } from './components/ReactiveComponent';
 import { FalsyToNull } from './pipes/falsyToNull';
 import { GlobalizationService } from './services/globalization.service';
 import { NcbApiService } from './services/ncb-api.service';
+import { IsDisabledDirective } from './directives/is-disabled.directive';
+import { IsNil } from './pipes/isNil';
 
 @NgModule({
     declarations: [
         // NcbApiService,
         ReactiveComponent,
-        FalsyToNull
+        FalsyToNull,
+        IsNil,
+        IsDisabledDirective
     ],
     imports: [
         HttpClientModule
@@ -17,7 +21,9 @@ import { NcbApiService } from './services/ncb-api.service';
     exports: [
         // NcbApiService,
         ReactiveComponent,
-        FalsyToNull
+        FalsyToNull,
+        IsNil,
+        IsDisabledDirective
     ],
     providers: [
         GlobalizationService

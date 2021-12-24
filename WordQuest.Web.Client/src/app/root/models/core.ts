@@ -1,5 +1,3 @@
-export type Dictionary<Key extends string | number | symbol, Value> = Partial<Record<Key, Value>>;
-
 export interface IRange<T> {
     readonly start: T;
     readonly end: T;

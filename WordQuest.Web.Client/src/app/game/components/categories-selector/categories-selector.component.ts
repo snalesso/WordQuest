@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { map, multicast, refCount } from 'rxjs/operators';
 import { Options } from 'sortablejs';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { isNilOrEmpty } from 'src/app/common/utils/array.utils';
+import { isNotNil } from 'src/app/common/utils/core.utils';
 import { ISelectable } from 'src/app/root/models/core';
 import { } from 'src/app/root/models/presentation';
 import { Tag } from '../../models/game';
@@ -16,7 +18,7 @@ import { MatchService } from '../../services/match.service';
   styleUrls: ['./categories-selector.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CategoriesSelectorComponent extends ReactiveComponent {
+export class CategoriesSelectorComponent extends ReactiveComponent implements OnInit {
 
   constructor(
     private readonly _gameService: GameService,
@@ -26,28 +28,34 @@ export class CategoriesSelectorComponent extends ReactiveComponent {
     super(changeDetectorRef);
 
     // this.isDisabled$ = this.isDisabled$.pipe(map(x => !x), shareReplay(1));
-
-    this.subscribe(this.categories$.pipe(map(cats => !!cats), multicast(this._isEnabled$$), refCount()));
-    this.subscribe(this.categories$.pipe(map(cats => !!cats ? [] : null), multicast(this._selectedCategories$$), refCount()));
   }
 
-  private _isEnabled$$ = new BehaviorSubject<boolean>(false);
-  // public get isEnabled() { return this._isEnabled$$.value; };
-  public get isEnabled$() { return this._isEnabled$$.asObservable(); };
-  public get isDisabled$() { return this._isEnabled$$.pipe(map(x => !x)); };
-  // public readonly isDisabled$: Observable<boolean>;
+  ngOnInit(): void {
 
+    // TODO: review if refCount is needed
+    this.subscribe(this.hasCategories$.pipe(multicast(this._isEnabled$$), refCount()));
+    this.subscribe(this.hasCategories$.pipe(map(hasCategories => hasCategories ? [] : null), multicast(this._selectedCategories$$), refCount()));
+  }
+
+  // TODO: calculate isEnabled using combineLatest
+  private readonly _isEnabled$$ = new BehaviorSubject<boolean>(false);
+  public readonly isEnabled$ = this._isEnabled$$.asObservable();
+  public readonly isDisabled$ = this._isEnabled$$.pipe(map(isEnabled => !isEnabled));
+
+  private readonly _categories$$ = new BehaviorSubject<ISelectable<CategoryHeaderDto>[]>(null);
+  public readonly categories$ = this._categories$$.asObservable();
   @Input()
   public set categories(value) { this._categories$$.next(value); }
   public get categories() { return this._categories$$.value; }
-  private readonly _categories$$ = new BehaviorSubject<ISelectable<CategoryHeaderDto>[]>(null);
-  public get categories$() { return this._categories$$.asObservable(); };
 
-  public get selectedCategories() { return this._selectedCategories$$.value; }
-  public set selectedCategories(value) { this._selectedCategories$$.next(value); };
+  public readonly areCategoriesLoaded$ = this.categories$.pipe(map(cats => isNotNil(cats)));
+  public readonly hasCategories$ = this.categories$.pipe(map(cats => !isNilOrEmpty(cats)));
+
   private readonly _selectedCategories$$ = new BehaviorSubject<ISelectable<CategoryHeaderDto>[]>(null);
   @Output()
-  public get selectedCategories$() { return this._selectedCategories$$.asObservable(); }
+  public readonly selectedCategories$ = this._selectedCategories$$.asObservable();
+  public get selectedCategories() { return this._selectedCategories$$.value; }
+  public set selectedCategories(value) { this._selectedCategories$$.next(value); };
 
   public getCategoryId(index: number, category: ISelectable<CategoryHeaderDto>): number {
     return category.value.id;

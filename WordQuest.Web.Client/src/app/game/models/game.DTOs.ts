@@ -1,4 +1,4 @@
-import { Dictionary } from "src/app/root/models/core";
+import { Dictionary } from "src/app/common/data/models/Dictionary";
 import { Alphabet, Char, Language } from "src/app/root/models/culture.DTOs";
 
 export enum MatchMode {
@@ -31,8 +31,9 @@ export interface CategoryDto {
     // readonly tags?: ReadonlyArray<Tag>;
     readonly isCustom?: boolean;
 }
-export type CategoriesDict = Dictionary<CategoryDto["id"], CategoryDto>;
 export type CategoryHeaderDto = Pick<CategoryDto, "id" | "name" | "description">;
+
+export type CategoriesDict = Dictionary<CategoryDto["id"], CategoryDto>;
 export type CategoryHeadersDict = Dictionary<CategoryHeaderDto["id"], CategoryHeaderDto>;
 
 export interface WordDto {

@@ -1,10 +1,11 @@
 {
-    "routes": [
-        {
-            "route": "/matches/new",
-            "serve": "/matches/new"
-        }
-    ],
+    "navigationFallback": {
+        "rewrite": "/index.html",
+        "exclude": [
+            "/images/*.{png,jpg,gif}",
+            "/css/*"
+        ]
+    },
     "globalHeaders": {
         "content-security-policy": "default-src https: 'unsafe-eval' 'unsafe-inline'; object-src 'none'"
     },

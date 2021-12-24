@@ -2,14 +2,15 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { IEnvironment } from './IEnvironment';
+import { APP_NAME, IEnvironment } from './environment.core';
 
 export const environment: IEnvironment = {
     production: false,
     website: {
-        displayName: "SaltinSEDIA - Dev"
+        displayName: `${APP_NAME} - Dev`
     },
     api: {
+        getSignalRHostAddress: () => "",
         getHostAddress: () => "http://localhost:7071/api"
     }
 };

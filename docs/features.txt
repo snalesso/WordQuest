@@ -1,0 +1,10 @@
+- grafico della lead ad ogni round (visibile sempre/alla fine)
+- storico partite con relative info
+- vote to skip round
+- colori per i tags
+- filling mode:
+	- chill: tutte le categorie insieme, tempo gestibile
+	- rush: parole separate in sequenza
+- possibilità di bannare giocatori (admin/voto)
+- rientro a partita iniziata con token cookie
+- verifica che tutti abbiano la UI pronta per immettere le parole

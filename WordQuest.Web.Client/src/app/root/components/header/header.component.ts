@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
-import { environment } from 'src/environments/environment';
+import { environment } from 'src/environments/environment.dev';
 import { Language } from '../../models/culture.DTOs';
 
 @Component({
@@ -23,10 +23,8 @@ export class HeaderComponent extends ReactiveComponent {
     public get hostAddress(): string { return environment.api.getHostAddress(); }
 
     public get availableLanguages$() { return this._globalizationService.availableLanguages$; }
-    public get availableLanguagesMap$() { return this._globalizationService.availableLanguagesMap$; }
-    public get selectedLanguage$(): Observable<Language> { return this._globalizationService.language$; }
+    public get availableLanguagesMap$() { return this._globalizationService.availableLanguages$; }
+    public get selectedLanguage$(): Observable<Language> { return this._globalizationService.selectedLanguage$; }
 
-    public async setLanguageAsync(language: Language) {
-        await this._globalizationService.setlanguage(language);
-    }
+    public setLanguageAsync(language: Language) { return this._globalizationService.setlanguageAsync(language); }
 }

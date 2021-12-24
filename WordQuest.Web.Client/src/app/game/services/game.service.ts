@@ -1,11 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import { Dictionary } from 'src/app/root/models/core';
-import { Alphabet, AlphabetsDict, Language, LanguagesDict } from 'src/app/root/models/culture.DTOs';
+import { EMPTY, NEVER, Observable, of } from 'rxjs';
+import { map, catchError, tap, switchMap } from 'rxjs/operators';
+import { Alphabet, Language } from 'src/app/root/models/culture.DTOs';
 import { NcbApiService } from 'src/app/common/services/ncb-api.service';
-import { CategoryDto, CategoryHeaderDto, CategoryHeadersDict, MatchSettingsDto, MatchSnapshot } from '../models/game.DTOs';
+import { CategoryDto, CategoryHeaderDto, MatchSettingsDto, MatchSnapshot } from '../models/game.DTOs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,22 +23,32 @@ export class GameService extends NcbApiService {
     if (!!alphabetId)
       queryParams = queryParams.append("alphabetId", "" + alphabetId);
 
-    return this.http.get<CategoryHeadersDict>(this.getEndpoint("GetCategories"), { params: queryParams }).pipe(
-      map(categs => {
-        return categs;
-      }),
-      catchError(err => of<CategoryHeadersDict>(null))
-    );
+    return this.http.get<ReadonlyArray<CategoryHeaderDto>>(this.getEndpoint("GetCategories"), { params: queryParams })
+      // .pipe(
+      //   map(categs => {
+      //     return categs;
+      //   }),
+      //   catchError(err => EMPTY))
+      ;
   }
 
   public getAlphabetsAsync() {
-    return this.http.get<AlphabetsDict>(this.getEndpoint("GetAlphabets"));
+    return this.http.get<ReadonlyArray<Alphabet>>(this.getEndpoint("GetAlphabets"))
+      // .pipe(
+      //   catchError(error => EMPTY))
+      ;
   }
 
   public getLanguagesAsync() {
-    return this.http.get<LanguagesDict>(this.getEndpoint("GetLanguages")).pipe(
-      map(langChars => langChars),
-      catchError(err => of<LanguagesDict>(null))
-    );
+    return this.http.get<ReadonlyArray<Language>>(this.getEndpoint("GetLanguages"))
+      // .pipe(
+      //   catchError(err => EMPTY))
+      ;
+  }
+
+  public createMatchAsync(settings: MatchSettingsDto) { return of("NEhnXXf78is"); }
+
+  public joinAsync(matchId: MatchSnapshot["id"]): Observable<MatchSnapshot> {
+    return of(null);
   }
 }

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { BehaviorSubject, concat, from, Observable, of } from 'rxjs';
+import { BehaviorSubject, concat, defer, from, Observable, of } from 'rxjs';
 import { distinctUntilChanged, map, shareReplay, switchMap, tap } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { ISelectable } from 'src/app/root/models/core';
-import { Alphabet, Char, Language, LanguagesDict } from 'src/app/root/models/culture.DTOs';
+import { Alphabet, Char, Language } from 'src/app/root/models/culture.DTOs';
 import { arrayToDictionary } from 'src/app/root/models/utils';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
 import { CategoryDto, CategoryHeaderDto, MatchSettingsDto } from '../../models/game.DTOs';
@@ -29,12 +29,14 @@ export class NewMatchEditorComponent extends ReactiveComponent {
 
         super(changeDetectorRef);
 
-        this.languagesMap$ = this.alphabetsMap$.pipe(
-            map(alphabets => {
-                const langs = !!alphabets ? Object.values(alphabets).map((alph) => alph.language) : null;
-                return arrayToDictionary(langs, l => l.id, l => l);
-            }),
-            shareReplay(1));
+        // this.languagesMap$ = this.alphabets$.pipe(
+        //     map(alphabets =>
+        //         //{
+        //         !!alphabets ? Object.values(alphabets).map((alph) => alph.language) : null
+        //         // return arrayToDictionary(langs, l => l.id, l => l);
+        //         // }
+        //     ),
+        //     shareReplay(1));
         this.languages$ = this.alphabets$.pipe(
             map(alphabets => alphabets.map(x => x.language)),
             shareReplay(1));
@@ -57,7 +59,9 @@ export class NewMatchEditorComponent extends ReactiveComponent {
                         .values(catsMap)
                         .map<ISelectable<CategoryHeaderDto>>(x => ({ value: x, isSelected: false }))))
             ),
-            tap(x => !!x ? console.log("Categories - Loaded: " + x.length) : console.log("Categories - Reset")),
+            tap(x => !!x
+                ? console.log("Categories - Loaded: " + x.length)
+                : console.log("Categories - Reset")),
             shareReplay(1));
 
         this.subscribe(this.categories$, { next: cats => this._categoryIds = !!cats ? new Set(cats.map(x => x.value.id)) : null });
@@ -73,12 +77,13 @@ export class NewMatchEditorComponent extends ReactiveComponent {
         // this.subscribe(this.roundsCount$, x => console.log("Rounds count: " + x));
     }
 
-    public readonly alphabetsMap$ = from(this._gameService.getAlphabetsAsync()).pipe(shareReplay(1));
-    public readonly alphabets$ = this.alphabetsMap$.pipe(map(dict => Object.values(dict)), shareReplay(1));
-
+    // public readonly alphabetsMap$ = from(this._gameService.getAlphabetsAsync()).pipe(shareReplay(1));
     @Output()
-    public readonly languagesMap$: Observable<LanguagesDict>;
-    public readonly languages$: Observable<Language[]>;
+    public readonly alphabets$ = defer(() => this._gameService.getAlphabetsAsync()).pipe(/*map(dict => Object.values(dict)),*/shareReplay(1));
+    @Output()
+    public readonly languages$: Observable<ReadonlyArray<Language>>;
+    // @Output()
+    // public readonly languagesMap$: Observable<ReadonlyArray<Language>>;
 
     public get selectedLanguage() { return this._selectedLanguage$$.value; }
     public set selectedLanguage(value: Language) { this._selectedLanguage$$.next(value); }

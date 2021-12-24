@@ -49,8 +49,8 @@ import { WordInputComponent } from './pages/match/components/word-input/word-inp
         HttpClientModule,
         SortablejsModule.forRoot({ animation: 150 }),
         FontAwesomeModule,
-        GameRoutingModule,
-        NcbCommonModule
+        NcbCommonModule,
+        GameRoutingModule
     ],
     exports: [
         CategoriesSelectorComponent,

@@ -10,7 +10,7 @@
 
                         <div class="form-group">
 
-                            <label for="languageSelect">Language</label>
+                            <label for="languageSelect">Language & Alphabet</label>
 
                             <!-- <select class="form-control" id="languageSelect" name="languageSelect"
                                 [ngModel]="(selectedLanguage$ | async)"
@@ -20,7 +20,7 @@
                                     *ngFor="let langAlph of (availableLanguageAlphabets$ | async) | keyvalue">{{langAlph.value.languageNativeName}}</option>
                             </select> -->
 
-                            <app-alphabet-variant-selector [availableAlphabets$]="alphabets$"
+                            <app-alphabet-variant-selector [availableAlphabets]="(alphabets$ | async)"
                                                            (selectedAlphabet$)="selectAlphabet($event)">
                             </app-alphabet-variant-selector>
                             <!-- <p>{{selectedLanguage}}</p>
