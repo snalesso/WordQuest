@@ -8,11 +8,6 @@ import { TestComponent } from './pages/test/test.component';
 
 export const gameRoutes: ReadonlyArray<Route> = [
     {
-        path: "",
-        redirectTo: "new",
-        pathMatch: "full",
-    },
-    {
         path: "new",
         component: NewMatchEditorComponent,
         data: ({
