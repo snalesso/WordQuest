@@ -1,31 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WordQuest.Culture
+namespace WordQuest
 {
-    public enum RangeBoundMode
-    {
-        Inclusive,
-        Exclusive
-    }
-
-    public class RangeBound<T>
-        where T : IComparable<T>
-    {
-        public RangeBound(T value, RangeBoundMode mode)
-        {
-            this.Value = value;
-            this.Mode = mode;
-        }
-
-        public T Value { get; }
-        public RangeBoundMode Mode { get; }
-    }
-
     public class Range<T>
         where T : IComparable<T>
     {
-        public Range(T lower, RangeBoundMode lowerMode, T upper, RangeBoundMode upperMode)
+        public Range(
+            T lower,
+            T upper,
+            RangeBoundMode lowerMode = RangeBoundMode.Inclusive,
+            RangeBoundMode upperMode = RangeBoundMode.Inclusive)
         {
             this.LowerBound = new RangeBound<T>(lower, lowerMode);
             this.UpperBound = new RangeBound<T>(upper, upperMode);
@@ -34,12 +19,21 @@ namespace WordQuest.Culture
         public RangeBound<T> LowerBound { get; }
         public RangeBound<T> UpperBound { get; }
 
-        [Obsolete("temporary: on net5 use IReadOnlySet")]
-        public ISet<T> Exclusions { get; set; }
-    }
+        public virtual bool Includes(T value)
+        {
+            var comparedToLower = value.CompareTo(this.LowerBound.Value);
+            if (comparedToLower < 0)
+                return false;
+            if (comparedToLower == 0 && this.LowerBound.Mode == RangeBoundMode.Exclusive)
+                return false;
 
-    // public interface ILocalizedLanguageOption {
-    //     readonly language: Language;
-    //     readonly selfLocalizedName: string;
-    // }
+            var comparedToUpper = value.CompareTo(this.UpperBound.Value);
+            if (comparedToUpper > 0)
+                return false;
+            if (comparedToUpper == 0 && this.UpperBound.Mode == RangeBoundMode.Exclusive)
+                return false;
+
+            return true;
+        }
+    }
 }

@@ -1,8 +1,0 @@
-{
-    "azureFunctions.projectSubpath": "WordQuest.Web.Functions._Azure",
-    "azureFunctions.deploySubpath": "WordQuest.Web.Functions._Azure/bin/Release/net6.0/publish",
-    "azureFunctions.projectLanguage": "C#",
-    "azureFunctions.projectRuntime": "~3",
-    "debug.internalConsoleOptions": "neverOpen",
-    "azureFunctions.preDeployTask": "publish (functions)"
-}

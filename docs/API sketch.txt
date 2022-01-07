@@ -1,0 +1,33 @@
+/matches?userId={userId}
+- GET: history
+/matches/new
+- GET: default config
+- POST: create -> returns new match id
+- PATCH: 
+- DELETE: 
+
+/matches/{id}
+- GET: get match current status
+- POST: execute action on match
+- DELETE: 
+
+
+
+/tags
+/categories
+/categories?{langId}+{alphVarId}
+- GET: list of categories for specified lang + alphabet
+/categories/{catId}
+- GET: single category info
+/languages
+- GET: list of supported site/game languages
+/languages/{langId}
+/languages/{langId}/alphabets
+- GET: list of supported alphabets for selected language
+/languages/{langId}/categories
+
+
+- GET: 
+- POST: 
+- PATCH: 
+- DELETE: 

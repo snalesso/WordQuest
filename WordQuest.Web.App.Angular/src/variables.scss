@@ -1,0 +1,16 @@
+// @import "../node_modules/bootstrap/scss/variables";
+
+$app-purple: #7e3e97;
+$app-orange: #f7931d;
+$app-green: #3fc06a;
+$app-gray: #999;
+
+$app-colors: () !default;
+$app-colors: map-merge(
+    (
+        "purple": $app-purple,
+        "orange": $app-orange,
+        "green": $app-green,
+        "gray": $app-gray,
+    ),
+    $app-colors);

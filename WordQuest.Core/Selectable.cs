@@ -1,4 +1,4 @@
-﻿namespace WordQuest.Domain
+﻿namespace WordQuest
 {
     public class Selectable<T>
     {
@@ -12,9 +12,4 @@
         public T Value { get; set; }
         public bool IsSelected { get; set; }
     }
-
-    // public interface ILocalizedLanguageOption {
-    //     readonly language: Language;
-    //     readonly selfLocalizedName: string;
-    // }
 }
