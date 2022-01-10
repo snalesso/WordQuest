@@ -1,0 +1,1 @@
+Scaffold-DbContext "Data Source=.;Initial Catalog=WordQuest;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -Context WordQuestDBContext -ContextDir Persistence/MSSQLS -OutputDir Persistence/MSSQLS/Models -Force
