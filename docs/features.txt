@@ -1,6 +1,8 @@
 - grafico della lead ad ogni round (visibile sempre/alla fine)
 - storico partite con relative info
 - vote to skip round
+- vote to kick
+- vote to end match (minimo 51%?)
 - colori per i tags
 - filling mode:
 	- chill: tutte le categorie insieme, tempo gestibile
@@ -8,3 +10,6 @@
 - possibilità di bannare giocatori (admin/voto)
 - rientro a partita iniziata con token cookie
 - verifica che tutti abbiano la UI pronta per immettere le parole
+- per entrare nella privata: pw dell'owner + link -> nome utente + pw personale
+- per ri-entrare: nome utente (ma+ pw personale
+- a fine partita possibilità di selezionare i turni da considerare per il conteggio finale (se rilevabile anche vedendo chi era connesso al turno)
