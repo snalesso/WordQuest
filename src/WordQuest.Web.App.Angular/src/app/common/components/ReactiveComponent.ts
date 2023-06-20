@@ -1,14 +1,12 @@
-import { ChangeDetectorRef, Component, Directive, Injectable, OnDestroy } from "@angular/core";
-import { AbstractControl } from "@angular/forms";
-import { Observable, Observer, PartialObserver, Subscription } from "rxjs";
+import { ChangeDetectorRef, Component, OnDestroy } from "@angular/core";
+import { Observable, PartialObserver, Subscription } from "rxjs";
 
 // @Injectable()
 // @Directive()
 @Component({ template: '' })
 export class ReactiveComponent implements OnDestroy {
 
-  private _subscriptions: Subscription[];
-  fewfaw: AbstractControl;
+  private _subscriptions: Subscription[] | undefined = undefined;
 
   constructor(private readonly _changeDetectorRef: ChangeDetectorRef) { }
 
@@ -57,7 +55,7 @@ export class ReactiveComponent implements OnDestroy {
   ngOnDestroy(): void {
 
     this.unsubscribeBackwards();
-    this._subscriptions = null;
+    this._subscriptions = undefined;
   }
 
 }

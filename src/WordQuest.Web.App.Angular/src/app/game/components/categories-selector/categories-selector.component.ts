@@ -1,14 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { map, multicast, refCount } from 'rxjs/operators';
+import { BehaviorSubject, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, map, shareReplay, startWith, tap } from 'rxjs/operators';
 import { Options } from 'sortablejs';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
-import { isNilOrEmpty } from 'src/app/common/utils/array.utils';
-import { isNotNil } from 'src/app/common/utils/core.utils';
+import { logEvent } from 'src/app/common/utils/dev.utils';
+import { mapInvertedBool } from 'src/app/common/utils/rxjs.utils';
+import { isNil } from 'src/app/common/utils/utils';
 import { ISelectable } from 'src/app/root/models/core';
 import { } from 'src/app/root/models/presentation';
 import { Tag } from '../../models/game';
-import { CategoryDto, CategoryHeaderDto } from '../../models/game.DTOs';
+import { Category, CategoryHeader } from '../../models/game.DTOs';
 import { GameService } from '../../services/game.service';
 import { MatchService } from '../../services/match.service';
 
@@ -19,6 +20,54 @@ import { MatchService } from '../../services/match.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoriesSelectorComponent extends ReactiveComponent implements OnInit {
+
+  private readonly _isLoading$$ = new ReplaySubject<boolean>(1)
+  @Output()
+  public readonly isLoading$ = this._isLoading$$.pipe(
+    startWith(false),
+    distinctUntilChanged(),
+    tap(x => logEvent(this, 'isLoading', x)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  // TODO: calculate isEnabled using combineLatest
+  private readonly _isEnabled$$ = new BehaviorSubject<boolean>(false);
+  @Output()
+  public readonly isEnabled$ = this._isEnabled$$.pipe(
+    distinctUntilChanged(),
+    tap(x => logEvent(this, 'isEnabled', x)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+  @Output()
+  public readonly isDisabled$ = this.isEnabled$.pipe(mapInvertedBool(), distinctUntilChanged());
+
+  // private readonly _categoriesFromInput$$ = new ReplaySubject<ISelectable<CategoryHeader>[]>(1);
+  private readonly _categories$$ = new BehaviorSubject<ISelectable<CategoryHeader>[] | undefined>(undefined);
+  // @Input('categories')
+  @Input()
+  public set categories(value: ISelectable<CategoryHeader>[] | undefined) { this._categories$$.next(value); }
+  public get categories() { return this._categories$$.value; }
+  @Output()
+  public readonly categories$ = this._categories$$.pipe(
+    distinctUntilChanged(),
+    tap(x => logEvent(this, 'categories', x)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  @Output()
+  public readonly areCategoriesAvailable$ = this.categories$.pipe(
+    map(cats => isNil(cats) ? false : cats.length > 0),
+    distinctUntilChanged(),
+    tap(x => logEvent(this, 'areCategoriesAvailable', x)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  // private readonly _selectedCategories$$ = new ReplaySubject<ISelectable<CategoryHeader>[]>(1);
+  private readonly _selectedCategories$$ = new BehaviorSubject<ISelectable<CategoryHeader>[] | undefined>(undefined);
+  public set selectedCategories(value: ISelectable<CategoryHeader>[]) {
+    // if (value === undefined)
+    //   return;
+    this._selectedCategories$$.next(value);
+  }
+  // public get selectedCategories() { return this._selectedCategories$$.value; }
+  @Output()
+  public readonly selectedCategories$ = this._selectedCategories$$.asObservable();
 
   constructor(
     private readonly _gameService: GameService,
@@ -33,31 +82,11 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
   ngOnInit(): void {
 
     // TODO: review if refCount is needed
-    this.subscribe(this.hasCategories$.pipe(multicast(this._isEnabled$$), refCount()));
-    this.subscribe(this.hasCategories$.pipe(map(hasCategories => hasCategories ? [] : null), multicast(this._selectedCategories$$), refCount()));
+    // this.subscribe(this.areCategoriesAvailable$.pipe(multicast(this._isEnabled$$), refCount()));
+    // this.subscribe(this.areCategoriesAvailable$.pipe(map(hasCategories => hasCategories ? [] : []), multicast(this._selectedCategories$$), refCount()));
   }
 
-  // TODO: calculate isEnabled using combineLatest
-  private readonly _isEnabled$$ = new BehaviorSubject<boolean>(false);
-  public readonly isEnabled$ = this._isEnabled$$.asObservable();
-  public readonly isDisabled$ = this._isEnabled$$.pipe(map(isEnabled => !isEnabled));
-
-  private readonly _categories$$ = new BehaviorSubject<ISelectable<CategoryHeaderDto>[]>(null);
-  public readonly categories$ = this._categories$$.asObservable();
-  @Input()
-  public set categories(value) { this._categories$$.next(value); }
-  public get categories() { return this._categories$$.value; }
-
-  public readonly areCategoriesLoaded$ = this.categories$.pipe(map(cats => isNotNil(cats)));
-  public readonly hasCategories$ = this.categories$.pipe(map(cats => !isNilOrEmpty(cats)));
-
-  private readonly _selectedCategories$$ = new BehaviorSubject<ISelectable<CategoryHeaderDto>[]>(null);
-  @Output()
-  public readonly selectedCategories$ = this._selectedCategories$$.asObservable();
-  public get selectedCategories() { return this._selectedCategories$$.value; }
-  public set selectedCategories(value) { this._selectedCategories$$.next(value); };
-
-  public getCategoryId(index: number, category: ISelectable<CategoryHeaderDto>): number {
+  public getCategoryId(index: number, category: ISelectable<CategoryHeader>): number {
     return category.value.id;
   }
 
@@ -132,7 +161,7 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     this.selectedCategories.push(item);
   }
 
-  public remove(item: ISelectable<CategoryDto> | null) {
+  public remove(item: ISelectable<Category> | null) {
 
     if (item == null || item.value == null) //|| item.value.tags == null)
       return;

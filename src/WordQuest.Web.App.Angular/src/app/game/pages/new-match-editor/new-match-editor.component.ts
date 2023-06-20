@@ -1,16 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { BehaviorSubject, concat, defer, from, Observable, of } from 'rxjs';
-import { distinctUntilChanged, map, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, of, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, map, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { GlobalizationService } from 'src/app/common/services/globalization.service';
+import { logEvent } from 'src/app/common/utils/dev.utils';
 import { ISelectable } from 'src/app/root/models/core';
 import { Alphabet, Char, Language } from 'src/app/root/models/culture.DTOs';
-import { arrayToDictionary } from 'src/app/root/models/utils';
-import { GlobalizationService } from 'src/app/common/services/globalization.service';
-import { CategoryDto, CategoryHeaderDto, MatchSettingsDto } from '../../models/game.DTOs';
+import { Category, CategoryHeader } from '../../models/game.DTOs';
 import { GameService } from '../../services/game.service';
 import { MatchService } from '../../services/match.service';
-import { switchMapWith } from 'src/app/common/pipes/awaitingWith';
 
 @Component({
     selector: 'app-new-match-editor',
@@ -18,7 +17,109 @@ import { switchMapWith } from 'src/app/common/pipes/awaitingWith';
     styleUrls: ['./new-match-editor.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+// TODO: implement ValueProvider (to make it behave like a form)
 export class NewMatchEditorComponent extends ReactiveComponent {
+
+    // private readonly _alphabetsSource = new ObservableValueSource(this._gameService.getAlphabetOptionsAsync);
+    // @Output() public readonly alphabets$ = this._alphabetsSource.value$;
+    @Output()
+    public readonly alphabets$ = this._gameService.getAlphabetVariantOptionsAsync().pipe(shareReplay({ bufferSize: 1, refCount: true }));
+    // public readonly alphabets$: Observable<readonly Alphabet[]> = throwError(() => new Error('fewfawefwe'));
+    @Output()
+    public readonly languages$ = this.alphabets$.pipe(
+        map(alphabets => {
+            return alphabets.map(x => x.language);
+        }),
+        // map(languages => new Set(languages) as ReadonlySet<Language>), // TODO: find a better way to make it readonly (asReadonly()?)
+        tap(x => logEvent(this, 'languages', x)),
+        shareReplay({ bufferSize: 1, refCount: true }));;
+    // @Output()
+    // public readonly languagesMap$: Observable<ReadonlyArray<Language>>;
+
+    // private readonly _selectedLanguage$$ = new ReplaySubject<Language>(1);
+    private readonly _selectedLanguage$$ = new BehaviorSubject<Language | undefined>(undefined);
+    public get selectedLanguage() { return this._selectedLanguage$$.value; }
+    public set selectedLanguage(value: Language | undefined) { this._selectedLanguage$$.next(value); }
+    public selectLanguage(language: Language) { this.selectedLanguage = language; }
+    @Output()
+    public readonly selectedLanguage$ = this._selectedLanguage$$.asObservable();
+
+    // private readonly _selectedAlphabet$$ = new ReplaySubject<Alphabet>(1);
+    private readonly _selectedAlphabet$$ = new BehaviorSubject<Alphabet | undefined>(undefined);
+    public get selectedAlphabet() { return this._selectedAlphabet$$.value; }
+    public set selectedAlphabet(value: Alphabet | undefined) { this._selectedAlphabet$$.next(value); }
+    public selectAlphabet(alphabet: Alphabet) { this.selectedAlphabet = alphabet; }
+    @Output()
+    public readonly selectedAlphabet$ = this._selectedAlphabet$$.pipe(distinctUntilChanged());
+
+    // private _categoryIds: Set<CategoryHeaderDto["id"]>;
+    @Output()
+    public readonly categories$ = this.selectedAlphabet$
+        .pipe(
+            tap(() => console.log("Categories - Loading ...")),
+            switchMap(alph => {
+                if (alph === undefined)
+                    return of(undefined);
+                const categoryOptions$ = this._gameService.getCategoryHeadersAsync(/*alph.language.id,*/ alph.id)
+                    .pipe(
+                        map(catsMap => Object
+                            .values(catsMap)
+                            .map<ISelectable<CategoryHeader>>(x => ({ value: x, isSelected: false }))));
+
+                return categoryOptions$.pipe(startWith(undefined));
+                // return concat(of(undefined), categoryOptions$);
+            }),
+            tap(x => {
+                logEvent(this, "Categories", x);
+            }),
+            shareReplay({ bufferSize: 1, refCount: true }));
+
+    public setSelectedCategories(categories: ReadonlyArray<Category>) { }
+
+    @Output()
+    public readonly selectableChars$ = this.selectedAlphabet$.pipe(
+        map(selAlph => {
+            const charInfos = !!selAlph ? Object.values(selAlph.charInfos) : null;
+            const selectableChars = !!charInfos ? charInfos.map<ISelectable<Char>>(ci => ({ value: ci.char, isSelected: !ci.isRare })) : [];
+            return selectableChars;
+        }),
+        shareReplay({ bufferSize: 1, refCount: true }));
+
+    private readonly _selectedChars$$ = new ReplaySubject<readonly Char[]>(1);
+    // public get selectedChars(): Char[] { return this._selectedChars$$.value; }
+    public set selectedChars(value: readonly Char[]) { this._selectedChars$$.next(value); }
+    public setSelectedChars(selectedChars: Char[]) { this.selectedChars = selectedChars; }
+    @Output()
+    public readonly selectedChars$ = this._selectedChars$$.asObservable();
+
+    private readonly _secondsPerWord$$ = new BehaviorSubject<number>(10);
+    public get secondsPerWord() { return this._secondsPerWord$$.value; }
+    public set secondsPerWord(value) { this._secondsPerWord$$.next(value); }
+    @Output()
+    public readonly secondsPerWord$ = this._secondsPerWord$$.pipe(distinctUntilChanged());
+    public readonly SecondsPerWord_MIN: number = 3;
+    public readonly SecondsPerWord_MAX: number = 60;
+
+    private readonly _roundsCount$$ = new BehaviorSubject<number>(8);
+    public get roundsCount() { return this._roundsCount$$.value; }
+    public set roundsCount(value) { this._roundsCount$$.next(value); }
+    @Output()
+    public readonly roundsCount$ = this._roundsCount$$.pipe(distinctUntilChanged());
+    public readonly RoundsCount_MIN: number = 5;
+    public readonly RoundsCount_MAX: number = 20;
+
+    //#region UI
+
+    @Output()
+    public readonly areCategoriesAvailable$ = this.categories$
+        .pipe(
+            map(categories => categories !== undefined && categories.length > 0),
+            // startWith(false),
+            distinctUntilChanged()
+            // shareReplay({ bufferSize: 1, refCount: true })
+        );
+
+    //#endregion
 
     constructor(
         private readonly _gameService: GameService,
@@ -29,101 +130,18 @@ export class NewMatchEditorComponent extends ReactiveComponent {
 
         super(changeDetectorRef);
 
-        // this.languagesMap$ = this.alphabets$.pipe(
-        //     map(alphabets =>
-        //         //{
-        //         !!alphabets ? Object.values(alphabets).map((alph) => alph.language) : null
-        //         // return arrayToDictionary(langs, l => l.id, l => l);
-        //         // }
-        //     ),
-        //     shareReplay(1));
-        this.languages$ = this.alphabets$.pipe(
-            map(alphabets => alphabets.map(x => x.language)),
-            shareReplay(1));
-
-        this.selectableChars$ = this.selectedAlphabet$.pipe(
-            map(selAlph => {
-                const charInfos = !!selAlph ? Object.values(selAlph.charInfos) : null;
-                const selectableChars = !!charInfos ? charInfos.map<ISelectable<Char>>(ci => ({ value: ci.char, isSelected: !ci.isRare })) : null;
-                return selectableChars;
-            }),
-            shareReplay(1));
-
-        this.categories$ = this.selectedAlphabet$.pipe(
-            tap(() => console.log("Categories - Loading ...")),
-            switchMapWith(
-                null,
-                alph => !!alph,
-                alph => this._gameService.getCategoryHeadersAsync(alph.language.id, alph.id).pipe(
-                    map(catsMap => Object
-                        .values(catsMap)
-                        .map<ISelectable<CategoryHeaderDto>>(x => ({ value: x, isSelected: false }))))
-            ),
-            tap(x => !!x
-                ? console.log("Categories - Loaded: " + x.length)
-                : console.log("Categories - Reset")),
-            shareReplay(1));
-
-        this.subscribe(this.categories$, { next: cats => this._categoryIds = !!cats ? new Set(cats.map(x => x.value.id)) : null });
+        // this.subscribe(this.categories$, { next: cats => this._categoryIds = !!cats ? new Set(cats.map(x => x.value.id)) : null });
 
         // logs
-        this.subscribe(this.alphabets$, { next: x => console.log("Alphabets - Loaded: " + x?.length) });
-        this.subscribe(this.languages$, { next: x => console.log("Languages - Loaded: " + x?.length) });
-        this.subscribe(this.selectableChars$, { next: x => console.log("New selectable chars: " + x?.length) });
-        this.subscribe(this.selectedAlphabet$, { next: x => console.log("Selected alphabet: " + x?.nativeName) });
-        this.subscribe(this.selectedLanguage$, { next: x => console.log("Selected language: " + x?.nativeName) });
-        this.subscribe(this.selectedChars$, { next: x => console.log("Selected chars: " + x) });
+        // this.subscribe(this.alphabets$, { next: x => console.log("Alphabets - Loaded: " + x?.size) });
+        // this.subscribe(this.languages$, { next: x => console.log("Languages - Loaded: " + x?.size) });
+        // this.subscribe(this.selectableChars$, { next: x => console.log("New selectable chars: " + x?.length) });
+        // this.subscribe(this.selectedAlphabet$, { next: x => console.log("Selected alphabet: " + x?.nativeName) });
+        // this.subscribe(this.selectedLanguage$, { next: x => console.log("Selected language: " + x?.nativeName) });
+        // this.subscribe(this.selectedChars$, { next: x => console.log("Selected chars: " + x) });
         // this.subscribe(this.secondsPerWord$, x => console.log("Seconds per word: " + x));
         // this.subscribe(this.roundsCount$, x => console.log("Rounds count: " + x));
     }
-
-    // public readonly alphabetsMap$ = from(this._gameService.getAlphabetsAsync()).pipe(shareReplay(1));
-    @Output()
-    public readonly alphabets$ = defer(() => this._gameService.getAlphabetsAsync()).pipe(/*map(dict => Object.values(dict)),*/shareReplay(1));
-    @Output()
-    public readonly languages$: Observable<ReadonlyArray<Language>>;
-    // @Output()
-    // public readonly languagesMap$: Observable<ReadonlyArray<Language>>;
-
-    public get selectedLanguage() { return this._selectedLanguage$$.value; }
-    public set selectedLanguage(value: Language) { this._selectedLanguage$$.next(value); }
-    public selectLanguage(language: Language) { this.selectedLanguage = language; }
-    // event
-    private readonly _selectedLanguage$$: BehaviorSubject<Language> = new BehaviorSubject<Language>(null);
-    public get selectedLanguage$() { return this._selectedLanguage$$.asObservable(); }
-
-    public get selectedAlphabet() { return this._selectedAlphabet$$.value; }
-    public set selectedAlphabet(value: Alphabet) { this._selectedAlphabet$$.next(value); }
-    public selectAlphabet(alphabet: Alphabet) { this.selectedAlphabet = alphabet; }
-    // event
-    private readonly _selectedAlphabet$$: BehaviorSubject<Alphabet> = new BehaviorSubject<Alphabet>(null);
-    public get selectedAlphabet$() { return this._selectedAlphabet$$.asObservable(); }
-
-    private _categoryIds: Set<CategoryHeaderDto["id"]>;
-    public readonly categories$: Observable<ISelectable<CategoryHeaderDto>[]>;
-    public setSelectedCategories(categories: ReadonlyArray<CategoryDto>) { }
-
-    public readonly selectableChars$: Observable<ISelectable<Char>[]>;
-
-    public get selectedChars(): Char[] { return this._selectedChars$$.value; }
-    public set selectedChars(value) { this._selectedChars$$.next(value); }
-    private readonly _selectedChars$$: BehaviorSubject<Char[]> = new BehaviorSubject(null);
-    public get selectedChars$() { return this._selectedChars$$.asObservable(); }
-    public setSelectedChars(selectedChars: Char[]) { this.selectedChars = selectedChars; }
-
-    private readonly _secondsPerWord$$ = new BehaviorSubject<number>(10);
-    public get secondsPerWord() { return this._secondsPerWord$$.value; }
-    public set secondsPerWord(value) { this._secondsPerWord$$.next(value); }
-    public get secondsPerWord$() { return this._secondsPerWord$$.asObservable().pipe(distinctUntilChanged()); }
-    public readonly SecondsPerWord_MIN: number = 3;
-    public readonly SecondsPerWord_MAX: number = 60;
-
-    private readonly _roundsCount$$ = new BehaviorSubject<number>(8);
-    public get roundsCount() { return this._roundsCount$$.value; }
-    public set roundsCount(value) { this._roundsCount$$.next(value); }
-    public get roundsCount$() { return this._roundsCount$$.asObservable().pipe(distinctUntilChanged()); }
-    public readonly RoundsCount_MIN: number = 5;
-    public readonly RoundsCount_MAX: number = 20;
 
     doCreateMatch(): void {
         // const matchConfig: MatchConfigDto = {};

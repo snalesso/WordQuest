@@ -9,37 +9,22 @@
                     <div class="col-xs-12 col">
 
                         <div class="form-group">
-
                             <label for="languageSelect">
                                 <b>Language & Alphabet</b>
                             </label>
-
-                            <!-- <select class="form-control" id="languageSelect" name="languageSelect"
-                                [ngModel]="(selectedLanguage$ | async)"
-                                [disabled]="!(availableLanguageAlphabets$ | async)"
-                                (ngModelChange)="selectLanguage($event)">
-                                <option [ngValue]="langAlph.key"
-                                    *ngFor="let langAlph of (availableLanguageAlphabets$ | async) | keyvalue">{{langAlph.value.languageNativeName}}</option>
-                            </select> -->
-
-                            <app-alphabet-variant-selector [availableAlphabets]="(alphabets$ | async)"
+                            <app-alphabet-variant-selector [alphabets]="this.alphabets$ | ngrxPush"
                                                            (selectedAlphabet$)="selectAlphabet($event)">
                             </app-alphabet-variant-selector>
-                            <!-- <p>{{selectedLanguage}}</p>
-                            <p *ngIf="alphabets$ | async as langs">{{ langs[selectedLanguage] | json }}</p> -->
-
                         </div>
 
                     </div>
 
-                    <div class="col-xs-12 col-auto">
+                    <!-- <div class="col-xs-12 col-auto">
 
                         <div class="form-group">
-
                             <label>
                                 <b>Tools</b>
                             </label>
-
                             <div class="input-group">
 
                                 <button class="btn btn-dark"
@@ -50,51 +35,36 @@
                                     <fa-icon [icon]="['fas', 'random']"
                                              size="1x"
                                              [fixedWidth]="true"></fa-icon>
-                                    <!-- <span class="fas fa-random fa-fw"></span> -->
                                 </button>
                             </div>
-
                         </div>
 
-                    </div>
+                    </div> -->
 
                 </div>
 
                 <div class="form-group">
-
                     <label>
                         <b>Categories</b>
                     </label>
-
-                    <!-- <app-sortablejs-test></app-sortablejs-test> -->
-                    <app-categories-selector [categories]="categories$ | async"
+                    <app-categories-selector [categories]="this.categories$ | ngrxPush"
                                              (selectedCategories$)="setSelectedCategories($event)">
                     </app-categories-selector>
-                    <!-- <app-categories-selector-am [language]="selectedLanguage$ | async" (selectedCategories$)="printSelectedCategories($event)"></app-categories-selector-am> -->
-
-                    <!-- <p>{{selectedCategories | json}}</p> -->
-
                 </div>
 
                 <div class="form-group">
                     <label>
                         <b>Letters</b>
                     </label>
-
-                    <!-- <div class="d-flex flex-wrap m-n1">
-                        <button class="btn btn-outline-primary m-1 px-3" role="checkbox" type="button" style="font-family: Consolas;" data-toggle="button" aria-pressed="false" *ngFor="let letter of (languageLetters$ | async)">
-                            <span>{{letter}}</span>
-                        </button>
-                    </div> -->
-                    <app-letters-selector [selectableChars]="selectableChars$ | async"
+                    <app-letters-selector [selectableChars]="this.selectableChars$ | ngrxPush"
                                           (selectedChars$)="setSelectedChars($event)">
                     </app-letters-selector>
-
                 </div>
 
                 <div class="form-row">
 
                     <div class="col-12 col-sm-6">
+
                         <div class="form-group">
                             <label for="secondsPerWordRangeInput">
                                 <b>Seconds per word</b>
@@ -110,19 +80,19 @@
                                        name="secondsPerWord"
                                        id="secondsPerWordRangeInput">
                                 <div class="input-group-append">
-                                    <span class="input-group-text bg-light">{{secondsPerWord$ | async | number : '2.0'}}</span>
+                                    <span class="input-group-text bg-light">{{this.secondsPerWord$ | ngrxPush | number : '2.0'}}</span>
                                 </div>
                             </div>
-
                         </div>
+
                     </div>
 
                     <div class="col-12 col-sm-6">
+
                         <div class="form-group">
                             <label for="roundsCountRangeInput">
                                 <b>Rounds</b>
                             </label>
-
                             <div class="input-group input-group-sm">
                                 <input type="range"
                                        class="form-control custom-range"
@@ -134,13 +104,12 @@
                                        id="roundsCountRangeInput">
                                 <div class="input-group-append"
                                      for="roundsCountRangeInput">
-                                    <span class="input-group-text bg-light">{{roundsCount$ | async | number : '2.0'}}</span>
+                                    <span class="input-group-text bg-light">{{this.roundsCount$ | ngrxPush | number : '2.0'}}</span>
                                 </div>
                             </div>
-
                         </div>
-                    </div>
 
+                    </div>
                 </div>
 
                 <div class="form-row">
@@ -148,11 +117,9 @@
                     <div class="col-12 col-sm">
 
                         <div class="form-group">
-
                             <label>
                                 <b>Mode</b>
                             </label>
-
                             <label class="radio-card"
                                    for="timeOutRoundingModeRadioInput">
                                 <input type="radio"
@@ -216,18 +183,16 @@
                                     </div>
                                 </div>
                             </label>
-
                         </div>
+
                     </div>
 
                     <div class="col-12 col-sm">
 
                         <div class="form-group">
-
                             <label>
                                 <b>Accessibility</b>
                             </label>
-
                             <label class="radio-card"
                                    for="publicMatchAccessRadioInput">
                                 <input type="radio"
@@ -290,7 +255,6 @@
                                     </div>
                                 </div>
                             </label>
-
                         </div>
 
                         <!-- <div class="form-check">

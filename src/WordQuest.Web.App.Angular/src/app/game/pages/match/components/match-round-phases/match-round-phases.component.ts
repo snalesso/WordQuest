@@ -1,7 +1,6 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
-import { MatchSettingsDto } from 'src/app/game/models/game.DTOs';
 import { MatchService } from 'src/app/game/services/match.service';
 
 @Component({

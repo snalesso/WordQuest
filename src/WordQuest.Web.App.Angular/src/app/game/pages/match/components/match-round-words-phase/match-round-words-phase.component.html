@@ -1,11 +1,11 @@
 <div class="row"
-     *ngIf="match$ | async as match">
+     *ngIf="match$ | ngrxPush as match">
     <div class="col">
 
         <form>
 
             <div class="row"
-                 *ngFor="let cat of (categories$ | async)">
+                 *ngFor="let cat of (categories$ | ngrxPush)">
                 <div class="col">
 
                     <app-word-input [category]="cat"

@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!--
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<EnablePreviewFeatures>enabled</EnablePreviewFeatures>
+		<RootNamespace>$(SolutionName)</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		-->
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Culture\**" />
+	  <Compile Remove="Game\Domain\Entities\**" />
+	  <EmbeddedResource Remove="Culture\**" />
+	  <EmbeddedResource Remove="Game\Domain\Entities\**" />
+	  <None Remove="Culture\**" />
+	  <None Remove="Game\Domain\Entities\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Game\Domain\Persistence\IAlphabetVariantsView.cs" />
+	  <Compile Remove="Game\Domain\Persistence\IReadCategoriesRepository.cs" />
+	  <Compile Remove="Game\Domain\Persistence\IReadCategoriesTagsRepository.cs" />
+	  <Compile Remove="Game\Domain\Persistence\IReadLanguagesRepository.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Common\" />
+		<Folder Include="Game\Application\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\WordQuest.Application.Core.Read\WordQuest.Application.Core.Read.csproj" />
+	  <ProjectReference Include="..\WordQuest.Application.Core\WordQuest.Application.Core.csproj" />
+	  <ProjectReference Include="..\WordQuest.Core\WordQuest.csproj" />
+	</ItemGroup>
+
+</Project>

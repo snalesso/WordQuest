@@ -17,7 +17,7 @@ export class LettersSelectorComponent extends ReactiveComponent {
         super(changeDetectorRef);
     }
 
-    private readonly _selectableChars$$ = new BehaviorSubject<readonly ISelectable<Char>[]>(null);
+    private readonly _selectableChars$$ = new BehaviorSubject<readonly ISelectable<Char>[] | undefined>(undefined);
     public readonly selectableChars$ = this._selectableChars$$.asObservable();
     @Input()
     public set selectableChars(value) { this._selectableChars$$.next(value); }

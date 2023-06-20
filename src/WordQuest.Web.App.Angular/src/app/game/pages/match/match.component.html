@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col">
 
-        <p>Match ID: {{matchId$ | async}}</p>
+        <p>Match ID: {{this.matchId$ | ngrxPush}}</p>
 
         <app-match-round></app-match-round>
 

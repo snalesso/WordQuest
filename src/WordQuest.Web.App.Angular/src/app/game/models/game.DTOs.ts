@@ -11,9 +11,9 @@ export enum MatchMode {
 //     LinkOnly = 2
 // }
 
-export interface MatchSettingsDto {
+export interface MatchSettings {
     readonly alphabetId: Alphabet["id"];
-    readonly categoryIds: ReadonlySet<CategoryDto["id"]>;
+    readonly categoryIds: ReadonlySet<Category["id"]>;
     readonly chars: ReadonlySet<Char>;
     readonly secondsPerWord: number;
     readonly roundsCount: number;
@@ -21,7 +21,7 @@ export interface MatchSettingsDto {
     readonly isPublic: boolean;
 }
 
-export interface CategoryDto {
+export interface Category {
     readonly id: number;
     readonly languageId: Language["id"];
     readonly alphabetId: Alphabet["id"];
@@ -31,10 +31,10 @@ export interface CategoryDto {
     // readonly tags?: ReadonlyArray<Tag>;
     readonly isCustom?: boolean;
 }
-export type CategoryHeaderDto = Pick<CategoryDto, "id" | "name" | "description">;
+export type CategoryHeader = Pick<Category, "id" | "name" | "description">;
 
-export type CategoriesDict = Dictionary<CategoryDto["id"], CategoryDto>;
-export type CategoryHeadersDict = Dictionary<CategoryHeaderDto["id"], CategoryHeaderDto>;
+export type CategoriesDict = Dictionary<Category["id"], Category>;
+export type CategoryHeadersDict = Dictionary<CategoryHeader["id"], CategoryHeader>;
 
 export interface WordDto {
     value: string;
@@ -55,7 +55,7 @@ export interface MatchRoundDto {
 
 export interface MatchSnapshot {
     readonly id: string;
-    readonly settings: MatchSettingsDto;
+    readonly settings: MatchSettings;
 
     readonly creationDateTime: Date;
     readonly startDateTime: Date;
@@ -72,7 +72,7 @@ export interface MatchSnapshot {
 export interface MatchRoundSnapshot {
     readonly index: number;
     readonly char: Char;
-    readonly categories: ReadonlyArray<CategoryDto>;
+    readonly categories: ReadonlyArray<Category>;
     readonly wordsPhase: WordsPhase;
     readonly validationPhase: ValidationPhase;
 }

@@ -6,7 +6,8 @@ import { RouterModule } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { NcbCommonModule } from '../common/ncb-common.module';
+import { ReactiveComponentModule } from '@ngrx/component';
+import { AppCommonModule } from '../common/app-common.module';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
@@ -30,7 +31,8 @@ import { TestComponent } from './pages/test/test.component';
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
-    NcbCommonModule
+    AppCommonModule,
+    ReactiveComponentModule
   ],
   exports: [
     HeaderComponent,

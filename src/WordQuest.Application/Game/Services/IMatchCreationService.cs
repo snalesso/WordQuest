@@ -1,18 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using WordQuest.Culture.DTOs;
-using WordQuest.Game.DTOs;
+﻿using WordQuest.Game.Domain;
 
-namespace WordQuest.Game.Services
+namespace WordQuest.Game.Services;
+
+public interface IMatchCreationService
 {
-    public interface IMatchCreationService
-    {
-        Task<IReadOnlyList<LanguageOption>> GetLanguageOptionsAsync(CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<LanguageOption>> GetLanguageOptionsAsync(CancellationToken cancellationToken = default);
 
-        Task<IReadOnlyList<AlphabetInfo>> GetAlphabetVariantsAsync(CancellationToken cancellationToken = default);
-        Task<IReadOnlyList<AlphabetInfo>> GetAlphabetVariantsAsync(int languageId, CancellationToken cancellationToken = default);
+    //Task<IReadOnlyList<AlphabetOption>> GetAlphabetOptionsAsync(CancellationToken cancellationToken = default);
+    //Task<IReadOnlyList<AlphabetInfo>> GetAlphabetVariantsAsync(CancellationToken cancellationToken = default);
+    Task<IReadOnlyList<AlphabetVariantOption>> GetAlphabetVariantOptionsAsync(CancellationToken cancellationToken = default);
+    //Task<IReadOnlyList<AlphabetInfo>> GetAlphabetVariantsAsync(int languageId, CancellationToken cancellationToken = default);
 
-        Task<IReadOnlyList<Category>> GetRandomCategories(int alphabetId, ushort count, CancellationToken cancellationToken = default);
-    }
+    Task<IReadOnlyList<CategoryOption>> GetRandomCategories(Guid alphabetVariantId, ushort count, CancellationToken cancellationToken = default);
+
+    Task SeedCategories(CancellationToken cancellationToken = default);
 }

@@ -105,17 +105,19 @@
                    data-toggle="dropdown"
                    aria-haspopup="true"
                    aria-expanded="false">
-                    <span *ngIf="(selectedLanguage$ | async) as language; else noSelectedLang">{{language.nativeName}}</span>
+                    <span *ngIf="this.isLanguageSelected$ | ngrxPush; else noSelectedLang">{{(this.selectedLanguage$ | ngrxPush).nativeName}}</span>
                     <ng-template #noSelectedLang>
-                        <span>-no lang-</span>
+                        <span *ngIf="this.areLanguagesAvailable$ | ngrxPush">No languages</span>
+                        <span *ngIf="this.areLanguagesAvailable$ | ngrxPush | negate">Select a language</span>
                     </ng-template>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right"
                      aria-labelledby="navbarDropdownMenuLink">
+                    <!-- TODO: add loading placeholder -->
                     <button class="dropdown-item"
-                            (click)="setLanguageAsync(lang)"
-                            *ngFor="let lang of (availableLanguages$ | async)">
-                        <span>{{lang.nativeName}}</span>
+                            (click)="setLanguage(language)"
+                            *ngFor="let language of (this.languages$ | ngrxPush)">
+                        <span>{{language.nativeName}}</span>
                     </button>
                 </div>
             </li>

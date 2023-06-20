@@ -3,20 +3,20 @@
 
         <div class="input-group mb-2">
             <input type="text"
-                   [appIsDisabled]="isDisabled$ | async"
+                   [appIsDisabled]="this.isDisabled$ | ngrxPush"
                    class="form-control"
                    placeholder="Filter by name"
                    aria-label="Filter by name">
             <div class="input-group-append">
                 <button class="btn btn-outline-primary"
-                        [appIsDisabled]="isDisabled$ | async"
+                        [appIsDisabled]="this.isDisabled$ | ngrxPush"
                         type="button">
                     <!-- <span class="fas fa-search fa-fw"></span> -->
                     <fa-icon [icon]="['fas', 'search']"
                              [fixedWidth]="true"></fa-icon>
                 </button>
                 <button class="btn btn-outline-danger"
-                        [appIsDisabled]="isDisabled$ | async"
+                        [appIsDisabled]="this.isDisabled$ | ngrxPush"
                         type="button">
                     <!-- <span class="fas fa-times fa-fw"></span> -->
                     <fa-icon [icon]="['fas', 'times']"
@@ -34,7 +34,7 @@
                        for="tagsFilterSelect">Tags</label>
             </div>
             <select class="custom-select"
-                    [appIsDisabled]="isDisabled$ | async"
+                    [appIsDisabled]="this.isDisabled$ | ngrxPush"
                     placeholder="Filter by tag"
                     id="tagsFilterSelect">
                 <option selected>All</option>
@@ -42,7 +42,7 @@
             </select>
             <div class="input-group-append">
                 <button class="btn btn-outline-danger"
-                        [appIsDisabled]="isDisabled$ | async"
+                        [appIsDisabled]="this.isDisabled$ | ngrxPush"
                         type="button">
                     <!-- <span class="fas fa-times fa-fw"></span> -->
                     <fa-icon [icon]="['fas', 'times']"
@@ -56,16 +56,16 @@
 
 <!-- <div>
     <button (click)="subscribeLang()">subscribe to lang</button>
-    <p>{{test$ | async | json}}</p>
+    <p>{{test$ | ngrxPush | json}}</p>
 </div> -->
 
 <div class="wrap-panel rounded-top p-1 overflow-auto"
      style="max-height: 300px;">
 
-    <ng-container *ngIf="(areCategoriesLoaded$ | async) as areCategoriesLoaded; then categoriesLoaded; else categoriesLoading;"></ng-container>
+    <ng-container *ngIf="(this.areCategoriesAvailable$ | ngrxPush) as areCategoriesLoaded; then categoriesLoaded; else categoriesLoading;"></ng-container>
 
     <ng-template #categoriesLoaded>
-        <ng-container *ngIf="(hasCategories$ | async) as hasCategories; then hasCategories; else hasNoCategories;"></ng-container>
+        <ng-container *ngIf="(this.areCategoriesAvailable$ | ngrxPush) as hasCategories; then hasCategories; else hasNoCategories;"></ng-container>
 
         <ng-template #hasCategories>
             <!-- <label *ngFor="let item of categories; let i = index;" class="card-text token clickable m-1 px-1">
@@ -74,8 +74,8 @@
                 <span class="text-muted">[{{getUnicodeFlag(item.value.language)}}]</span>
             </label> -->
 
-            <button *ngFor="let item of (categories$ | async); let i = index;"
-                    [appIsDisabled]="isDisabled$ | async"
+            <button *ngFor="let item of (this.categories$ | ngrxPush); let i = index;"
+                    [appIsDisabled]="isDisabled$ | ngrxPush"
                     class="btn btn-primary m-1 px-2 py-1"
                     [class.active]="item.isSelected"
                     (click)="toggle(item)">
@@ -122,7 +122,7 @@
     </label> -->
 
     <button *ngFor="let item of selectedCategories; let i = index; trackBy: getCategoryId;"
-            [appIsDisabled]="isDisabled$ | async"
+            [appIsDisabled]="isDisabled$ | ngrxPush"
             class="btn btn-outline-primary m-1 px-2 py-1"
             [class.active]="!!item.isSelected"
             (click)="remove(item)">
@@ -138,8 +138,8 @@
 <div class="card-footer form-control-border rounded-bottom border-top-0 py-1 px-2 align-content-center">
     <!-- <button type="button" class="btn btn-link">Clear</button> -->
     <label class="align-middle m-0">
-        <span *ngIf="!(selectedCategories$ | async)">-</span>
-        <span *ngIf="!!(selectedCategories$ | async)">{{(selectedCategories$ | async).length}} categories selected</span>
+        <span *ngIf="!(selectedCategories$ | ngrxPush)">-</span>
+        <span *ngIf="!!(selectedCategories$ | ngrxPush)">{{(selectedCategories$ | ngrxPush).length}} categories selected</span>
         <!-- <span>{{selectedCats?.length || 0}} categories selected</span> -->
     </label>
 </div>

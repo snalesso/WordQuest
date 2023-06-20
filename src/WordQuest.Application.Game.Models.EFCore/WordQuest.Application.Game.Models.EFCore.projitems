@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects Condition="'$(MSBuildVersion)' == '' Or '$(MSBuildVersion)' &lt; '16.0'">$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>fcb8b5b2-7baf-44c0-928d-1ae8a6ec785e</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>WordQuest.Application.Game.Models.EFCore</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\AlphabetFamiliesLanguageName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\AlphabetFamily.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\AlphabetVariant.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\AlphabetVariantCharsUtf16.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\Category.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\Language.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\LanguageAlphabet.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\Tag.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\TagName.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Game\Models\TagNamesByLanguage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Game\Models\Mssqls\" />
+  </ItemGroup>
+</Project>

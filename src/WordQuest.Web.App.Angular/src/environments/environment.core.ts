@@ -1,12 +1,12 @@
 export const APP_NAME: string = "WordQuest";
 
 export interface IEnvironment {
-    production: boolean;
-    website: {
-        displayName: string;
+    readonly isInProduction: boolean;
+    readonly website: {
+        readonly displayName: string;
     };
-    api: {
-        getSignalRHostAddress: () => string;
-        getHostAddress: () => string;
+    readonly api: {
+        readonly getSignalRHostAddress: () => string;
+        readonly getHostAddress: () => string;
     }
 }

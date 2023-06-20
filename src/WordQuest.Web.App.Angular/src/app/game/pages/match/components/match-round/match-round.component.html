@@ -1,5 +1,5 @@
 <div class="row"
-     *ngIf="currentRound$ | async as round">
+     *ngIf="currentRound$ | ngrxPush as round">
     <div class="col">
 
         <p>Round #{{round.index}}</p>

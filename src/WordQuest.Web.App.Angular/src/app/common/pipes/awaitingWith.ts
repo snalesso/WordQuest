@@ -1,19 +1,18 @@
-import { invalid } from "@angular/compiler/src/render3/view/util";
-import { merge, Observable, of, concat, ObservableInput, from, SubscribableOrPromise } from "rxjs";
-import { catchError, map, startWith, switchMap } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+import { map, startWith, switchMap } from "rxjs/operators";
 import { DataOp } from "../data/models/DataOp";
 
 export function switchMapWith<TIn, TOut>(
     awaitingValue: TOut,
-    filter: (input: TIn) => boolean,
-    asyncFn: (value: TIn) => Observable<TOut>) {
-    return (source: Observable<TIn>) =>
-        source.pipe(
+    canGetValue: (input: TIn) => boolean,
+    getValueAsync: (value: TIn) => Observable<TOut>) {
+    return (source$: Observable<TIn>) =>
+        source$.pipe(
             switchMap(inValue => {
-                // TODO: use NEVER while waiting
-                return filter(inValue)
-                    ? concat(of(awaitingValue), asyncFn(inValue))
-                    : of(awaitingValue);
+                if (!canGetValue(inValue))
+                    return of(awaitingValue);
+                return getValueAsync(inValue).pipe(startWith(awaitingValue));
+                // return concat(of(awaitingValue), asyncFn(inValue));
             }));
 }
 
@@ -23,12 +22,12 @@ export function toDataOp<TIn>(source: Observable<TIn>): Observable<DataOp<TIn>> 
             map<TIn, DataOp<TIn>>(value => ({
                 isLoading: false,
                 data: value,
-                error: null
+                error: undefined
             })),
             startWith<DataOp<TIn>>({
                 isLoading: true,
-                data: null,
-                error: null
+                data: undefined,
+                error: undefined
             })
         );
 }

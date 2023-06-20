@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!--
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<EnablePreviewFeatures>enabled</EnablePreviewFeatures>
+		<RootNamespace>$(SolutionName)</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		-->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Culture\**" />
+		<EmbeddedResource Remove="Culture\**" />
+		<None Remove="Culture\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="Game\Domain\Persistence\EfCoreAlphabetVariantOptionsView1.cs" />
+		<Compile Remove="Game\Domain\Persistence\EFCoreLanguageOptionsRepository.cs" />
+		<Compile Remove="Game\Services\EFCoreMatchCreationService.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\WordQuest.Application.Read\WordQuest.Application.Read.csproj" />
+		<ProjectReference Include="..\WordQuest.Core\WordQuest.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Domain\" />
+		<Folder Include="Game\Services\" />
+	</ItemGroup>
+
+</Project>

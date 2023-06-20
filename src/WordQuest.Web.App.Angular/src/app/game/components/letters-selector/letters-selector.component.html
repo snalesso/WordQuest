@@ -4,8 +4,8 @@
             [class.active]="!!item.isSelected"
             type="button"
             (click)="toggleSelection(item)"
-            *ngFor="let item of (selectableChars$ | async)">
+            *ngFor="let item of (selectableChars$ | ngrxPush)">
         <p class="text-monospace m-0">{{item.value}}</p>
     </button>
-    <!-- <p *ngFor="let sc of (selectableChars$ | async)">{{sc.value}}</p> -->
+    <!-- <p *ngFor="let sc of (selectableChars$ | ngrxPush)">{{sc.value}}</p> -->
 </div>

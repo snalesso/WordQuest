@@ -1,0 +1,1 @@
+Scaffold-DbContext "Data Source=.;Initial Catalog=WordQuest;Integrated Security=True;" Microsoft.EntityFrameworkCore.SqlServer -Context EfCoreReadOnlyGameDbContext -ContextDir Game/Domain/Persistence -OutputDir Game/Domain/Persistence -Force -Project "WordQuest.Application.Read.EFCore" -StartupProject "WordQuest.Application.Read.EFCore"

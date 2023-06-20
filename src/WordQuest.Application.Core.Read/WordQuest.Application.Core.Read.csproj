@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!--
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<EnablePreviewFeatures>enabled</EnablePreviewFeatures>
+		<RootNamespace>$(SolutionName)</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		-->
+	</PropertyGroup>
+
+</Project>
