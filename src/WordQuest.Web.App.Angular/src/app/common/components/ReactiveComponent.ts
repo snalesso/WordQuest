@@ -1,63 +1,54 @@
-import { ChangeDetectorRef, Component, Directive, Injectable, OnDestroy } from "@angular/core";
-import { AbstractControl } from "@angular/forms";
-import { Observable, Observer, PartialObserver, Subscription } from "rxjs";
+import { ChangeDetectorRef, Directive, OnDestroy, Output } from "@angular/core";
+import { Observable, PartialObserver, Subject, isObservable } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
-// @Injectable()
-// @Directive()
-@Component({ template: '' })
-export class ReactiveComponent implements OnDestroy {
+// TODO: rename file
+@Directive()
+export abstract class ReactiveComponent implements OnDestroy {
 
-  private _subscriptions: Subscription[];
-  fewfaw: AbstractControl;
+  private readonly _destructionTrigger$$ = new Subject<void>();
+  @Output()
+  public readonly destructionTrigger$ = this._destructionTrigger$$.asObservable();
 
-  constructor(private readonly _changeDetectorRef: ChangeDetectorRef) { }
-
-  protected markForCheck(): void {
-    this._changeDetectorRef.markForCheck();
-  }
-
-  protected detectChanges(): void {
-    this._changeDetectorRef.detectChanges();
-  }
-
-  protected subscribe<T>(
-    sourceOrSubs: Observable<T> | Subscription[] | Subscription,
-    observer?: PartialObserver<T>) {
-
-    this._subscriptions ??= [];
-
-    if (sourceOrSubs instanceof Observable) {
-      const sub = !!observer
-        ? sourceOrSubs.subscribe(observer)
-        : sourceOrSubs.subscribe();
-      this._subscriptions.push(sub);
-    }
-    else if (sourceOrSubs instanceof Array) {
-      this._subscriptions.push(...sourceOrSubs);
-    }
-    else if (sourceOrSubs instanceof Subscription) {
-      this._subscriptions.push(sourceOrSubs);
-    }
-  }
-
-  private unsubscribeBackwards(): void {
-
-    if (!this._subscriptions)
-      return;
-
-    for (let i = (this._subscriptions.length - 1); i >= 0; i--) {
-      const sub = this._subscriptions[i];
-      sub.unsubscribe();
-    }
-    // for (const sub of this._subscriptions) {
-    //   sub.unsubscribe();
-    // }
-  }
+  constructor(private readonly _cdr: ChangeDetectorRef) { }
 
   ngOnDestroy(): void {
-
-    this.unsubscribeBackwards();
-    this._subscriptions = null;
+    this._destructionTrigger$$.next();
   }
 
+  protected subscribe<T>(observable: Observable<T>): void;
+  protected subscribe<T>(observables: Observable<T>[]): void;
+  protected subscribe(observables: Observable<unknown>[]): void;
+  protected subscribe<T>(observable: Observable<T>, observer?: PartialObserver<T>): void;
+  protected subscribe<T>(observables: Observable<T>[], observer?: PartialObserver<T>): void;
+  protected subscribe(observables: Observable<unknown>[], observer?: PartialObserver<unknown>): void;
+  protected subscribe<T>(oneOrManyObservables: Observable<T> | Observable<T>[], observer?: PartialObserver<T>): void {
+
+    if (oneOrManyObservables == null)
+      throw new Error('Observable/s not defined.');
+
+    if (isObservable(oneOrManyObservables)) {
+      oneOrManyObservables.pipe(takeUntil(this.destructionTrigger$)).subscribe(observer);
+      return;
+    }
+    if (oneOrManyObservables instanceof Array) {
+      for (const observable of oneOrManyObservables) {
+        this.subscribe(observable, observer);
+      }
+      return;
+    }
+    throw new Error('Unsupported type.');
+  }
+
+  protected markForCheck(): void {
+    this._cdr.markForCheck();
+  }
+  protected detectChanges(): void {
+    this._cdr.detectChanges();
+  }
+  protected detectLocalChanges(): void {
+    this._cdr.detach();
+    this._cdr.detectChanges();
+    this._cdr.reattach();
+  }
 }

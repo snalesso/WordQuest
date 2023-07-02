@@ -7,6 +7,6 @@ export enum DataOperationStatus {
 export interface DataOp<T> {
     // readonly status: DataOperationStatus;
     readonly isLoading: boolean;
-    readonly data: T;
-    readonly error: Error | null;
+    readonly data: T | undefined;
+    readonly error: Error | undefined;
 }

@@ -1,54 +1,72 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EMPTY, NEVER, Observable, of } from 'rxjs';
-import { map, catchError, tap, switchMap } from 'rxjs/operators';
-import { Alphabet, Language } from 'src/app/root/models/culture.DTOs';
+import { Observable, of, throwError } from 'rxjs';
 import { NcbApiService } from 'src/app/common/services/ncb-api.service';
-import { CategoryDto, CategoryHeaderDto, MatchSettingsDto, MatchSnapshot } from '../models/game.DTOs';
+import { forceDelayInDev } from 'src/app/common/utils/dev.utils';
+import { Alphabet, AlphabetVariantOption, Language } from 'src/app/root/models/culture.DTOs';
+import { CategoryOption, MatchSettings, MatchSnapshot } from '../models/game.DTOs';
 
 @Injectable({
   providedIn: 'root'
 })
+// TODO: rename to MatchCreationService
 export class GameService extends NcbApiService {
 
   constructor(http: HttpClient) { super(http); }
 
-  public async getMatchDefaultSettingsAsync() { return of("Not implemented"); }
+  public async getMatchDefaultSettingsAsync() {
+    return throwError(() => new Error("Not implemented"));
+  }
 
-  public getCategoryHeadersAsync(languageId: Language["id"], alphabetId: Alphabet["id"]) {
+  public getCategoryOptionsAsync(/*languageId: Language["id"],*/ alphabetVariantId: Alphabet["id"]) {
 
     let queryParams: HttpParams = new HttpParams();
-    if (!!languageId)
-      queryParams = queryParams.append("languageId", "" + languageId);
-    if (!!alphabetId)
-      queryParams = queryParams.append("alphabetId", "" + alphabetId);
+    /*if (!!languageId)
+      queryParams = queryParams.append("languageId", "" + languageId);*/
+    if (!!alphabetVariantId)
+      queryParams = queryParams.append("alphabetVariantId", alphabetVariantId.toString());
 
-    return this.http.get<ReadonlyArray<CategoryHeaderDto>>(this.getEndpoint("GetCategories"), { params: queryParams })
-      // .pipe(
-      //   map(categs => {
-      //     return categs;
-      //   }),
-      //   catchError(err => EMPTY))
-      ;
+    return this.http.get<readonly CategoryOption[]>(this.getEndpoint("GetCategoryOptions"), { params: queryParams })
+      .pipe(
+        forceDelayInDev(),
+        //   map(categs => {
+        //     return categs;
+        //   }),
+        //   catchError(err => EMPTY)
+      );
   }
 
-  public getAlphabetsAsync() {
-    return this.http.get<ReadonlyArray<Alphabet>>(this.getEndpoint("GetAlphabets"))
-      // .pipe(
+  // public getAlphabetOptionsAsync() {
+  //   return this.http.get<readonly Alphabet[]>(this.getEndpoint("GetAlphabetOptions"))
+  //     .pipe(
+  //       forceDelayInDev(3000),
+  //       // map(alphabets => new Set(alphabets) as ReadonlySet<Alphabet>),
+  //       // tap(value => logEvent(this, 'alphabet options', value)),
+  //       //   catchError(error => EMPTY))
+  //     );
+  // }
+
+  public getAlphabetVariantOptionsAsync() {
+    return this.http.get<readonly AlphabetVariantOption[]>(this.getEndpoint("GetAlphabetVariantOptions"))
+      .pipe(
+      // forceDelayInDev(3000),
+      // map(alphabets => new Set(alphabets) as ReadonlySet<Alphabet>),
+      // tap(value => logEvent(this, 'alphabet options', value)),
       //   catchError(error => EMPTY))
-      ;
+    );
   }
 
-  public getLanguagesAsync() {
-    return this.http.get<ReadonlyArray<Language>>(this.getEndpoint("GetLanguages"))
-      // .pipe(
-      //   catchError(err => EMPTY))
-      ;
+  public getLanguageOptionsAsync() {
+    return this.http.get<ReadonlySet<Language>>(this.getEndpoint("GetLanguageOptions"))
+      .pipe(
+        forceDelayInDev(),
+        // catchError(err => EMPTY)
+      );
   }
 
-  public createMatchAsync(settings: MatchSettingsDto) { return of("NEhnXXf78is"); }
+  public createMatchAsync(settings: MatchSettings) { return of("NEhnXXf78is"); }
 
   public joinAsync(matchId: MatchSnapshot["id"]): Observable<MatchSnapshot> {
-    return of(null);
+    return throwError(() => new Error('Not implemented'));
   }
 }

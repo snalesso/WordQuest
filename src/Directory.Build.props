@@ -1,16 +1,25 @@
 <Project>
-    <PropertyGroup>
-        <!--<Company></Company>-->
-        <Copyright>Copyright © snalesso 2022</Copyright>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-        <!--<FileVersion></FileVersion>-->
-        <!--<Version>1.0.0.0</Version>-->
-        <!-- ... -->
-    </PropertyGroup>
+	<PropertyGroup>
+		<!--<Company></Company>-->
+		<Copyright>Copyright © snalesso 2022</Copyright>
+		<AssemblyVersion>1.0.0.0</AssemblyVersion>
+		<!--<FileVersion></FileVersion>-->
+		<!--<Version>1.0.0.0</Version>-->
+		<!-- ... -->
+	</PropertyGroup>
 
-    <PropertyGroup>
-        <SolutionName Condition="'$(SolutionName)' == ''">
-            $([System.IO.Path]::GetFileNameWithoutExtension($([System.IO.Directory]::GetFiles("$(MSBuildThisFileDirectory)", "*.sln")[0])))
-        </SolutionName>
-    </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<EnablePreviewFeatures>true</EnablePreviewFeatures>
+		<RootNamespace>$(SolutionName)</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<SolutionName Condition="'$(SolutionName)' == ''">
+			$([System.IO.Path]::GetFileNameWithoutExtension($([System.IO.Directory]::GetFiles("$(MSBuildThisFileDirectory)", "*.sln")[0])))
+		</SolutionName>
+	</PropertyGroup>
 </Project>

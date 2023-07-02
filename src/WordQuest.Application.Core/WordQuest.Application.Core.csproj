@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<!--
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>preview</LangVersion>
+		<Nullable>enable</Nullable>
+		<EnablePreviewFeatures>enabled</EnablePreviewFeatures>
+		<RootNamespace>$(SolutionName)</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+		-->
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Game\Application\**" />
+		<EmbeddedResource Remove="Game\Application\**" />
+		<None Remove="Game\Application\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\WordQuest.Core\WordQuest.Core.csproj" />
+	</ItemGroup>
+
+</Project>

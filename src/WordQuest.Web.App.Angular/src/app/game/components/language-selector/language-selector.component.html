@@ -1,16 +1,16 @@
 <select class="form-control"
         id="languageSelect"
-        [disabled]="!(languages$ | async)"
-        [ngModel]="selectedLanguage$ | async"
+        [disabled]="!(languages$ | ngrxPush)"
+        [ngModel]="selectedLanguage$ | ngrxPush"
         (ngModelChange)="selectLanguage($event)">
     <option [ngValue]="null"
             disabled
             hidden>
-        <span *ngIf="!(languages$ | async)">Loading &hellip;</span>
-        <span *ngIf="languages$ | async">Select a language &hellip;</span>
+        <span *ngIf="!(languages$ | ngrxPush)">Loading &hellip;</span>
+        <span *ngIf="languages$ | ngrxPush">Select a language &hellip;</span>
     </option>
     <option [ngValue]="lang.key"
-            *ngFor="let lang of languages$ | async | keyvalue">
+            *ngFor="let lang of languages$ | ngrxPush | keyvalue">
         <span>{{lang.value}}</span>
     </option>
 </select>

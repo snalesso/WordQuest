@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
-import { MatchSnapshot } from '../../models/game.DTOs';
 import { MatchService } from '../../services/match.service';
 
 @Component({
@@ -61,7 +59,7 @@ export class MatchComponent extends ReactiveComponent {
     //                         return languages[0];
     //                     }
     //                 }))
-    //             .subscribe(x => this.selectLanguage(x)),
+    //             .subscribe(value => this.selectLanguage(x)),
 
     //     );
     // }

@@ -1,5 +1,5 @@
 <div class="row"
-     *ngIf="currentRound$ | async as currentRound">
+     *ngIf="currentRound$ | ngrxPush as currentRound">
     <div class="col">
 
         <p>Letter: {{currentRound.char}}</p>

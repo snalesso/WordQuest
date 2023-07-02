@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule, Routes, Data } from '@angular/router';
+import { Route, RouterModule, Routes } from '@angular/router';
 import { RouteData } from '../root/models/presentation';
 import { GuideComponent } from './pages/guide/guide.component';
 import { MatchComponent } from './pages/match/match.component';
@@ -17,6 +17,15 @@ export const gameRoutes: ReadonlyArray<Route> = [
         } as RouteData)
     },
     {
+        path: ":matchId",
+        component: MatchComponent,
+        data: ({
+            UI: {
+                pageTitleKey: "Match"
+            }
+        } as RouteData)
+    },
+    {
         path: "test",
         component: TestComponent,
         data: ({
@@ -26,14 +35,14 @@ export const gameRoutes: ReadonlyArray<Route> = [
         } as RouteData)
     },
     {
-        path: ":matchId",
-        component: MatchComponent,
+        path: "guide",
+        component: GuideComponent,
         data: ({
             UI: {
-                pageTitleKey: "Match"
+                pageTitleKey: "Guide"
             }
         } as RouteData)
-    }
+    },
 ];
 
 // export const appRoutes: ReadonlyArray<Route> = routes;

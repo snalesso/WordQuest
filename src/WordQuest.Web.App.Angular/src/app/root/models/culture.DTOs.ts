@@ -29,6 +29,13 @@ export interface Language {
     readonly id: number;
     readonly nativeName: string;
 }
+export interface LanguageHeader {
+    readonly id: number;
+    readonly nativeName: string;
+}
+export interface CharMetadata {
+    readonly isUncommon?: boolean;
+}
 export interface CharInfo {
     readonly char: Char;
     readonly isRare?: boolean;
@@ -38,7 +45,14 @@ export interface Alphabet {
     readonly language: Language;
     // readonly alphabetFamily: AlphabetFamily;
     readonly nativeName: string;
-    readonly charInfos: ReadonlyArray<CharInfo>;
+    readonly charInfos: ReadonlyArray<CharInfo>; // TODO: use dict/set?
+}
+export interface AlphabetVariantOption {
+    readonly id: number;
+    readonly languageNativeName: string;
+    readonly alphabetFamilyInvariantCultureName: string;
+    // readonly language: LanguageHeader;
+    readonly charMetadataMap: Dictionary<Char, CharMetadata>;
 }
 
 export type LanguagesDict = Dictionary<Language["id"], Language>;

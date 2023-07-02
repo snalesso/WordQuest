@@ -1,5 +1,5 @@
 ﻿
-create view LanguageAlphabets
+create view [dbo].[LanguageAlphabets]
 as select /*av.Id as AlphabetVariantId,*/ lang.Id as LanguageId, lang.NativeName as LanguageNativeName, af.InvariantCultureName
 from
 	AlphabetVariants av

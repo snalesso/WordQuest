@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { map, multicast, refCount } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
 import { Options } from 'sortablejs';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
-import { isNilOrEmpty } from 'src/app/common/utils/array.utils';
-import { isNotNil } from 'src/app/common/utils/core.utils';
+import { allTrue, isNilOrEmpty } from 'src/app/common/utils/core.utils';
+import { logEvent } from 'src/app/common/utils/dev.utils';
 import { ISelectable } from 'src/app/root/models/core';
-import { } from 'src/app/root/models/presentation';
 import { Tag } from '../../models/game';
-import { CategoryDto, CategoryHeaderDto } from '../../models/game.DTOs';
+import { Category, CategoryOption } from '../../models/game.DTOs';
 import { GameService } from '../../services/game.service';
 import { MatchService } from '../../services/match.service';
 
@@ -20,48 +19,140 @@ import { MatchService } from '../../services/match.service';
 })
 export class CategoriesSelectorComponent extends ReactiveComponent implements OnInit {
 
+  private readonly _isLoading$$ = new BehaviorSubject<boolean>(false);
+  public get isLoading() { return this._isLoading$$.value; }
+  @Output()
+  public readonly isLoading$ = this._isLoading$$.pipe(
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'isLoading', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  private readonly _isEnabled$$ = new BehaviorSubject<boolean>(false);
+  public get isEnabled() { return this._isEnabled$$.value; }
+  @Input()
+  public set isEnabled(value) { this._isEnabled$$.next(value); }
+  @Output()
+  public readonly isEnabled$ = this._isEnabled$$.pipe(
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'isEnabled', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  private readonly _categories$$ = new BehaviorSubject<ISelectable<CategoryOption>[] | undefined>(undefined);
+  public get categories() { return this._categories$$.value; }
+  @Input()
+  public set categories(value: ISelectable<CategoryOption>[] | undefined) { this._categories$$.next(value); }
+  @Output()
+  public readonly categories$ = this._categories$$.pipe(
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'categories', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  private readonly _fulltextSearchString$$ = new BehaviorSubject<string>('');
+  public get fulltextSearchString() { return this._fulltextSearchString$$.value; }
+  @Input()
+  public set fulltextSearchString(value: string) { this._fulltextSearchString$$.next(value); }
+  @Output()
+  public readonly fulltextSearchString$ = this._fulltextSearchString$$.pipe(distinctUntilChanged());
+
+  private readonly _filteredCategories$$ = new BehaviorSubject<readonly ISelectable<CategoryOption>[] | undefined>(undefined);
+  public get filteredCategories() { return this._filteredCategories$$.value; }
+  @Output() public readonly filteredCategories$ = combineLatest([
+    this.categories$,
+    this.fulltextSearchString$.pipe(debounceTime(500))
+  ]).pipe(
+    map(([categories, fulltextSearchString]) => {
+      if (categories == null)
+        return undefined;
+      if (isNilOrEmpty(fulltextSearchString))
+        return categories;
+      const keysSet = new Set(fulltextSearchString.toLowerCase().split(' ').filter(key => key.length > 0));
+      const keys = [...keysSet.values()];
+      const filteredCategories = categories.filter(category => {
+        const name = category.value.name.toLowerCase();
+        const desription = category.value.description?.toLowerCase();
+        return keys.every(key => name.includes(key) || (desription?.includes(key) ?? false));
+      });
+      return filteredCategories;
+    }),
+    multicast(() => this._filteredCategories$$),
+    refCount(),
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'categories', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  private readonly _areCategoriesAvailable$$ = new BehaviorSubject<boolean>(!isNilOrEmpty(this.categories));
+  public get areCategoriesAvailable() { return this._areCategoriesAvailable$$.value; }
+  @Output()
+  public readonly areCategoriesAvailable$ = this.categories$.pipe(
+    map(cats => !isNilOrEmpty(cats)),
+    multicast(() => this._areCategoriesAvailable$$),
+    refCount(),
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'areCategoriesAvailable', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  private readonly _selectedCategories$$ = new BehaviorSubject<readonly ISelectable<CategoryOption>[] | undefined>(undefined);
+  public get selectedCategories() { return this._selectedCategories$$.value; }
+  @Input()
+  public set selectedCategories(value) { this._selectedCategories$$.next(value); }
+  @Output()
+  public readonly selectedCategories$ = this._selectedCategories$$.asObservable();
+
+  private readonly _canFilterCategories$$ = new BehaviorSubject<boolean>(allTrue([this.isEnabled, this.areCategoriesAvailable]));
+  @Output()
+  public readonly canFilterCategories$ = this.categories$.pipe(
+    map(cats => !isNilOrEmpty(cats)),
+    multicast(() => this._canFilterCategories$$),
+    refCount(),
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'canFilterCategories', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  private readonly _canChooseCategories$$ = new BehaviorSubject<boolean>(allTrue([this.isEnabled, this.areCategoriesAvailable]));
+  @Output()
+  public readonly canChooseCategories$ = this.categories$.pipe(
+    map(cats => !isNilOrEmpty(cats)),
+    multicast(() => this._canChooseCategories$$),
+    refCount(),
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'canChooseCategories', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
   constructor(
+    cdr: ChangeDetectorRef,
     private readonly _gameService: GameService,
-    private readonly _matchService: MatchService,
-    changeDetectorRef: ChangeDetectorRef) {
-
-    super(changeDetectorRef);
-
-    // this.isDisabled$ = this.isDisabled$.pipe(map(x => !x), shareReplay(1));
+    private readonly _matchService: MatchService) {
+    super(cdr);
   }
 
   ngOnInit(): void {
+    this.subscribe([
+      this.isEnabled$,
+      this.isLoading$,
+      this.categories$,
+      this.selectedCategories$,
+      this.areCategoriesAvailable$,
+      this.canFilterCategories$,
+      this.filteredCategories$,
+      this.fulltextSearchString$,
+      this.canChooseCategories$,
+    ]);
 
-    // TODO: review if refCount is needed
-    this.subscribe(this.hasCategories$.pipe(multicast(this._isEnabled$$), refCount()));
-    this.subscribe(this.hasCategories$.pipe(map(hasCategories => hasCategories ? [] : null), multicast(this._selectedCategories$$), refCount()));
+    this.subscribe(this.categories$, {
+      next: () => {
+        this.selectedCategories = [];
+      }
+    });
+    this.subscribe(this.categories$, {
+      next: () => {
+        this.fulltextSearchString = '';
+      }
+    });
   }
 
-  // TODO: calculate isEnabled using combineLatest
-  private readonly _isEnabled$$ = new BehaviorSubject<boolean>(false);
-  public readonly isEnabled$ = this._isEnabled$$.asObservable();
-  public readonly isDisabled$ = this._isEnabled$$.pipe(map(isEnabled => !isEnabled));
-
-  private readonly _categories$$ = new BehaviorSubject<ISelectable<CategoryHeaderDto>[]>(null);
-  public readonly categories$ = this._categories$$.asObservable();
-  @Input()
-  public set categories(value) { this._categories$$.next(value); }
-  public get categories() { return this._categories$$.value; }
-
-  public readonly areCategoriesLoaded$ = this.categories$.pipe(map(cats => isNotNil(cats)));
-  public readonly hasCategories$ = this.categories$.pipe(map(cats => !isNilOrEmpty(cats)));
-
-  private readonly _selectedCategories$$ = new BehaviorSubject<ISelectable<CategoryHeaderDto>[]>(null);
-  @Output()
-  public readonly selectedCategories$ = this._selectedCategories$$.asObservable();
-  public get selectedCategories() { return this._selectedCategories$$.value; }
-  public set selectedCategories(value) { this._selectedCategories$$.next(value); };
-
-  public getCategoryId(index: number, category: ISelectable<CategoryHeaderDto>): number {
+  public getCategoryId(index: number, category: ISelectable<CategoryOption>): number {
     return category.value.id;
   }
-
-  //#region SortableJS
 
   //   public readonly availableCategoriesOptions: Options = {
   //     group: {
@@ -99,7 +190,9 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     //   this.markForCheck();
     //   this.detectChanges();
     // },
-    onSort: () => this.markForCheck()
+    onSort: () => {
+      this.detectLocalChanges();
+    }
   };
 
   public deselectCategory(index: number) {
@@ -108,47 +201,32 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
       throw new Error("Index " + index + " is out of array bounds");
     }
 
-    const category = this.selectedCategories[index];
-    this.selectedCategories.splice(index, 1);
+    this.selectedCategories = this.selectedCategories.slice(1);
   }
 
   public toggle(item: any) {
 
-    if (!item.isSelected) {
+    if (!item.isSelected)
       this.add(item);
-    }
-    else {
+    else
       this.remove(item);
-    }
   }
 
   public add(item: any) {
 
-    if (!this.selectedCategories || this.selectedCategories.includes(item)) {
+    if (!this.selectedCategories || this.selectedCategories.includes(item))
       return;
-    }
 
     item.isSelected = true;
-    this.selectedCategories.push(item);
+    this.selectedCategories = [...this.selectedCategories, item];
   }
 
-  public remove(item: ISelectable<CategoryDto> | null) {
+  public remove(item: ISelectable<Category> | undefined) {
 
-    if (item == null || item.value == null) //|| item.value.tags == null)
+    if (this.selectedCategories == null || item == null || item.value == null)
       return;
 
-    const items = this.selectedCategories;
-    if (!items) {
-      return;
-    }
-
-    let i = 0;
-    while (i < items.length) {
-      if (items[i] === item) {
-        items.splice(i, 1);
-      }
-      i++;
-    }
+    this.selectedCategories = this.selectedCategories?.filter(x => x !== item);
 
     item.isSelected = false;
   }
@@ -164,6 +242,4 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
 
     return tags.map(x => "#" + this.getTagName(x)).join(" ");
   }
-
-  //#endregion
 }

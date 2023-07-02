@@ -1,0 +1,1 @@
+Powershell -NoExit .\scaffolding.ps1

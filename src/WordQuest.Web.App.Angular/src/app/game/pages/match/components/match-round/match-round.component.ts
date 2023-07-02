@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
-import { MatchSettingsDto } from 'src/app/game/models/game.DTOs';
+import { MatchSettings } from 'src/app/game/models/game.DTOs';
 import { MatchService } from 'src/app/game/services/match.service';
 
 @Component({
@@ -14,18 +14,16 @@ import { MatchService } from 'src/app/game/services/match.service';
 export class MatchRoundComponent extends ReactiveComponent {
 
     constructor(
+        cdr: ChangeDetectorRef,
         private readonly _activatedRoute: ActivatedRoute,
-        private readonly _matchService: MatchService,
-        changeDetectorRef: ChangeDetectorRef
-    ) {
-
-        super(changeDetectorRef);
+        private readonly _matchService: MatchService) {
+        super(cdr);
     }
 
-    private _matchSettings$$ = new BehaviorSubject<MatchSettingsDto>(null);
+    private readonly _matchSettings$$ = new ReplaySubject<MatchSettings>(1);
     @Input()
-    public set matchSettings(value) { this._matchSettings$$.next(value); }
-    public get matchSettings() { return this._matchSettings$$.value; }
+    public set matchSettings(value: MatchSettings) { this._matchSettings$$.next(value); }
+    // public get matchSettings() { return this._matchSettings$$.value; }
     public get matchSettings$() { return this._matchSettings$$.asObservable(); }
 
     public get currentRound$() { return this._matchService.matchSnapshot$.pipe(map(x => x.currentRound)) }

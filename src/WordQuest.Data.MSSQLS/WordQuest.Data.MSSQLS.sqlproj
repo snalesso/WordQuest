@@ -9,8 +9,7 @@
     <ProjectGuid>{7281deb9-038e-4e0e-86b3-362127d66b2b}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
-    <RootPath>
-    </RootPath>
+    <RootPath />
     <RootNamespace>WordQuess</RootNamespace>
     <AssemblyName>WordQuest.Data</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
@@ -49,7 +48,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
@@ -58,23 +56,29 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
-    <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="Data" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\Tags.sql" />
-    <Build Include="dbo\Tables\TagNamesByLanguage.sql" />
-    <Build Include="dbo\Tables\Languages.sql" />
-    <Build Include="dbo\Tables\CategoriesTags.sql" />
-    <Build Include="dbo\Tables\Categories.sql" />
-    <Build Include="dbo\Tables\AlphabetVariants.sql" />
-    <Build Include="dbo\Tables\AlphabetVariant_Chars_UTF16.sql" />
-    <Build Include="dbo\Tables\AlphabetFamiliesLanguageNames.sql" />
-    <Build Include="dbo\Tables\AlphabetFamilies.sql" />
     <Build Include="dbo\Views\TagNames.sql" />
+    <Build Include="dbo\Views\AlphabetVariantOptions.sql" />
+    <Build Include="dbo\Tables\AlphabetFamilies.sql" />
+    <Build Include="dbo\Tables\AlphabetFamiliesLanguageNames.sql" />
+    <Build Include="dbo\Tables\AlphabetVariant_Chars_UTF16.sql" />
+    <Build Include="dbo\Tables\AlphabetVariants.sql" />
+    <Build Include="dbo\Tables\Categories.sql" />
+    <Build Include="dbo\Tables\Languages.sql" />
+    <Build Include="dbo\Tables\TagNamesByLanguage.sql" />
+    <Build Include="dbo\Tables\Tags.sql" />
+    <Build Include="dbo\Tables\CategoriesTags.sql" />
+    <None Include="Data\AlphabetFamilies.sql" />
+    <Build Include="dbo\Views\LanguageOptions.sql" />
     <Build Include="dbo\Views\LanguageAlphabets.sql" />
+    <Build Include="dbo\Views\CategoryOptions.sql" />
+    <Build Include="dbo\Views\AlphabetVariantChars.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="SqlSchemaCompare1.scmp" />
+    <None Include="Data\Languages.sql" />
   </ItemGroup>
 </Project>

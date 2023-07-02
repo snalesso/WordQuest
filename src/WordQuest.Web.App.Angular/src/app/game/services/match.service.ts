@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
-import { BehaviorSubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { NcbApiService } from 'src/app/common/services/ncb-api.service';
 import { isNotNil } from 'src/app/common/utils/core.utils';
@@ -13,13 +13,13 @@ import { MatchSnapshot } from '../models/game.DTOs';
 export class MatchService extends NcbApiService {
 
     private readonly _hubConnectionBuilder: signalR.HubConnectionBuilder = new signalR.HubConnectionBuilder().withUrl("http://localhost:5000/MatchHub");
-    private _matchHubConnection: signalR.HubConnection;
+    private _matchHubConnection: signalR.HubConnection | undefined = undefined;
 
     constructor(http: HttpClient) {
         super(http);
     }
 
-    private _matchSnapshot$$ = new BehaviorSubject<MatchSnapshot>(null);
+    private readonly _matchSnapshot$$ = new ReplaySubject<MatchSnapshot>(1);
     // public set matchSnapshot(value) { this._matchSnapshot$$.next(value); }
     // public get matchSnapshot() { return this._matchSnapshot$$.value; }
     public readonly matchSnapshot$ = this._matchSnapshot$$.asObservable();
@@ -61,7 +61,7 @@ export class MatchService extends NcbApiService {
             async (isConnected) => {
 
                 if (isConnected)
-                    return await this._matchHubConnection.invoke<boolean>("Terminate");
+                    return await this._matchHubConnection?.invoke<boolean>("Terminate");
 
                 return true;
             }

@@ -1,6 +1,4 @@
 import { Directive, ElementRef, Input } from '@angular/core';
-import { NgControl } from '@angular/forms';
-import { Observable, Subscription } from 'rxjs';
 import { HTMLDisableableElement } from '../model/presentation';
 
 const DIRECTIVE_NAME: string = "appIsDisabled";
@@ -11,13 +9,19 @@ const DIRECTIVE_NAME: string = "appIsDisabled";
 export class IsDisabledDirective {
 
   @Input(DIRECTIVE_NAME)
-  public set IsDisabiled(isDisabled: boolean) {
-    if (!this._htmlSelectElem.nativeElement)
-      return;
+  public set isDisabiled(value: boolean) {
+    const element = this._htmlSelectElem.nativeElement;
+    if (element === undefined || element === null)
+      throw new Error('HTML element not available.');
 
-    this._htmlSelectElem.nativeElement.disabled = isDisabled ? true : null;
+    if (value == false)
+      element.disabled = undefined as any as boolean;
+    else
+      element.disabled = true;
   }
 
-  constructor(private readonly _htmlSelectElem: ElementRef<HTMLDisableableElement>) { }
+  constructor(private readonly _htmlSelectElem: ElementRef<HTMLDisableableElement>) {
+    // TODO: validate nil?
+  }
 
 }

@@ -5,91 +5,34 @@
             <form>
 
                 <div class="form-row">
-
                     <div class="col-xs-12 col">
-
                         <div class="form-group">
-
                             <label for="languageSelect">
                                 <b>Language & Alphabet</b>
                             </label>
-
-                            <!-- <select class="form-control" id="languageSelect" name="languageSelect"
-                                [ngModel]="(selectedLanguage$ | async)"
-                                [disabled]="!(availableLanguageAlphabets$ | async)"
-                                (ngModelChange)="selectLanguage($event)">
-                                <option [ngValue]="langAlph.key"
-                                    *ngFor="let langAlph of (availableLanguageAlphabets$ | async) | keyvalue">{{langAlph.value.languageNativeName}}</option>
-                            </select> -->
-
-                            <app-alphabet-variant-selector [availableAlphabets]="(alphabets$ | async)"
-                                                           (selectedAlphabet$)="selectAlphabet($event)">
+                            <app-alphabet-variant-selector [alphabetVariants]="this.alphabetVariants$ | ngrxPush"
+                                                           (selectedAlphabetVariant$)="selectedAlphabet = $event">
                             </app-alphabet-variant-selector>
-                            <!-- <p>{{selectedLanguage}}</p>
-                            <p *ngIf="alphabets$ | async as langs">{{ langs[selectedLanguage] | json }}</p> -->
-
                         </div>
-
                     </div>
-
-                    <div class="col-xs-12 col-auto">
-
-                        <div class="form-group">
-
-                            <label>
-                                <b>Tools</b>
-                            </label>
-
-                            <div class="input-group">
-
-                                <button class="btn btn-dark"
-                                        title="Randomize"
-                                        disabled>
-                                    <span class="d-none d-sm-inline-block">Randomize</span>
-                                    <span class="d-none d-sm-inline-block">&nbsp;</span>
-                                    <fa-icon [icon]="['fas', 'random']"
-                                             size="1x"
-                                             [fixedWidth]="true"></fa-icon>
-                                    <!-- <span class="fas fa-random fa-fw"></span> -->
-                                </button>
-                            </div>
-
-                        </div>
-
-                    </div>
-
                 </div>
 
                 <div class="form-group">
-
                     <label>
                         <b>Categories</b>
                     </label>
-
-                    <!-- <app-sortablejs-test></app-sortablejs-test> -->
-                    <app-categories-selector [categories]="categories$ | async"
-                                             (selectedCategories$)="setSelectedCategories($event)">
+                    <app-categories-selector [categories]="this.categories$ | ngrxPush"
+                                             (selectedCategories$)="selectedCategories = $event">
                     </app-categories-selector>
-                    <!-- <app-categories-selector-am [language]="selectedLanguage$ | async" (selectedCategories$)="printSelectedCategories($event)"></app-categories-selector-am> -->
-
-                    <!-- <p>{{selectedCategories | json}}</p> -->
-
                 </div>
 
                 <div class="form-group">
                     <label>
                         <b>Letters</b>
                     </label>
-
-                    <!-- <div class="d-flex flex-wrap m-n1">
-                        <button class="btn btn-outline-primary m-1 px-3" role="checkbox" type="button" style="font-family: Consolas;" data-toggle="button" aria-pressed="false" *ngFor="let letter of (languageLetters$ | async)">
-                            <span>{{letter}}</span>
-                        </button>
-                    </div> -->
-                    <app-letters-selector [selectableChars]="selectableChars$ | async"
-                                          (selectedChars$)="setSelectedChars($event)">
+                    <app-letters-selector [alphabetChars]="this.alphabetChars$ | ngrxPush"
+                                          (selectedChars$)="selectedChars = $event">
                     </app-letters-selector>
-
                 </div>
 
                 <div class="form-row">
@@ -99,7 +42,6 @@
                             <label for="secondsPerWordRangeInput">
                                 <b>Seconds per word</b>
                             </label>
-
                             <div class="input-group input-group-sm">
                                 <input type="range"
                                        class="form-control custom-range"
@@ -110,10 +52,9 @@
                                        name="secondsPerWord"
                                        id="secondsPerWordRangeInput">
                                 <div class="input-group-append">
-                                    <span class="input-group-text bg-light">{{secondsPerWord$ | async | number : '2.0'}}</span>
+                                    <span class="input-group-text bg-light">{{this.secondsPerWord$ | ngrxPush | number : '2.0'}}</span>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
@@ -122,7 +63,6 @@
                             <label for="roundsCountRangeInput">
                                 <b>Rounds</b>
                             </label>
-
                             <div class="input-group input-group-sm">
                                 <input type="range"
                                        class="form-control custom-range"
@@ -134,25 +74,22 @@
                                        id="roundsCountRangeInput">
                                 <div class="input-group-append"
                                      for="roundsCountRangeInput">
-                                    <span class="input-group-text bg-light">{{roundsCount$ | async | number : '2.0'}}</span>
+                                    <span class="input-group-text bg-light">{{this.roundsCount$ | ngrxPush | number : '2.0'}}</span>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
                 </div>
 
+                <!-- options -->
                 <div class="form-row">
 
                     <div class="col-12 col-sm">
-
                         <div class="form-group">
-
                             <label>
                                 <b>Mode</b>
                             </label>
-
                             <label class="radio-card"
                                    for="timeOutRoundingModeRadioInput">
                                 <input type="radio"
@@ -216,18 +153,14 @@
                                     </div>
                                 </div>
                             </label>
-
                         </div>
                     </div>
 
                     <div class="col-12 col-sm">
-
                         <div class="form-group">
-
                             <label>
                                 <b>Accessibility</b>
                             </label>
-
                             <label class="radio-card"
                                    for="publicMatchAccessRadioInput">
                                 <input type="radio"
@@ -243,7 +176,6 @@
                                                          class="mr-2"
                                                          size="1x"
                                                          [fixedWidth]="true"></fa-icon>
-                                                <!-- <b class="fas fa-lock-open fa-1x fa-fw mr-2"></b> -->
                                             </p>
                                         </div>
 
@@ -274,7 +206,6 @@
                                                          class="mr-2"
                                                          size="1x"
                                                          [fixedWidth]="true"></fa-icon>
-                                                <!-- <b class="fas fa-lock fa-1x fa-fw mr-2"></b> -->
                                             </p>
                                         </div>
 
@@ -290,97 +221,15 @@
                                     </div>
                                 </div>
                             </label>
-
                         </div>
-
-                        <!-- <div class="form-check">
-                                <input class="form-check-input" type="radio" id="publicMatchAccessRadioInput" name="matchAccess" value="public">
-                                <div class="row no-gutters">
-
-                                    <div class="col-auto">
-                                        <span class="fas fa-lock-open fa-2x fa-fw mr-3"></span>
-                                    </div>
-
-                                    <div class="col">
-
-                                        <h5 class="card-title uppercase mb-0">
-                                            <span>Public</span>
-                                        </h5>
-                                        <p class="card-text">
-                                            <small class="text-muted">Anyone can join</small>
-                                        </p>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" id="privateMatchAccessRadioInput" name="matchAccess" value="private">
-                                <label class="form-check-label" for="privateMatchAccessRadioInput">
-                                    <span class="fas fa-lock fa-1x fa-fw"></span>
-                                    <span>&nbsp;</span>
-                                    <span>Private</span>
-                                </label>
-                            </div> -->
-
-                        <!-- <label class="radio-card w-100">
-                                <input type="radio">
-
-                                <div class="card p-0">
-                                    <div class="card-body p-3">
-
-                                        <div class="row no-gutters">
-
-                                            <div class="col-auto">
-                                                <span class="fas fa-lock-open fa-2x fa-fw mr-3"></span>
-                                            </div>
-
-                                            <div class="col">
-
-                                                <h5 class="card-title uppercase mb-0">
-                                                    <span>Public</span>
-                                                </h5>
-                                                <p class="card-text">
-                                                    <small class="text-muted">Anyone can join</small>
-                                                </p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
-                            <label class="radio-card w-100">
-                                <input type="radio">
-
-                                <div class="card p-0">
-                                    <div class="card-body p-3">
-
-                                        <div class="row no-gutters">
-
-                                            <div class="col-auto">
-                                                <span class="fas fa-lock fa-2x fa-fw mr-3"></span>
-                                            </div>
-
-                                            <div class="col">
-
-                                                <h5 class="card-title uppercase mb-0">
-                                                    <span>Private</span>
-                                                </h5>
-                                                <p class="card-text">
-                                                    <small class="text-muted">Only those with the link can access</small>
-                                                </p>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </label> -->
-
                     </div>
 
                 </div>
 
                 <button type="submit"
-                        class="btn btn-primary btn-lg btn-block d-sm-none">
+                        class="btn btn-primary btn-lg btn-block d-sm-none"
+                        [appIsEnabled]="canCreateMatch$ | ngrxPush"
+                        (click)="createMatch()">
                     <span>Create match</span>
                     <span>&nbsp;</span>
                     <span class="fab fa-accessible-icon fa-fw"></span>
@@ -388,10 +237,10 @@
 
                 <div class="text-right">
                     <button type="submit"
-                            class="btn btn-primary btn-lg d-none d-sm-inline">
+                            class="btn btn-primary btn-lg d-none d-sm-inline"
+                            [appIsEnabled]="canCreateMatch$ | ngrxPush">
                         <span>Create match</span>
                         <span>&nbsp;</span>
-                        <!-- <span class="fab fa-accessible-icon fa-fw"></span> -->
                         <fa-icon [icon]="['fas', 'spell-check']"
                                  [fixedWidth]="true"></fa-icon>
                     </button>

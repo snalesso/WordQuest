@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WordQuest.Web.Service.Read.Functions.MSAzure": {
+      "commandName": "Project",
+      "launchBrowser": false
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { APP_NAME, IEnvironment } from './environment.core';
 
 export const environment: IEnvironment = {
-    production: true,
+    isInProduction: true,
     website: {
         displayName: APP_NAME
     },

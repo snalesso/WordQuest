@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
-import { MatchSettingsDto } from 'src/app/game/models/game.DTOs';
+import { MatchSettings } from 'src/app/game/models/game.DTOs';
 import { MatchService } from '../../../../services/match.service';
 
 @Component({
@@ -20,7 +19,7 @@ export class MatchRoundWordsPhaseComponent extends ReactiveComponent {
     }
 
     @Input()
-    public matchSettings: MatchSettingsDto | null = null;
+    public matchSettings: MatchSettings | null = null;
 
     public get match$() { return this._matchService.matchSnapshot$; }
     public get categories$() { return this._matchService.matchSnapshot$.pipe(map(x => x.currentRound.categories)); }
@@ -28,7 +27,7 @@ export class MatchRoundWordsPhaseComponent extends ReactiveComponent {
     // public readonly categories$: Observable<ReadonlyArray<ICategoryDto>> =
     //     from(this._matchesService.getCategoriesAsync(Language.Italian/*, AlphabetFamily.Latin*/))
     //         .pipe(
-    //             map(x => x
+    //             map(value => x
     //                 .filter((cat, index) => index % 2 === 0)
     //                 .filter((cat, index) => index < 10)),
     //             shareReplay()

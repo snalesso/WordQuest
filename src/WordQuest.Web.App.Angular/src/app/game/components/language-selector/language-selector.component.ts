@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, tap } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { } from 'src/app/root/models/core';
@@ -14,7 +14,7 @@ import { MatchService } from '../../services/match.service';
 })
 export class LanguageSelectorComponent extends ReactiveComponent {
 
-  private readonly _selectedLanguage$$ = new BehaviorSubject<number>(null);
+  private readonly _selectedLanguage$$ = new ReplaySubject<number>(1);
 
   constructor(
     private readonly _matchService: MatchService,
@@ -24,7 +24,7 @@ export class LanguageSelectorComponent extends ReactiveComponent {
 
     // this._availableLanguages$$ = new BehaviorSubject<Array<ILanguageDto>>(null);
     // this.availableLanguages$ = this._availableLanguages$$.pipe(
-    //   // catchError(x => of(null)),
+    //   // catchError(value => of(null)),
     //   distinctUntilChanged(),
     //   shareReplay({ refCount: true, bufferSize: 1 }));
 
@@ -63,14 +63,14 @@ export class LanguageSelectorComponent extends ReactiveComponent {
 
   // private _availableLanguages$$: BehaviorSubject<Array<ILanguageDto>>;
   @Input()
-  public languages$: Observable<Array<Language>>;
+  public languages$: Observable<Array<Language>> | undefined;
   // @Input()
   // public set availableLanguages(value: Array<ILanguageDto>) { this._availableLanguages$$.next(value); }
   // public get availableLanguages(): Array<ILanguageDto> { return this._availableLanguages$$.value; }
 
   @Output()
   public readonly selectedLanguage$: Observable<number>;
-  public get selectedLanguage() { return this._selectedLanguage$$.value; }
+  // public get selectedLanguage() { return this._selectedLanguage$$.value; }
   public set selectedLanguage(value: number) { this._selectedLanguage$$.next(value); }
 
   public selectLanguage(language: number) { this.selectedLanguage = +language; }

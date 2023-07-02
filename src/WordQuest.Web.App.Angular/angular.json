@@ -68,6 +68,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
+            "port": 4208,
             "browserTarget": "WordQuest:build"
           },
           "configurations": {

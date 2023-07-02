@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { ISelectable } from 'src/app/root/models/core';
 import { Char } from 'src/app/root/models/culture.DTOs';
@@ -17,10 +17,10 @@ export class Utf16CharToggleComponent extends ReactiveComponent {
   }
 
   @Input()
-  public selectableChar: ISelectable<Char>;
+  public selectableChar: ISelectable<Char> | undefined;
 
   @Input()
-  public char: Char;
+  public char: Char | undefined;
 
   private readonly _isSelected$$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   @Output()

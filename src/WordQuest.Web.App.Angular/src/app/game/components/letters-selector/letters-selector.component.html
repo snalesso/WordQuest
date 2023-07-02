@@ -1,11 +1,30 @@
-<div class="d-flex flex-wrap m-n1">
-    <button class="btn btn-outline-primary m-1 px-3"
-            [attr.aria-pressed]="!!item.isSelected"
-            [class.active]="!!item.isSelected"
-            type="button"
-            (click)="toggleSelection(item)"
-            *ngFor="let item of (selectableChars$ | async)">
-        <p class="text-monospace m-0">{{item.value}}</p>
-    </button>
-    <!-- <p *ngFor="let sc of (selectableChars$ | async)">{{sc.value}}</p> -->
+<div *ngIf="alphabetChars$ | ngrxPush | isNil; else alphabetAvailable;"
+     class="alert alert-dark py-2 px-3"
+     role="alert">
+    <span>No alphabet available</span>
 </div>
+
+<ng-template #alphabetAvailable>
+
+    <div *ngIf="selectableChars$ | ngrxPush | isNilOrEmpty; else charsAvailable;"
+         class="alert alert-danger py-2 px-3"
+         role="alert">
+        <span>No letters available</span>
+    </div>
+
+    <ng-template #charsAvailable>
+        <div class="d-flex flex-wrap mb-3"
+             style="gap: 0.5rem;">
+            <button #char
+                    *ngFor="let item of (selectableChars$ | ngrxPush)"
+                    class="btn btn-outline-primary px-3 py-2"
+                    [attr.aria-pressed]="!!item.isSelected"
+                    [class.active]="!!item.isSelected"
+                    type="button"
+                    (click)="toggleSelection(item)">
+                <p class="text-monospace m-0">{{item.value}}</p>
+            </button>
+        </div>
+    </ng-template>
+
+</ng-template>

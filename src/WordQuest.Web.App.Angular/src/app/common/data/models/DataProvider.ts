@@ -1,6 +1,5 @@
 import { BehaviorSubject, defer, from, Observable, SubscribableOrPromise } from "rxjs";
 import { shareReplay } from "rxjs/operators";
-import { assert } from "../../model/assert";
 
 export enum DataProviderStatus {
     Unloaded,
@@ -23,7 +22,7 @@ export class DataProvider<T> {
 
     constructor(private readonly _config: DataProviderConfig<T>) {
 
-        assert.notNil(this._config, "_config");
+        // assert.notNil(this._config, "_config");
 
         this.dataSource$ = defer(() => from(this._config.dataSource$)).pipe(shareReplay(1));
     }

@@ -1,5 +1,5 @@
 ﻿
-create view TagNames
+create view [dbo].[TagNames]
 as select t.Id as TagId, t.InvariantCultureName, l.Id as LanguageId, l.NativeName as NativeLanguageName, tnbl.Name as TagName
 from
 	Tags t
