@@ -12,18 +12,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Remove="Culture\**" />
-		<EmbeddedResource Remove="Culture\**" />
-		<None Remove="Culture\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Remove="Game\Domain\Persistence\EfCoreAlphabetVariantOptionsView1.cs" />
-		<Compile Remove="Game\Domain\Persistence\EFCoreLanguageOptionsRepository.cs" />
-		<Compile Remove="Game\Services\EFCoreMatchCreationService.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\WordQuest.Application.Read\WordQuest.Application.Read.csproj" />
 		<ProjectReference Include="..\WordQuest.Core\WordQuest.Core.csproj" />
 	</ItemGroup>
@@ -36,11 +24,6 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Domain\" />
-		<Folder Include="Game\Services\" />
 	</ItemGroup>
 
 </Project>
