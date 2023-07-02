@@ -34,11 +34,11 @@ export class GlobalizationService extends NcbApiService {
         //         }));
     }
 
+    // TODO: hold subscription
     private readonly _languages$$ = new ReplaySubject<ReadonlySet<Language>>(1);
-    public readonly languages$ = this.getAvailableLanguages()
-        .pipe(
-            multicast(() => this._languages$$),
-            refCount());
+    public readonly languages$ = this.getAvailableLanguages().pipe(
+        multicast(() => this._languages$$),
+        refCount());
 
     // private readonly _availableLanguagesMap$$ = new ReplaySubject<ReadonlyMap<Language['id'], Language>>(1);
     // public readonly availableLanguagesMap$ = this.getAvailableLanguages()

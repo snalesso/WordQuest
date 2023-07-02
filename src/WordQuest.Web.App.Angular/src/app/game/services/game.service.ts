@@ -26,7 +26,7 @@ export class GameService extends NcbApiService {
     if (!!alphabetVariantId)
       queryParams = queryParams.append("alphabetVariantId", alphabetVariantId.toString());
 
-    return this.http.get<readonly CategoryOption[]>(this.getEndpoint("GetCategoryOptions"), { params: queryParams })
+    return this._http.get<readonly CategoryOption[]>(this.getEndpoint("GetCategoryOptions"), { params: queryParams })
       .pipe(
         forceDelayInDev(),
         //   map(categs => {
@@ -47,7 +47,7 @@ export class GameService extends NcbApiService {
   // }
 
   public getAlphabetVariantOptionsAsync() {
-    return this.http.get<readonly AlphabetVariantOption[]>(this.getEndpoint("GetAlphabetVariantOptions"))
+    return this._http.get<readonly AlphabetVariantOption[]>(this.getEndpoint("GetAlphabetVariantOptions"))
       .pipe(
       // forceDelayInDev(3000),
       // map(alphabets => new Set(alphabets) as ReadonlySet<Alphabet>),
@@ -57,7 +57,7 @@ export class GameService extends NcbApiService {
   }
 
   public getLanguageOptionsAsync() {
-    return this.http.get<ReadonlySet<Language>>(this.getEndpoint("GetLanguageOptions"))
+    return this._http.get<ReadonlySet<Language>>(this.getEndpoint("GetLanguageOptions"))
       .pipe(
         forceDelayInDev(),
         // catchError(err => EMPTY)

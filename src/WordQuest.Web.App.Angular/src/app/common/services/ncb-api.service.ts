@@ -7,7 +7,7 @@ export abstract class NcbApiService {
 
     private readonly ApiAddress: string = environment.api.getHostAddress();
 
-    constructor(protected readonly http: HttpClient) { }
+    constructor(protected readonly _http: HttpClient) { }
 
     protected getEndpoint(...routeSteps: string[]): string {
         return [this.ApiAddress, ...routeSteps].join("/");

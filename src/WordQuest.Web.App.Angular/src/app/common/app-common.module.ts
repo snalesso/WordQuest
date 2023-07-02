@@ -11,6 +11,7 @@ import { KeepPipe } from './pipes/keep';
 import { NegatePipe } from './pipes/negate';
 import { ThrutifyPipe } from './pipes/thruthify';
 import { GlobalizationService } from './services/globalization.service';
+import { SystemService } from './services/system.service';
 
 // @NgModule({
 //     declarations: [
@@ -68,7 +69,8 @@ const COMPONENTS: any[] = [];
         ...DIRECTIVES
     ],
     providers: [
-        GlobalizationService
+        SystemService,
+        GlobalizationService,
     ]
 })
 export class AppCommonModule {
