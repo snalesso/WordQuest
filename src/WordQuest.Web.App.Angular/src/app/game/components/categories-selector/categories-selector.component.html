@@ -105,9 +105,7 @@
 </div>
 
 <div class="wrap-panel border-top-0 p-1"
-     [class.d-none]="!selectedCategories || selectedCategories.length <= 0"
-     [sortablejs]="selectedCategories"
-     [sortablejsOptions]="selectedCategoriesOptions">
+     [class.d-none]="!selectedCategories || selectedCategories.length <= 0">
     <button *ngFor="let item of selectedCategories; let i = index; trackBy: getCategoryId;"
             [appIsEnabled]="isEnabled$ | ngrxPush"
             class="btn btn-outline-primary m-1 px-2 py-1 active"

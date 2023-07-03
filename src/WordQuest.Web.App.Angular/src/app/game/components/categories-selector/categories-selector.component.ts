@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
-import { Options } from 'sortablejs';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { allTrue, isNilOrEmpty } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
@@ -168,47 +167,6 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
   public getCategoryId(index: number, category: CategoryOption): number {
     return category.id;
   }
-
-  //   public readonly availableCategoriesOptions: Options = {
-  //     group: {
-  //       name: "categories",
-  //       pull: "clone",
-  //       put: true
-  //     },
-  //     sort: false,
-  //     removeOnSpill: false,
-  //     revertOnSpill: true,
-  //     animation: 150
-  //   };
-
-  public readonly selectedCategoriesOptions: Options = {
-    group: {
-      name: "categories",
-      pull: false,
-      put: false
-    },
-    sort: true,
-    revertOnSpill: true,
-    removeOnSpill: false,
-    // onMove: () => {
-    //   this.detectChanges();
-    //   this.markForCheck();
-    //   this.detectChanges();
-    // },
-    // onChange: () => {
-    //   this.detectChanges();
-    //   this.markForCheck();
-    //   this.detectChanges();
-    // },
-    // onUpdate: () => {
-    //   this.detectChanges();
-    //   this.markForCheck();
-    //   this.detectChanges();
-    // },
-    onSort: () => {
-      this.detectLocalChanges();
-    }
-  };
 
   private calculateSelectedCategoryOptions() {
     if (this.selectableCategories == null)
