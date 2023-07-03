@@ -7,7 +7,6 @@ import { GlobalizationService } from 'src/app/common/services/globalization.serv
 import { allTrue, isNilOrEmpty, isNotNil } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
 import { mapInvertedBool } from 'src/app/common/utils/rxjs.utils';
-import { ISelectable } from 'src/app/root/models/core';
 import { AlphabetVariantOption, Char, CharMetadata, Language } from 'src/app/root/models/culture.DTOs';
 import { CategoryOption } from '../../models/game.DTOs';
 import { GameService } from '../../services/game.service';
@@ -40,7 +39,6 @@ export class NewMatchEditorComponent extends ReactiveComponent implements OnInit
     public readonly selectedAlphabet$ = this._selectedAlphabet$$.pipe(distinctUntilChanged());
 
     private readonly _categories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
-    public set categories(value) { this._categories$$.next(value); }
     public get categories() { return this._categories$$.value; }
     @Output()
     public readonly categories$ = this.selectedAlphabet$.pipe(
@@ -48,11 +46,12 @@ export class NewMatchEditorComponent extends ReactiveComponent implements OnInit
             if (alphabetVariant == null)
                 return of(undefined);
             return this._gameService.getCategoryOptionsAsync(alphabetVariant.id).pipe(
-                map(catsMap => Object.values(catsMap).map<ISelectable<CategoryOption>>(x => ({ value: x, isSelected: false }))),
                 catchError(() => of(undefined)),
-                startWith(undefined),
-                distinctUntilChanged());
+                startWith(undefined));
         }),
+        multicast(() => this._categories$$),
+        refCount(),
+        distinctUntilChanged(),
         tap(categories => logEvent(this, "categories", categories)),
         shareReplay({ bufferSize: 1, refCount: true }));
 

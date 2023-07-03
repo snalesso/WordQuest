@@ -109,12 +109,11 @@
      [sortablejs]="selectedCategories"
      [sortablejsOptions]="selectedCategoriesOptions">
     <button *ngFor="let item of selectedCategories; let i = index; trackBy: getCategoryId;"
-            [appIsDisabled]="isDisabled$ | ngrxPush"
-            class="btn btn-outline-primary m-1 px-2 py-1"
-            [class.active]="!!item.isSelected"
+            [appIsEnabled]="isEnabled$ | ngrxPush"
+            class="btn btn-outline-primary m-1 px-2 py-1 active"
             (click)="remove(item)">
         <span>{{i + 1}}° </span>
-        <span>{{item.value.name}}</span>
+        <span>{{item.name}}</span>
     </button>
 </div>
 

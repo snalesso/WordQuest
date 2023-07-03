@@ -7,7 +7,7 @@ import { allTrue, isNilOrEmpty } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
 import { ISelectable } from 'src/app/root/models/core';
 import { Tag } from '../../models/game';
-import { Category, CategoryOption } from '../../models/game.DTOs';
+import { CategoryOption } from '../../models/game.DTOs';
 import { GameService } from '../../services/game.service';
 import { MatchService } from '../../services/match.service';
 
@@ -37,14 +37,28 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     tap(value => logEvent(this, 'isEnabled', value)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
-  private readonly _categories$$ = new BehaviorSubject<ISelectable<CategoryOption>[] | undefined>(undefined);
+  private readonly _categories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
   public get categories() { return this._categories$$.value; }
   @Input()
-  public set categories(value: ISelectable<CategoryOption>[] | undefined) { this._categories$$.next(value); }
+  public set categories(value) { this._categories$$.next(value); }
   @Output()
   public readonly categories$ = this._categories$$.pipe(
     distinctUntilChanged(),
     tap(value => logEvent(this, 'categories', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  private readonly _selectableCategories$$ = new BehaviorSubject<readonly ISelectable<CategoryOption>[] | undefined>(undefined);
+  public get selectableCategories() { return this._selectableCategories$$.value; }
+  @Output()
+  public readonly selectableCategories$ = this.categories$.pipe(
+    map(categories => {
+      if (categories == null)
+        return undefined;
+      return categories.map<ISelectable<CategoryOption>>(category => ({ value: category, isSelected: false }));
+    }),
+    multicast(() => this._selectableCategories$$),
+    refCount(),
+    tap(selectableCategories => logEvent(this, "selectableCategories", selectableCategories)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
   private readonly _fulltextSearchString$$ = new BehaviorSubject<string>('');
@@ -57,7 +71,7 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
   private readonly _filteredCategories$$ = new BehaviorSubject<readonly ISelectable<CategoryOption>[] | undefined>(undefined);
   public get filteredCategories() { return this._filteredCategories$$.value; }
   @Output() public readonly filteredCategories$ = combineLatest([
-    this.categories$,
+    this.selectableCategories$,
     this.fulltextSearchString$.pipe(debounceTime(500))
   ]).pipe(
     map(([categories, fulltextSearchString]) => {
@@ -91,10 +105,10 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     tap(value => logEvent(this, 'areCategoriesAvailable', value)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
-  private readonly _selectedCategories$$ = new BehaviorSubject<readonly ISelectable<CategoryOption>[] | undefined>(undefined);
+  private readonly _selectedCategories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
   public get selectedCategories() { return this._selectedCategories$$.value; }
   @Input()
-  public set selectedCategories(value) { this._selectedCategories$$.next(value); }
+  protected set selectedCategories(value) { this._selectedCategories$$.next(value); }
   @Output()
   public readonly selectedCategories$ = this._selectedCategories$$.asObservable();
 
@@ -135,23 +149,24 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
       this.canFilterCategories$,
       this.filteredCategories$,
       this.fulltextSearchString$,
+      this.selectableCategories$,
       this.canChooseCategories$,
     ]);
 
-    this.subscribe(this.categories$, {
+    this.subscribe(this.selectableCategories$, {
       next: () => {
         this.selectedCategories = [];
       }
     });
-    this.subscribe(this.categories$, {
+    this.subscribe(this.selectableCategories$, {
       next: () => {
         this.fulltextSearchString = '';
       }
     });
   }
 
-  public getCategoryId(index: number, category: ISelectable<CategoryOption>): number {
-    return category.value.id;
+  public getCategoryId(index: number, category: CategoryOption): number {
+    return category.id;
   }
 
   //   public readonly availableCategoriesOptions: Options = {
@@ -195,6 +210,12 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     }
   };
 
+  private calculateSelectedCategoryOptions() {
+    if (this.selectableCategories == null)
+      throw new Error('No selectable category available.');
+    return this.selectableCategories.filter(selectable => selectable.isSelected).map(x => x.value)
+  }
+
   public deselectCategory(index: number) {
 
     if (!this.selectedCategories || index >= this.selectedCategories.length) {
@@ -213,22 +234,26 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
   }
 
   public add(item: any) {
-
-    if (!this.selectedCategories || this.selectedCategories.includes(item))
-      return;
-
+    if (this.selectedCategories == null)
+      throw new Error('Selected categories list not available.');
     item.isSelected = true;
-    this.selectedCategories = [...this.selectedCategories, item];
+    this.selectedCategories = this.calculateSelectedCategoryOptions();
   }
 
-  public remove(item: ISelectable<Category> | undefined) {
+  public remove(item: CategoryOption) {
 
-    if (this.selectedCategories == null || item == null || item.value == null)
+    if (this.selectedCategories == null || this.selectableCategories == null || item == null)
       return;
 
-    this.selectedCategories = this.selectedCategories?.filter(x => x !== item);
+    const selectedItemIndex = this.selectableCategories.findIndex(x => x.value.id === item.id);
+    if (selectedItemIndex < 0)
+      throw new Error('Element is not selected.');
 
-    item.isSelected = false;
+    const selectedItem = this.selectableCategories[selectedItemIndex];
+    selectedItem.isSelected = false;
+    this.selectedCategories = this.selectableCategories
+      .filter(selectableItem => selectableItem !== selectedItem)
+      .map(x => x.value);
   }
 
   public getTagName(tag: Tag) {
