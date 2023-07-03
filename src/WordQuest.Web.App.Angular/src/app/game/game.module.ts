@@ -77,6 +77,7 @@ export class GameModule {
         // NG DOCS: https://github.com/FortAwesome/angular-fontawesome#documentation
         // ALL FREE ICONS: https://fontawesome.com/icons?d=gallery&s=brands,regular,solid&m=free
         // library.addIcons(fasSun, fasStar, fasMoon, fabAccessible);
+        // DOCS: https://github.com/FortAwesome/angular-fontawesome#compatibility-table
         library.addIconPacks(fas, fab);
     }
 }

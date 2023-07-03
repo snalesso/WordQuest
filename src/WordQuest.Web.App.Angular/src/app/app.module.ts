@@ -15,7 +15,7 @@ import { RootModule } from './root/root.module';
     AppComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
