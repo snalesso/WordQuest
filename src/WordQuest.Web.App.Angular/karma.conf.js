@@ -25,7 +25,7 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/WordQuest'),
+      dir: require('path').join(__dirname, './coverage/word-quest'),
       subdir: '.',
       reporters: [
         { type: 'html' },

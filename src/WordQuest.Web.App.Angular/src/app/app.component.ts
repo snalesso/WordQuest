@@ -51,8 +51,8 @@ export class AppComponent extends ReactiveComponent implements OnInit {
 
               let titleFrag: string | null = null;
 
-              if (currRouteComp.data.title) {
-                titleFrag = currRouteComp.data.title;
+              if (currRouteComp.data['title']) {
+                titleFrag = currRouteComp.data['title'];
               }
               // else if (currRouteComp.routeConfig)
               //   titleFrag = AppComponent.toFirstCharUppercase(currRouteComp.routeConfig.path);
