@@ -1,11 +1,11 @@
 <!-- <p>{{this.alphabetsSource.isLoading$ | ngrxPush | json}}</p> -->
 
 <select class="form-control"
-        [appIsEnabled]="this.canSelectAlphabetVariant$ | ngrxPush"
+        [appIsEnabled]="this.canSelectAlphabetVariant$ | ngrxPush | throwIfNil"
         [ngModel]="this.selectedAlphabetVariant$ | ngrxPush"
         (ngModelChange)="this.selectedAlphabetVariant = $event">
 
-    <option *ngIf="(this.areAlphabetVariantsAvailable$ | ngrxPush | negate); else alphabetVariants;"
+    <option *ngIf="(this.areAlphabetVariantsAvailable$ | ngrxPush | throwIfNil | negate); else alphabetVariants;"
             [ngValue]="undefined"
             disabled
             hidden>

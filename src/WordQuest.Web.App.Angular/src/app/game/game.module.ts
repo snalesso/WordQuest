@@ -6,8 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { ReactiveComponentModule } from '@ngrx/component';
-import { SortablejsModule } from 'ngx-sortablejs';
+import { PushModule } from '@ngrx/component';
 import { AppCommonModule } from '../common/app-common.module';
 import { AlphabetVariantSelectorComponent } from './components/alphabet-variant-selector/alphabet-variant-selector.component';
 import { CategoriesSelectorComponent } from './components/categories-selector/categories-selector.component';
@@ -48,11 +47,10 @@ import { MatchService } from './services/match.service';
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        SortablejsModule.forRoot({ animation: 150 }),
         FontAwesomeModule,
         AppCommonModule,
         GameRoutingModule,
-        ReactiveComponentModule
+        PushModule
     ],
     exports: [
         CategoriesSelectorComponent,

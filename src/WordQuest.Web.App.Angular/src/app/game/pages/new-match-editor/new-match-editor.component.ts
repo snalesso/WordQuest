@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { catchError, distinctUntilChanged, map, multicast, refCount, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
@@ -127,7 +127,7 @@ export class NewMatchEditorComponent extends ReactiveComponent implements OnInit
         private readonly _gameService: GameService,
         private readonly _matchService: MatchService,
         private readonly _globalizationService: GlobalizationService,
-        private readonly _formBuilder: FormBuilder) {
+        private readonly _formBuilder: UntypedFormBuilder) {
         super(cdr);
     }
 

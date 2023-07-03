@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ReactiveComponentModule } from '@ngrx/component';
+import { PushModule } from '@ngrx/component';
 import { IsDisabledDirective } from './directives/is-disabled.directive';
 import { IsEnabledDirective } from './directives/is-enabled.directive';
 import { CoalescePipe } from './pipes/coalesce';
@@ -7,8 +7,10 @@ import { EmptyPipe } from './pipes/empty';
 import { FalsyToNull } from './pipes/falsyToNull';
 import { IsNilPipe } from './pipes/isNil';
 import { IsNilOrEmptyPipe } from './pipes/isNilOrEmpty';
+import { IsNotNilPipe } from './pipes/isNotNil';
 import { KeepPipe } from './pipes/keep';
 import { NegatePipe } from './pipes/negate';
+import { ThrowIfNilPipe } from './pipes/throwIfNil';
 import { ThrutifyPipe } from './pipes/thruthify';
 import { GlobalizationService } from './services/globalization.service';
 import { SystemService } from './services/system.service';
@@ -44,9 +46,11 @@ const PIPES = [
     CoalescePipe,
     ThrutifyPipe,
     IsNilPipe,
+    IsNotNilPipe,
     FalsyToNull,
     EmptyPipe,
     IsNilOrEmptyPipe,
+    ThrowIfNilPipe,
 ];
 const DIRECTIVES = [
     IsEnabledDirective,
@@ -61,7 +65,7 @@ const COMPONENTS: any[] = [];
         ...DIRECTIVES
     ],
     imports: [
-        ReactiveComponentModule
+        PushModule
     ],
     exports: [
         ...COMPONENTS,

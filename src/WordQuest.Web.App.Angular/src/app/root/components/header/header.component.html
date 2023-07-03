@@ -112,10 +112,10 @@
                    data-toggle="dropdown"
                    aria-haspopup="true"
                    aria-expanded="false">
-                    <span *ngIf="this.isLanguageSelected$ | ngrxPush; else noSelectedLang">{{(this.selectedLanguage$ | ngrxPush).nativeName}}</span>
+                    <span *ngIf="this.isLanguageSelected$ | ngrxPush; else noSelectedLang">{{(this.selectedLanguage$ | ngrxPush | throwIfNil).nativeName}}</span>
                     <ng-template #noSelectedLang>
                         <span *ngIf="this.areLanguagesAvailable$ | ngrxPush">No languages</span>
-                        <span *ngIf="this.areLanguagesAvailable$ | ngrxPush | negate">Select a language</span>
+                        <span *ngIf="this.areLanguagesAvailable$ | ngrxPush | throwIfNil | negate">Select a language</span>
                     </ng-template>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right"

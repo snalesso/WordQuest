@@ -228,7 +228,7 @@
 
                 <button type="submit"
                         class="btn btn-primary btn-lg btn-block d-sm-none"
-                        [appIsEnabled]="canCreateMatch$ | ngrxPush"
+                        [appIsEnabled]="canCreateMatch$ | ngrxPush | throwIfNil"
                         (click)="createMatch()">
                     <span>Create match</span>
                     <span>&nbsp;</span>
@@ -238,7 +238,7 @@
                 <div class="text-right">
                     <button type="submit"
                             class="btn btn-primary btn-lg d-none d-sm-inline"
-                            [appIsEnabled]="canCreateMatch$ | ngrxPush">
+                            [appIsEnabled]="canCreateMatch$ | ngrxPush | throwIfNil">
                         <span>Create match</span>
                         <span>&nbsp;</span>
                         <fa-icon [icon]="['fas', 'spell-check']"

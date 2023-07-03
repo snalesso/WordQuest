@@ -3,7 +3,7 @@
 
         <div class="input-group mb-2">
             <input type="text"
-                   [appIsEnabled]="this.canFilterCategories$ | ngrxPush"
+                   [appIsEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
                    class="form-control"
                    placeholder="Filter by name"
                    aria-label="Filter by name"
@@ -16,7 +16,7 @@
                              [fixedWidth]="true"></fa-icon>
                 </button> -->
                 <button class="btn btn-outline-danger"
-                        [appIsEnabled]="this.canFilterCategories$ | ngrxPush"
+                        [appIsEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
                         type="button"
                         (click)="this.fulltextSearchString = ''">
                     <fa-icon [icon]="['fas', 'times']"
@@ -53,7 +53,7 @@
                        for="tagsFilterSelect">Tags</label>
             </div>
             <select class="custom-select"
-                    [appIsEnabled]="this.canFilterCategories$ | ngrxPush"
+                    [appIsEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
                     placeholder="Filter by tag"
                     id="tagsFilterSelect">
                 <option selected>All</option>
@@ -61,7 +61,7 @@
             </select>
             <div class="input-group-append">
                 <button class="btn btn-outline-danger"
-                        [appIsEnabled]="this.canFilterCategories$ | ngrxPush"
+                        [appIsEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
                         type="button">
                     <fa-icon [icon]="['fas', 'times']"
                              [fixedWidth]="true"></fa-icon>
@@ -85,7 +85,7 @@
 
         <ng-template #hasCategories>
             <button *ngFor="let item of (this.filteredCategories$ | ngrxPush); let i = index;"
-                    [appIsEnabled]="canChooseCategories$ | ngrxPush"
+                    [appIsEnabled]="canChooseCategories$ | ngrxPush | throwIfNil"
                     class="btn btn-primary m-1 px-2 py-1"
                     [class.active]="item.isSelected"
                     (click)="toggle(item)">
@@ -107,7 +107,7 @@
 <div class="wrap-panel border-top-0 p-1"
      [class.d-none]="!selectedCategories || selectedCategories.length <= 0">
     <button *ngFor="let item of selectedCategories; let i = index; trackBy: getCategoryId;"
-            [appIsEnabled]="isEnabled$ | ngrxPush"
+            [appIsEnabled]="isEnabled$ | ngrxPush | throwIfNil"
             class="btn btn-outline-primary m-1 px-2 py-1 active"
             (click)="remove(item)">
         <span>{{i + 1}}° </span>
@@ -118,6 +118,6 @@
 <div class="card-footer form-control-border rounded-bottom border-top-0 py-1 px-2 align-content-center">
     <label class="align-middle m-0">
         <span *ngIf="!(selectedCategories$ | ngrxPush)">-</span>
-        <span *ngIf="!!(selectedCategories$ | ngrxPush)">{{(selectedCategories$ | ngrxPush).length}} categories selected</span>
+        <span *ngIf="selectedCategories$ | ngrxPush | isNotNil">{{(selectedCategories$ | ngrxPush | throwIfNil).length}} categories selected</span>
     </label>
 </div>
