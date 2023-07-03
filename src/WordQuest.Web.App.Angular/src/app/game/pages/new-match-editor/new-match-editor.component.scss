@@ -1,4 +1,4 @@
-@import "~bootstrap/scss/bootstrap.scss";
+@import "bootstrap/scss/bootstrap.scss";
 
 // .radio-card {
 //     border: $input-border-width solid $input-border-color;
@@ -31,21 +31,21 @@
     }
 
     input[type=radio] {
-      display: none;
+        display: none;
     }
 
-    input[type=radio] + .radio-card-content {
+    input[type=radio]+.radio-card-content {
         border: $input-border-width solid $input-border-color;
         @include border-radius($input-border-radius, 0);
         background-color: $white;
         padding: map-get($spacers, 2);
     }
 
-    input[type=radio]:checked + .radio-card-content {
+    input[type=radio]:checked+.radio-card-content {
         border: $input-border-width solid $primary;
     }
 
-    input[type=radio]:checked + .checkable-text {
+    input[type=radio]:checked+.checkable-text {
         color: $primary;
     }
-  }
+}
