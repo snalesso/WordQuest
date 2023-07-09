@@ -26,14 +26,13 @@ export class GameService extends NcbApiService {
     if (!!alphabetVariantId)
       queryParams = queryParams.append("alphabetVariantId", alphabetVariantId.toString());
 
-    return this._http.get<readonly CategoryOption[]>(this.getEndpoint("GetCategoryOptions"), { params: queryParams })
-      .pipe(
-        forceDelayInDev(),
-        //   map(categs => {
-        //     return categs;
-        //   }),
-        //   catchError(err => EMPTY)
-      );
+    return this._http.get<readonly CategoryOption[]>(this.getEndpoint("GetCategoryOptions"), { params: queryParams }).pipe(
+      forceDelayInDev(),
+      //   map(categs => {
+      //     return categs;
+      //   }),
+      //   catchError(err => EMPTY)
+    );
   }
 
   // public getAlphabetOptionsAsync() {
@@ -47,9 +46,8 @@ export class GameService extends NcbApiService {
   // }
 
   public getAlphabetVariantOptionsAsync() {
-    return this._http.get<readonly AlphabetVariantOption[]>(this.getEndpoint("GetAlphabetVariantOptions"))
-      .pipe(
-      // forceDelayInDev(3000),
+    return this._http.get<readonly AlphabetVariantOption[]>(this.getEndpoint("GetAlphabetVariantOptions")).pipe(
+      forceDelayInDev(3000),
       // map(alphabets => new Set(alphabets) as ReadonlySet<Alphabet>),
       // tap(value => logEvent(this, 'alphabet options', value)),
       //   catchError(error => EMPTY))
@@ -57,11 +55,10 @@ export class GameService extends NcbApiService {
   }
 
   public getLanguageOptionsAsync() {
-    return this._http.get<ReadonlySet<Language>>(this.getEndpoint("GetLanguageOptions"))
-      .pipe(
-        forceDelayInDev(),
-        // catchError(err => EMPTY)
-      );
+    return this._http.get<ReadonlySet<Language>>(this.getEndpoint("GetLanguageOptions")).pipe(
+      forceDelayInDev(),
+      // catchError(err => EMPTY)
+    );
   }
 
   public createMatchAsync(settings: MatchSettings) { return of("NEhnXXf78is"); }

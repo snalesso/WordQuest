@@ -13,7 +13,7 @@ import { CategoriesSelectorComponent } from './components/categories-selector/ca
 import { LanguageSelectorComponent } from './components/language-selector/language-selector.component';
 import { LettersSelectorComponent } from './components/letters-selector/letters-selector.component';
 import { Utf16CharToggleComponent } from './components/utf16-char-toggle/utf16-char-toggle.component';
-import { GameRoutingModule } from './game-routing.module';
+import { GameRoutingModule } from './game.routes.module';
 import { MatchRoundPhasesComponent } from './pages/match/components/match-round-phases/match-round-phases.component';
 import { MatchRoundValidationPhaseComponent } from './pages/match/components/match-round-validation-phase/match-round-validation-phase.component';
 import { MatchRoundWordsPhaseComponent } from './pages/match/components/match-round-words-phase/match-round-words-phase.component';

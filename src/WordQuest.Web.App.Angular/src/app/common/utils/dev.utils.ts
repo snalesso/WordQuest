@@ -42,7 +42,7 @@ export function logEvent<TObj extends Object, TValue>(
 }
 
 export function forceDelayInDev(delayMs: number = DEV_FORCED_DELAY) {
-    if (environment.isInProduction || delayMs <= 0)
+    if (environment.mode.code === 'prod' || delayMs <= 0)
         return identity;
     return <T>(source$: Observable<T>) => source$.pipe(delay(delayMs));
 }

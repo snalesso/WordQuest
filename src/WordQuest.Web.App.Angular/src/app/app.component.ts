@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment.dev';
-import { ReactiveComponent } from './common/components/ReactiveComponent';
+import { ReactiveComponent } from './common/components/reactive.component';
 
 const TITLE_PATH_FRAGS_SEPARATOR = " - ";
 

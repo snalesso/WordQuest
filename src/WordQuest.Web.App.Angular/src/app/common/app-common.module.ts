@@ -3,8 +3,8 @@ import { PushModule } from '@ngrx/component';
 import { IsDisabledDirective } from './directives/is-disabled.directive';
 import { IsEnabledDirective } from './directives/is-enabled.directive';
 import { CoalescePipe } from './pipes/coalesce';
-import { EmptyPipe } from './pipes/empty';
 import { FalsyToNull } from './pipes/falsyToNull';
+import { IsEmptyPipe } from './pipes/isEmpty';
 import { IsNilPipe } from './pipes/isNil';
 import { IsNilOrEmptyPipe } from './pipes/isNilOrEmpty';
 import { IsNotNilPipe } from './pipes/isNotNil';
@@ -48,7 +48,7 @@ const PIPES = [
     IsNilPipe,
     IsNotNilPipe,
     FalsyToNull,
-    EmptyPipe,
+    IsEmptyPipe,
     IsNilOrEmptyPipe,
     ThrowIfNilPipe,
 ];
