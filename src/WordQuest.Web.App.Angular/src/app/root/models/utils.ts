@@ -35,24 +35,24 @@ export function arrayToDictionary<TItem, TKey extends number | string | symbol, 
     return dict;
 }
 
-export function transformDictionary<
-    TKeyIn extends number | string | symbol,
-    TValueIn,
-    TKeyOut extends number | string | symbol,
-    TValueOut>(
-        dictIn: Partial<Record<TKeyIn, TValueIn>>,
-        keySelector: (key: TKeyIn, value: TValueIn) => TKeyOut,
-        valueSelector: (key: TKeyIn, value: TValueIn) => TValueOut) {
+// export function transformDictionary<
+//     TKeyIn extends number | string | symbol,
+//     TValueIn,
+//     TKeyOut extends number | string | symbol,
+//     TValueOut>(
+//         dictIn: Partial<Record<TKeyIn, TValueIn>>,
+//         keySelector: (key: TKeyIn, value: TValueIn) => TKeyOut,
+//         valueSelector: (key: TKeyIn, value: TValueIn) => TValueOut) {
 
-    if (!dictIn)
-        return null;
+//     if (!dictIn)
+//         return null;
 
-    const dictOut: Partial<Record<TKeyOut, TValueOut>> = {};
+//     const dictOut: Partial<Record<TKeyOut, TValueOut>> = {};
 
-    for (const keyIn in dictIn) {
-        const valueIn = dictIn[keyIn];
-        dictOut[keySelector(keyIn, valueIn)] = valueSelector(keyIn, valueIn);
-    }
+//     for (const keyIn in dictIn) {
+//         const valueIn = dictIn[keyIn];
+//         dictOut[keySelector(keyIn, valueIn)] = valueSelector(keyIn, valueIn);
+//     }
 
-    return dictOut;
-}
+//     return dictOut;
+// }

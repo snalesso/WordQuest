@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { MatchSettings } from 'src/app/game/models/game.DTOs';
@@ -7,7 +7,8 @@ import { MatchService } from '../../../../services/match.service';
 @Component({
     selector: 'app-match-round-words-phase',
     templateUrl: './match-round-words-phase.component.html',
-    styleUrls: ['./match-round-words-phase.component.scss']
+    styleUrls: ['./match-round-words-phase.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MatchRoundWordsPhaseComponent extends ReactiveComponent {
 

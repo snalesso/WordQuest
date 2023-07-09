@@ -13,8 +13,9 @@
     </div>
 
     <ng-template #charsAvailable>
-        <div class="d-flex flex-wrap mb-3"
+        <div class="d-flex flex-wrap"
              style="gap: 0.5rem;">
+            <!-- TODO: explore using badges with checkmark instead of toggle buttons -->
             <button #char
                     *ngFor="let item of (selectableChars$ | ngrxPush)"
                     class="btn btn-outline-primary px-3 py-2"
@@ -22,7 +23,7 @@
                     [class.active]="!!item.isSelected"
                     type="button"
                     (click)="toggleSelection(item)">
-                <p class="text-monospace m-0">{{item.value}}</p>
+                <p class="font-monospace m-0">{{item.value}}</p>
             </button>
         </div>
     </ng-template>

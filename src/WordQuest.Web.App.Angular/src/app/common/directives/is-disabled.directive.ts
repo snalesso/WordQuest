@@ -1,7 +1,7 @@
 import { Directive, ElementRef, Input } from '@angular/core';
 import { HTMLDisableableElement } from '../model/presentation';
 
-const DIRECTIVE_NAME: string = "appIsDisabled";
+const DIRECTIVE_NAME: string = "isDisabled";
 
 @Directive({
   selector: `[${DIRECTIVE_NAME}]`

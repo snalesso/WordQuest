@@ -1,26 +1,24 @@
-<!-- Image and text -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light py-0">
+<nav class="navbar bg-body-secondary navbar-expand-lg p-1">
 
     <a class="navbar-brand"
        routerLink="/">
-        <!-- <img src="/docs/4.4/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt=""> -->
-        <!-- <fa-icon [icon]="['fas', 'wheelchair']" size="2x" class="mr-2 align-middle"></fa-icon> -->
-        <span class="mr-2 align-middle">
+        <span class="me-2 align-middle">
             <fa-icon [icon]="['fas', 'spell-check']"
                      size="2x"
                      [fixedWidth]="true"></fa-icon>
             <!-- <i class="fab fa-accessible-icon fa-2x fa-fw"></i> -->
         </span>
-        <span class="align-middle">
-            <span [title]="hostAddress">{{appDisplayName}}</span>
-            <!-- <span>Il gioco delle SEDIE</span> -->
-        </span>
+        <span class="align-middle"
+              [title]="hostAddress">{{appDisplayName}}</span>
+        <!-- <span>Il gioco delle SEDIE</span> -->
     </a>
+
+    <!-- TODO: make 3 cols to center menu voices -->
 
     <button class="navbar-toggler"
             type="button"
-            data-toggle="collapse"
-            data-target="#navbarSupportedContent"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent"
             aria-expanded="false"
             aria-label="Toggle navigation">
@@ -32,15 +30,18 @@
 
         <ul class="navbar-nav mx-auto">
 
-            <!-- <li class="nav-item" *ngFor="let link of links">
-                <a class="nav-link" routerLink="./{{link.path}}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">{{link.data.UI.navbar.labelKey}}</a>
-            </li> -->
-
             <li class="nav-item">
                 <a class="nav-link"
                    routerLink="./matches/new"
                    routerLinkActive="active"
                    [routerLinkActiveOptions]="{ exact: true }">Create</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link"
+                   routerLink="./matches/eCbS7eKs87o"
+                   routerLinkActive="active"
+                   [routerLinkActiveOptions]="{ exact: true }">Fake match</a>
             </li>
 
             <li class="nav-item">
@@ -57,36 +58,9 @@
                    [routerLinkActiveOptions]="{ exact: true }">Tests</a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link"
-                   routerLink="./matches/eCbS7eKs87o"
-                   routerLinkActive="active"
-                   [routerLinkActiveOptions]="{ exact: true }">Fake match</a>
-            </li>
-
-            <!-- <li class="nav-item">
-                <a class="nav-link" routerLink="./test" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Test</a>
-            </li> -->
-
-            <!-- <li class="nav-item">
-                <a class="nav-link" routerLink="./matches" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Join</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="./guide" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Guide</a>
-            </li> -->
-
-            <!-- <li class="nav-item">
-                <a class="nav-link" routerLink="./matches/new/sortableJS" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">SortableJS</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" routerLink="./matches/new/amcdk" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Angular Material CDK</a>
-            </li> -->
-
         </ul>
 
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav ms-auto">
 
             <li class="nav-item">
                 <button class="btn btn-outline nav-link active"
@@ -109,24 +83,26 @@
                    href="javascript:void(0);"
                    id="navbarDropdownMenuLink"
                    role="button"
-                   data-toggle="dropdown"
+                   data-bs-toggle="dropdown"
                    aria-haspopup="true"
                    aria-expanded="false">
+                    <!-- TODO: add loading placeholder -->
                     <span *ngIf="this.isLanguageSelected$ | ngrxPush; else noSelectedLang">{{(this.selectedLanguage$ | ngrxPush | throwIfNil).nativeName}}</span>
                     <ng-template #noSelectedLang>
                         <span *ngIf="this.areLanguagesAvailable$ | ngrxPush">No languages</span>
                         <span *ngIf="this.areLanguagesAvailable$ | ngrxPush | throwIfNil | negate">Select a language</span>
                     </ng-template>
                 </a>
-                <div class="dropdown-menu dropdown-menu-right"
-                     aria-labelledby="navbarDropdownMenuLink">
-                    <!-- TODO: add loading placeholder -->
-                    <button class="dropdown-item"
-                            (click)="setLanguage(language)"
-                            *ngFor="let language of (this.languages$ | ngrxPush)">
-                        <span>{{language.nativeName}}</span>
-                    </button>
-                </div>
+                <ul class="dropdown-menu"
+                    aria-labelledby="navbarDropdownMenuLink">
+                    <li>
+                        <button class="dropdown-item"
+                                (click)="setLanguage(language)"
+                                *ngFor="let language of (this.languages$ | ngrxPush)">
+                            <span>{{language.nativeName}}</span>
+                        </button>
+                    </li>
+                </ul>
             </li>
 
             <li class="nav-item">

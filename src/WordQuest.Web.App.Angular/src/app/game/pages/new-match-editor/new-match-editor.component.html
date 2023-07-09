@@ -1,253 +1,252 @@
-<div class="container">
-    <div class="row">
-        <div class="col">
+<form>
+    <div class="container d-flex flex-column row-gap-3">
 
-            <form>
+        <!-- language & alphabet -->
+        <div class="row">
+            <div class="col-xs-12 col">
+                <label class="form-label"
+                       for="languageSelect">
+                    <b>Language & Alphabet</b>
+                </label>
+                <app-alphabet-variant-selector [alphabetVariants]="this.alphabetVariants$ | ngrxPush"
+                                               (selectedAlphabetVariant$)="selectedAlphabet = $event">
+                </app-alphabet-variant-selector>
+            </div>
+        </div>
 
-                <div class="form-row">
-                    <div class="col-xs-12 col">
-                        <div class="form-group">
-                            <label for="languageSelect">
-                                <b>Language & Alphabet</b>
-                            </label>
-                            <app-alphabet-variant-selector [alphabetVariants]="this.alphabetVariants$ | ngrxPush"
-                                                           (selectedAlphabetVariant$)="selectedAlphabet = $event">
-                            </app-alphabet-variant-selector>
-                        </div>
-                    </div>
+        <!-- categories -->
+        <div class="row">
+            <div class="col">
+                <label class="form-label">
+                    <b>Categories</b>
+                </label>
+                <app-categories-selector [categories]="this.categories$ | ngrxPush"
+                                         (selectedCategories$)="selectedCategories = $event">
+                </app-categories-selector>
+            </div>
+        </div>
+
+        <!-- letters -->
+        <div class="row">
+            <div class="col">
+                <label class="form-label">
+                    <b>Letters</b>
+                </label>
+                <app-letters-selector [alphabetChars]="this.alphabetChars$ | ngrxPush"
+                                      (selectedChars$)="selectedChars = $event">
+                </app-letters-selector>
+            </div>
+        </div>
+
+        <!-- options -->
+        <div class="row g-2">
+
+            <div class="col-12 col-sm">
+                <label class="form-label"
+                       for="secondsPerWordRangeInput">
+                    <b>Seconds per word</b>
+                </label>
+                <div class="input-group input-group-sm">
+                    <input id="secondsPerWordRangeInput"
+                           name="secondsPerWord"
+                           type="range"
+                           class="form-control form-range h-auto"
+                           [min]="SecondsPerWord_MIN"
+                           [max]="SecondsPerWord_MAX"
+                           step="1"
+                           [(ngModel)]="secondsPerWord">
+                    <span class="input-group-text">{{this.secondsPerWord$ | ngrxPush | number : '2.0'}}</span>
                 </div>
+            </div>
 
+            <div class="col-12 col-sm">
+                <label class="form-label"
+                       for="roundsCountRangeInput">
+                    <b>Rounds</b>
+                </label>
+                <div class="input-group input-group-sm">
+                    <input id="roundsCountRangeInput"
+                           name="roundsCount"
+                           type="range"
+                           class="form-control form-range h-auto"
+                           [min]="RoundsCount_MIN"
+                           [max]="RoundsCount_MAX"
+                           [(ngModel)]="roundsCount"
+                           step="1">
+                    <span class="input-group-text"
+                          for="roundsCountRangeInput">{{this.roundsCount$ | ngrxPush | number : '2.0'}}</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- options -->
+        <div class="row">
+
+            <div class="col-12 col-sm-6">
                 <div class="form-group">
-                    <label>
-                        <b>Categories</b>
+                    <label class="form-label">
+                        <b>Mode</b>
                     </label>
-                    <app-categories-selector [categories]="this.categories$ | ngrxPush"
-                                             (selectedCategories$)="selectedCategories = $event">
-                    </app-categories-selector>
-                </div>
+                    <label class="radio-card"
+                           for="timeOutRoundingModeRadioInput">
+                        <input type="radio"
+                               name="roundingMode"
+                               id="timeOutRoundingModeRadioInput"
+                               value="timeOut">
+                        <div class="radio-card-content checkable-text">
+                            <div class="row no-gutters">
 
-                <div class="form-group">
-                    <label>
-                        <b>Letters</b>
-                    </label>
-                    <app-letters-selector [alphabetChars]="this.alphabetChars$ | ngrxPush"
-                                          (selectedChars$)="selectedChars = $event">
-                    </app-letters-selector>
-                </div>
-
-                <div class="form-row">
-
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label for="secondsPerWordRangeInput">
-                                <b>Seconds per word</b>
-                            </label>
-                            <div class="input-group input-group-sm">
-                                <input type="range"
-                                       class="form-control custom-range"
-                                       [min]="SecondsPerWord_MIN"
-                                       [max]="SecondsPerWord_MAX"
-                                       step="1"
-                                       [(ngModel)]="secondsPerWord"
-                                       name="secondsPerWord"
-                                       id="secondsPerWordRangeInput">
-                                <div class="input-group-append">
-                                    <span class="input-group-text bg-light">{{this.secondsPerWord$ | ngrxPush | number : '2.0'}}</span>
+                                <div class="col-auto">
+                                    <p class="m-0">
+                                        <fa-icon [icon]="['fas', 'hourglass-end']"
+                                                 class="me-1"
+                                                 size="1x"
+                                                 [fixedWidth]="true"></fa-icon>
+                                        <!-- <b class="fas fa-hourglass-end fa-1x fa-fw me-2"></b> -->
+                                    </p>
                                 </div>
+
+                                <div class="col">
+                                    <p class="m-0">
+                                        <b>Time out</b>
+                                    </p>
+                                    <p class="m-0">
+                                        <small class="text-body-secondary">Round finishes when time is out</small>
+                                    </p>
+                                </div>
+
                             </div>
                         </div>
-                    </div>
+                    </label>
+                    <label class="radio-card mt-2"
+                           for="firstToFinishRoundingModeRadioInput">
+                        <input type="radio"
+                               name="roundingMode"
+                               id="firstToFinishRoundingModeRadioInput"
+                               value="firstToFinish">
+                        <div class="radio-card-content checkable-text">
+                            <div class="row no-gutters">
 
-                    <div class="col-12 col-sm-6">
-                        <div class="form-group">
-                            <label for="roundsCountRangeInput">
-                                <b>Rounds</b>
-                            </label>
-                            <div class="input-group input-group-sm">
-                                <input type="range"
-                                       class="form-control custom-range"
-                                       [min]="RoundsCount_MIN"
-                                       [max]="RoundsCount_MAX"
-                                       [(ngModel)]="roundsCount"
-                                       step="1"
-                                       name="roundsCount"
-                                       id="roundsCountRangeInput">
-                                <div class="input-group-append"
-                                     for="roundsCountRangeInput">
-                                    <span class="input-group-text bg-light">{{this.roundsCount$ | ngrxPush | number : '2.0'}}</span>
+                                <div class="col-auto">
+                                    <p class="m-0">
+                                        <fa-icon [icon]="['fas', 'running']"
+                                                 class="me-1"
+                                                 size="1x"
+                                                 [fixedWidth]="true"></fa-icon>
+                                        <!-- <b class="fas fa-running fa-1x fa-fw me-2"></b> -->
+                                    </p>
                                 </div>
+
+                                <div class="col">
+                                    <p class="m-0">
+                                        <b>Rush</b>
+                                    </p>
+                                    <p class="m-0">
+                                        <small class="text-body-secondary">The first player who fills in every word can end the round</small>
+                                    </p>
+                                </div>
+
                             </div>
                         </div>
-                    </div>
+                    </label>
+                </div>
+            </div>
 
+            <div class="col-12 col-sm-6">
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <b>Accessibility</b>
+                    </label>
+                    <label class="radio-card"
+                           for="publicMatchAccessRadioInput">
+                        <input type="radio"
+                               name="accessibility"
+                               id="publicMatchAccessRadioInput"
+                               value="public">
+                        <div class="radio-card-content checkable-text">
+                            <div class="row no-gutters">
+
+                                <div class="col-auto">
+                                    <p class="m-0">
+                                        <fa-icon [icon]="['fas', 'lock-open']"
+                                                 class="me-2"
+                                                 size="1x"
+                                                 [fixedWidth]="true"></fa-icon>
+                                    </p>
+                                </div>
+
+                                <div class="col">
+                                    <p class="m-0">
+                                        <b>Public</b>
+                                    </p>
+                                    <p class="m-0">
+                                        <small class="text-body-secondary">Anyone can join the match</small>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </label>
+                    <label class="radio-card mt-2"
+                           for="privateMatchAccessRadioInput">
+                        <input type="radio"
+                               name="accessibility"
+                               id="privateMatchAccessRadioInput"
+                               value="private">
+                        <div class="radio-card-content checkable-text">
+                            <div class="row no-gutters">
+
+                                <div class="col-auto">
+                                    <p class="m-0">
+                                        <fa-icon [icon]="['fas', 'lock']"
+                                                 class="me-2"
+                                                 size="1x"
+                                                 [fixedWidth]="true"></fa-icon>
+                                    </p>
+                                </div>
+
+                                <div class="col">
+                                    <p class="m-0">
+                                        <b>Private</b>
+                                    </p>
+                                    <p class="m-0">
+                                        <small class="text-body-secondary">Match can be joined only via link</small>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </label>
                 </div>
 
-                <!-- options -->
-                <div class="form-row">
+            </div>
 
-                    <div class="col-12 col-sm">
-                        <div class="form-group">
-                            <label>
-                                <b>Mode</b>
-                            </label>
-                            <label class="radio-card"
-                                   for="timeOutRoundingModeRadioInput">
-                                <input type="radio"
-                                       name="roundingMode"
-                                       id="timeOutRoundingModeRadioInput"
-                                       value="timeOut">
-                                <div class="radio-card-content checkable-text">
-                                    <div class="row no-gutters">
+        </div>
 
-                                        <div class="col-auto">
-                                            <p class="m-0">
-                                                <fa-icon [icon]="['fas', 'hourglass-end']"
-                                                         class="mr-1"
-                                                         size="1x"
-                                                         [fixedWidth]="true"></fa-icon>
-                                                <!-- <b class="fas fa-hourglass-end fa-1x fa-fw mr-2"></b> -->
-                                            </p>
-                                        </div>
-
-                                        <div class="col">
-                                            <p class="m-0">
-                                                <b>Time out</b>
-                                            </p>
-                                            <p class="m-0">
-                                                <small class="text-muted">Round finishes when time is out</small>
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </label>
-                            <label class="radio-card mt-2"
-                                   for="firstToFinishRoundingModeRadioInput">
-                                <input type="radio"
-                                       name="roundingMode"
-                                       id="firstToFinishRoundingModeRadioInput"
-                                       value="firstToFinish">
-                                <div class="radio-card-content checkable-text">
-                                    <div class="row no-gutters">
-
-                                        <div class="col-auto">
-                                            <p class="m-0">
-                                                <fa-icon [icon]="['fas', 'running']"
-                                                         class="mr-1"
-                                                         size="1x"
-                                                         [fixedWidth]="true"></fa-icon>
-                                                <!-- <b class="fas fa-running fa-1x fa-fw mr-2"></b> -->
-                                            </p>
-                                        </div>
-
-                                        <div class="col">
-                                            <p class="m-0">
-                                                <b>Rush</b>
-                                            </p>
-                                            <p class="m-0">
-                                                <small class="text-muted">The first player who fills in every word can
-                                                    end the round</small>
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="col-12 col-sm">
-                        <div class="form-group">
-                            <label>
-                                <b>Accessibility</b>
-                            </label>
-                            <label class="radio-card"
-                                   for="publicMatchAccessRadioInput">
-                                <input type="radio"
-                                       name="accessibility"
-                                       id="publicMatchAccessRadioInput"
-                                       value="public">
-                                <div class="radio-card-content checkable-text">
-                                    <div class="row no-gutters">
-
-                                        <div class="col-auto">
-                                            <p class="m-0">
-                                                <fa-icon [icon]="['fas', 'lock-open']"
-                                                         class="mr-2"
-                                                         size="1x"
-                                                         [fixedWidth]="true"></fa-icon>
-                                            </p>
-                                        </div>
-
-                                        <div class="col">
-                                            <p class="m-0">
-                                                <b>Public</b>
-                                            </p>
-                                            <p class="m-0">
-                                                <small class="text-muted">Anyone can join the match</small>
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </label>
-                            <label class="radio-card mt-2"
-                                   for="privateMatchAccessRadioInput">
-                                <input type="radio"
-                                       name="accessibility"
-                                       id="privateMatchAccessRadioInput"
-                                       value="private">
-                                <div class="radio-card-content checkable-text">
-                                    <div class="row no-gutters">
-
-                                        <div class="col-auto">
-                                            <p class="m-0">
-                                                <fa-icon [icon]="['fas', 'lock']"
-                                                         class="mr-2"
-                                                         size="1x"
-                                                         [fixedWidth]="true"></fa-icon>
-                                            </p>
-                                        </div>
-
-                                        <div class="col">
-                                            <p class="m-0">
-                                                <b>Private</b>
-                                            </p>
-                                            <p class="m-0">
-                                                <small class="text-muted">Match can be joined only via link</small>
-                                            </p>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
-
-                </div>
-
+        <!-- actions -->
+        <div class="row">
+            <div class="col">
                 <button type="submit"
                         class="btn btn-primary btn-lg btn-block d-sm-none"
-                        [appIsEnabled]="canCreateMatch$ | ngrxPush | throwIfNil"
+                        [isEnabled]="canCreateMatch$ | ngrxPush | throwIfNil"
                         (click)="createMatch()">
                     <span>Create match</span>
                     <span>&nbsp;</span>
                     <span class="fab fa-accessible-icon fa-fw"></span>
                 </button>
 
-                <div class="text-right">
-                    <button type="submit"
-                            class="btn btn-primary btn-lg d-none d-sm-inline"
-                            [appIsEnabled]="canCreateMatch$ | ngrxPush | throwIfNil">
-                        <span>Create match</span>
-                        <span>&nbsp;</span>
-                        <fa-icon [icon]="['fas', 'spell-check']"
-                                 [fixedWidth]="true"></fa-icon>
-                    </button>
-                </div>
-
-            </form>
-
+                <button type="submit"
+                        class="btn btn-primary btn-lg d-none d-sm-inline"
+                        [isEnabled]="canCreateMatch$ | ngrxPush | throwIfNil">
+                    <span>Create match</span>
+                    <span>&nbsp;</span>
+                    <fa-icon [icon]="['fas', 'spell-check']"
+                             [fixedWidth]="true"></fa-icon>
+                </button>
+            </div>
         </div>
+
     </div>
-</div>
+</form>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Output } from '@angular/core';
 import { defaultIfEmpty, map } from 'rxjs/operators';
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
@@ -9,7 +9,8 @@ import { Language } from '../../models/culture.DTOs';
 @Component({
     selector: 'app-header',
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderComponent extends ReactiveComponent {
 
@@ -20,6 +21,7 @@ export class HeaderComponent extends ReactiveComponent {
         super(cdr);
     }
 
+    // TODO: use rx
     public get appDisplayName(): string { return environment.website.displayName; }
     public get hostAddress(): string { return environment.api.getHostAddress(); }
 

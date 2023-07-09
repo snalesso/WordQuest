@@ -1,7 +1,7 @@
 <!-- <p>{{this.alphabetsSource.isLoading$ | ngrxPush | json}}</p> -->
 
 <select class="form-control"
-        [appIsEnabled]="this.canSelectAlphabetVariant$ | ngrxPush | throwIfNil"
+        [isEnabled]="this.canSelectAlphabetVariant$ | ngrxPush | throwIfNil"
         [ngModel]="this.selectedAlphabetVariant$ | ngrxPush"
         (ngModelChange)="this.selectedAlphabetVariant = $event">
 
@@ -36,7 +36,7 @@
 
 <!-- <p>{{this.alphabetsSource.isLoading$ | ngrxPush | json}}</p>
 <select class="form-control"
-        [appIsDisabled]="this.canSelectAlphabet$ | ngrxPush"
+        [isDisabled]="this.canSelectAlphabet$ | ngrxPush"
         [ngModel]="this.selectedAlphabet$ | ngrxPush"
         (ngModelChange)="this.selectAlphabet($event)">
 

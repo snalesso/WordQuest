@@ -4,7 +4,8 @@ import { debounceTime, distinctUntilChanged, map, multicast, refCount, shareRepl
 import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { allTrue, isNilOrEmpty } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
-import { ISelectable } from 'src/app/root/models/core';
+import { ISelectable, randomInt } from 'src/app/root/models/core';
+import { generateNumbers } from 'src/app/root/models/utils';
 import { Tag } from '../../models/game';
 import { CategoryOption } from '../../models/game.DTOs';
 import { GameService } from '../../services/game.service';
@@ -17,6 +18,8 @@ import { MatchService } from '../../services/match.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoriesSelectorComponent extends ReactiveComponent implements OnInit {
+
+  protected readonly loadingPlaceholders = generateNumbers(1, 30).map(() => generateNumbers(1, randomInt(3, 12)).join(''));
 
   private readonly _isLoading$$ = new BehaviorSubject<boolean>(false);
   public get isLoading() { return this._isLoading$$.value; }

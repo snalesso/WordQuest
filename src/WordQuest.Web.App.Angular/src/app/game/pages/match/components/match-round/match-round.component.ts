@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -9,7 +9,8 @@ import { MatchService } from 'src/app/game/services/match.service';
 @Component({
     selector: 'app-match-round',
     templateUrl: './match-round.component.html',
-    styleUrls: ['./match-round.component.scss']
+    styleUrls: ['./match-round.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MatchRoundComponent extends ReactiveComponent {
 

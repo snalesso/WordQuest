@@ -1,75 +1,44 @@
-<div class="row mx-n1">
-    <div class="col-12 col-sm px-1">
+<div class="row gx-2">
 
-        <div class="input-group mb-2">
-            <input type="text"
-                   [appIsEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
-                   class="form-control"
+    <div class="col-12 col-sm">
+        <div class="input-group mb-2 g-1">
+            <input class="form-control"
+                   type="text"
                    placeholder="Filter by name"
                    aria-label="Filter by name"
+                   [isEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
                    [(ngModel)]="fulltextSearchString">
-            <div class="input-group-append">
-                <!-- <button class="btn btn-outline-primary"
-                        [appIsEnabled]="this.canFilterCategories$ | ngrxPush"
-                        type="button">
-                    <fa-icon [icon]="['fas', 'search']"
-                             [fixedWidth]="true"></fa-icon>
-                </button> -->
-                <button class="btn btn-outline-danger"
-                        [appIsEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
-                        type="button"
-                        (click)="this.fulltextSearchString = ''">
-                    <fa-icon [icon]="['fas', 'times']"
-                             [fixedWidth]="true"></fa-icon>
-                </button>
-            </div>
+            <button class="btn btn-outline-danger"
+                    type="button"
+                    [isEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
+                    (click)="this.fulltextSearchString = ''">
+                <fa-icon [icon]="['fas', 'times']"
+                         [fixedWidth]="true"></fa-icon>
+            </button>
         </div>
-        <!-- <div class="row mb-2 mx-n1">
-            <div class="col px-1">
-                <input type="text"
-                       [appIsEnabled]="this.canFilterCategories$ | ngrxPush"
-                       class="form-control"
-                       placeholder="Filter by name"
-                       aria-label="Filter by name"
-                       [(ngModel)]="fulltextSearchString">
-            </div>
-            <div class="col-auto px-1">
-                <button class="btn btn-outline-danger"
-                        [appIsEnabled]="this.canFilterCategories$ | ngrxPush"
-                        type="button"
-                        (click)="this.fulltextSearchString = ''">
-                    <fa-icon [icon]="['fas', 'times']"
-                             [fixedWidth]="true"></fa-icon>
-                </button>
-            </div>
-        </div> -->
-
     </div>
-    <div class="col-12 col-sm px-1">
 
+    <div class="col-12 col-sm">
         <div class="input-group mb-2">
-            <div class="input-group-prepend">
-                <label class="input-group-text"
-                       for="tagsFilterSelect">Tags</label>
-            </div>
-            <select class="custom-select"
-                    [appIsEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
+            <label class="input-group-text"
+                   for="tagsFilterSelect">Tags</label>
+            <select id="tagsFilterSelect"
+                    class="form-select"
                     placeholder="Filter by tag"
-                    id="tagsFilterSelect">
+                    [isEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil">
                 <option selected>All</option>
                 <option>Science</option>
             </select>
-            <div class="input-group-append">
-                <button class="btn btn-outline-danger"
-                        [appIsEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
-                        type="button">
-                    <fa-icon [icon]="['fas', 'times']"
-                             [fixedWidth]="true"></fa-icon>
-                </button>
-            </div>
+            <button class="btn btn-outline-danger"
+                    type="button"
+                    [isEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil">
+                <fa-icon [icon]="['fas', 'times']"
+                         [fixedWidth]="true"></fa-icon>
+                <!-- make fixed width app wide via config -->
+            </button>
         </div>
-
     </div>
+
 </div>
 
 <div class="wrap-panel rounded-top p-1 overflow-auto"
@@ -78,45 +47,52 @@
     <ng-template #categoriesLoaded>
 
         <ng-template #hasNoCategories>
-            <label class="card-text border-transparent text-muted font-italic m-1 px-2 py-1">
+            <label class="card-text border-transparent text-body-secondary font-italic m-1 px-2 py-1">
                 <span>No categories available</span>
             </label>
         </ng-template>
 
         <ng-template #hasCategories>
             <button *ngFor="let item of (this.filteredCategories$ | ngrxPush); let i = index;"
-                    [appIsEnabled]="canChooseCategories$ | ngrxPush | throwIfNil"
                     class="btn btn-primary m-1 px-2 py-1"
                     [class.active]="item.isSelected"
+                    [isEnabled]="canChooseCategories$ | ngrxPush | throwIfNil"
                     (click)="toggle(item)">
                 <span>{{item.value.name}}</span>
             </button>
         </ng-template>
 
-        <ng-container *ngIf="(this.areCategoriesAvailable$ | ngrxPush) as hasCategories; then hasCategories; else hasNoCategories;"></ng-container>
+        <ng-container *ngIf="(this.areCategoriesAvailable$ | ngrxPush); then hasCategories; else hasNoCategories;"></ng-container>
 
     </ng-template>
 
-    <label *ngIf="(this.isLoading$ | ngrxPush) as areCategoriesLoaded; else categoriesLoaded;"
-           class="card-text border-transparent text-muted font-italic m-1 px-2 py-1">
-        <span>Loading ...</span>
-    </label>
+    <ng-template #areCategoriesLoading>
+        <!-- <label class="card-text border-transparent text-body-secondary font-italic m-1 px-2 py-1">
+            <span>Loading ...</span>
+        </label> -->
+        <button *ngFor="let p of loadingPlaceholders"
+                class="btn btn-primary m-1 px-2 py-1 placeholder-wave disabled">
+            <span class="invisible">{{p}}</span>
+        </button>
+    </ng-template>
+
+    <ng-container *ngIf="(this.isLoading$ | ngrxPush); then areCategoriesLoading; else categoriesLoaded;"></ng-container>
 
 </div>
 
 <div class="wrap-panel border-top-0 p-1"
      [class.d-none]="!selectedCategories || selectedCategories.length <= 0">
     <button *ngFor="let item of selectedCategories; let i = index; trackBy: getCategoryId;"
-            [appIsEnabled]="isEnabled$ | ngrxPush | throwIfNil"
             class="btn btn-outline-primary m-1 px-2 py-1 active"
+            [isEnabled]="isEnabled$ | ngrxPush | throwIfNil"
             (click)="remove(item)">
         <span>{{i + 1}}° </span>
         <span>{{item.name}}</span>
     </button>
 </div>
 
-<div class="card-footer form-control-border rounded-bottom border-top-0 py-1 px-2 align-content-center">
-    <label class="align-middle m-0">
+<div class="card-footer form-control-border rounded-bottom border-top-0 py-2 px-3">
+    <label class="align-middle">
         <span *ngIf="!(selectedCategories$ | ngrxPush)">-</span>
         <span *ngIf="selectedCategories$ | ngrxPush | isNotNil">{{(selectedCategories$ | ngrxPush | throwIfNil).length}} categories selected</span>
     </label>
