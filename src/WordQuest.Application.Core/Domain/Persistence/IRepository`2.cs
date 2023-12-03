@@ -2,7 +2,7 @@
 
 // TODO: explore making IRrepository's method static
 public interface IRepository<TEntity, TIdentity>
-    where TEntity : Entity<TIdentity>
+    where TEntity : IEntity<TIdentity>
     where TIdentity : IEquatable<TIdentity>
 {
     Task AddAsync(TEntity entity, CancellationToken cancellationToken = default);

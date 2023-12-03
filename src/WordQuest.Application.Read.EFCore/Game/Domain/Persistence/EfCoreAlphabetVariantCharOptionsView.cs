@@ -23,6 +23,7 @@ internal class EfCoreAlphabetVariantCharOptionsView : IAlphabetVariantCharOption
                 from alphVar in this._alphabetVariants
                 join charInfo in this._alphabetVariantChars
                     on alphVar.Id equals charInfo.AlphabetVariantId
+                where alphVar.Id == alphabetVariantId
                 select
                     new CharOption(
                         charInfo.Char.Single(),
@@ -36,5 +37,12 @@ internal class EfCoreAlphabetVariantCharOptionsView : IAlphabetVariantCharOption
         {
             throw;
         }
+    }
+
+    public async Task<IReadOnlyDictionary<char, CharMetadata>> GetCharMetadataMapAsync(Guid alphabetVariantId, CancellationToken cancellationToken = default)
+    {
+        var charOptions = await this.GetAllAsync(alphabetVariantId, cancellationToken).ConfigureAwait(false);
+        var map = charOptions.ToDictionary(x => x.Id, x => x.Metadata);
+        return map;
     }
 }

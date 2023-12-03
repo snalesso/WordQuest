@@ -3,7 +3,6 @@ using Microsoft.Azure.Functions.Worker.Http;
 using System.Net;
 using System.Web;
 using WordQuest.Domain.Persistence;
-using WordQuest.Game.Domain;
 using WordQuest.Game.Domain.Persistence;
 
 namespace WordQuest.Game.Matches.Creation;
@@ -35,7 +34,7 @@ public class GetAlphabetVariantCharOptions
         var results = await this._unitOfWorkFactory
             .ExecuteAsync(async (ctx, ct) =>
             {
-                var results = await ctx.AlphabetVariantCharOptions.GetAllAsync(alphabetVariantId, ct).ConfigureAwait(false);
+                var results = await ctx.AlphabetVariantCharOptions.GetCharMetadataMapAsync(alphabetVariantId, ct).ConfigureAwait(false);
                 return results;
             }, cancellationToken)
             .ConfigureAwait(false);

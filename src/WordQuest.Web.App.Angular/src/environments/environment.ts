@@ -5,9 +5,12 @@
 import { APP_NAME, IEnvironment } from './environment.core';
 
 export const environment: IEnvironment = {
-    isInProduction: false,
+    mode: {
+        code: 'dev',
+        label: 'Dev'
+    },
     website: {
-        displayName: `${APP_NAME} - Dev`
+        displayName: APP_NAME
     },
     api: {
         getSignalRHostAddress: () => "",

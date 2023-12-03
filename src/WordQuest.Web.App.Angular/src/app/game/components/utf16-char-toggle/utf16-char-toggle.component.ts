@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { ISelectable } from 'src/app/root/models/core';
 import { Char } from 'src/app/root/models/culture.DTOs';
 

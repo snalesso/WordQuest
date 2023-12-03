@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { MatchSettings } from 'src/app/game/models/game.DTOs';
 import { MatchService } from 'src/app/game/services/match.service';
 

@@ -15,11 +15,11 @@ public partial class EfCoreReadWriteGameDbContext : DbContext
     {
     }
 
-    public virtual DbSet<AlphabetFamiliesLanguageName> AlphabetFamiliesLanguageNames { get; set; }
+    public virtual DbSet<EfCoreAlphabetFamiliesLanguageName> AlphabetFamiliesLanguageNames { get; set; }
 
-    public virtual DbSet<AlphabetFamily> AlphabetFamilies { get; set; }
+    public virtual DbSet<EfCoreAlphabetFamily> AlphabetFamilies { get; set; }
 
-    public virtual DbSet<AlphabetVariant> AlphabetVariants { get; set; }
+    public virtual DbSet<EfCoreAlphabetVariant> AlphabetVariants { get; set; }
 
     public virtual DbSet<AlphabetVariantCharsUtf16> AlphabetVariantCharsUtf16s { get; set; }
 
@@ -29,7 +29,7 @@ public partial class EfCoreReadWriteGameDbContext : DbContext
 
     public virtual DbSet<CategoryOption> CategoryOptions { get; set; }
 
-    public virtual DbSet<Language> Languages { get; set; }
+    public virtual DbSet<EfCoreLanguage> Languages { get; set; }
 
     public virtual DbSet<LanguageAlphabet> LanguageAlphabets { get; set; }
 
@@ -43,7 +43,7 @@ public partial class EfCoreReadWriteGameDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<AlphabetFamiliesLanguageName>(entity =>
+        modelBuilder.Entity<EfCoreAlphabetFamiliesLanguageName>(entity =>
         {
             entity.HasKey(e => new { e.AlphabetFamilyId, e.LanguageId });
 
@@ -62,14 +62,14 @@ public partial class EfCoreReadWriteGameDbContext : DbContext
                 .HasConstraintName("FK_AlphabetFamiliesLanguageNames_Languages");
         });
 
-        modelBuilder.Entity<AlphabetFamily>(entity =>
+        modelBuilder.Entity<EfCoreAlphabetFamily>(entity =>
         {
             entity.Property(e => e.InvariantCultureName)
                 .HasMaxLength(20)
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<AlphabetVariant>(entity =>
+        modelBuilder.Entity<EfCoreAlphabetVariant>(entity =>
         {
             entity.HasIndex(e => new { e.LanguageId, e.AlphabetFamilyId }, "UQ_AlphabetVariants_Language_AlphabetFamily").IsUnique();
 
@@ -146,7 +146,7 @@ public partial class EfCoreReadWriteGameDbContext : DbContext
                 .IsUnicode(false);
         });
 
-        modelBuilder.Entity<Language>(entity =>
+        modelBuilder.Entity<EfCoreLanguage>(entity =>
         {
             entity.HasIndex(e => e.NativeName, "UQ_Languages_NativeName").IsUnique();
 

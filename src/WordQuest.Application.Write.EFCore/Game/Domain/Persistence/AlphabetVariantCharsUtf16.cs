@@ -11,5 +11,5 @@ public partial class AlphabetVariantCharsUtf16
 
     public bool IsCommon { get; set; }
 
-    public virtual AlphabetVariant AlphabetVariant { get; set; } = null!;
+    public virtual EfCoreAlphabetVariant AlphabetVariant { get; set; } = null!;
 }

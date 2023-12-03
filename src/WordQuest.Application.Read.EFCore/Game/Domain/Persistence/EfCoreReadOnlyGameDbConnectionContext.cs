@@ -33,6 +33,10 @@ public sealed class EfCoreReadOnlyGameDbConnectionContext
                 this._dbContext.AlphabetFamilies));
         this._lazyCategoryOptionsView = new Lazy<EfCoreCategoryOptionsView>(
             () => new EfCoreCategoryOptionsView(this._dbContext.Categories));
+        this._lazyAlphabetVariantCharOptionsView = new Lazy<EfCoreAlphabetVariantCharOptionsView>(
+            () => new EfCoreAlphabetVariantCharOptionsView(
+                this._dbContext.AlphabetVariants,
+                this._dbContext.AlphabetVariantCharsUtf16s));
     }
 
     public ILanguageOptionsView LanguageOptions => this._lazyLanguageOptionsView.Value;

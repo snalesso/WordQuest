@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { Category, MatchSettings } from 'src/app/game/models/game.DTOs';
 
 @Component({

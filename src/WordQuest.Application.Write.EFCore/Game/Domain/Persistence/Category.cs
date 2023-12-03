@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WordQuest.Game.Domain.Persistence;
 
-public partial class Category
+public partial class Category : ICategory
 {
     public Guid AlphabetVariantId { get; set; }
 
@@ -13,5 +13,5 @@ public partial class Category
 
     public Guid Id { get; set; }
 
-    public virtual AlphabetVariant AlphabetVariant { get; set; } = null!;
+    public virtual EfCoreAlphabetVariant AlphabetVariant { get; set; } = null!;
 }

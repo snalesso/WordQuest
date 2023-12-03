@@ -18,12 +18,14 @@
             <!-- TODO: explore using badges with checkmark instead of toggle buttons -->
             <button #char
                     *ngFor="let item of (selectableChars$ | ngrxPush)"
-                    class="btn btn-outline-primary px-3 py-2"
-                    [attr.aria-pressed]="!!item.isSelected"
-                    [class.active]="!!item.isSelected"
+                    class="btn btn-outline-primary px-3 py-2 position-relative"
+                    [attr.aria-pressed]="item.isSelected"
+                    [class.active]="item.isSelected"
                     type="button"
                     (click)="toggleSelection(item)">
-                <p class="font-monospace m-0">{{item.value}}</p>
+                <span class="font-monospace m-0">{{item.value}}</span>
+                <span *ngIf="item.isSelected"
+                      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">✓</span>
             </button>
         </div>
     </ng-template>

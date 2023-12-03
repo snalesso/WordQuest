@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import { catchError, distinctUntilChanged, map, multicast, refCount, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { catchError, distinctUntilChanged, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
 import { allTrue, isNilOrEmpty, isNotNil } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
@@ -21,9 +21,6 @@ import { MatchService } from '../../services/match.service';
 // TODO: implement ValueProvider (to make it behave like a form)
 export class NewMatchEditorComponent extends ReactiveComponent implements OnInit {
 
-    @Output()
-    public readonly alphabetVariants$ = this._gameService.getAlphabetVariantOptionsAsync().pipe(shareReplay({ bufferSize: 1, refCount: true }));
-
     private readonly _selectedLanguageId$$ = new BehaviorSubject<Language['id'] | undefined>(undefined);
     public get selectedLanguageId() { return this._selectedLanguageId$$.value; }
     @Input()
@@ -31,28 +28,22 @@ export class NewMatchEditorComponent extends ReactiveComponent implements OnInit
     @Output()
     public readonly selectedLanguageId$ = this._selectedLanguageId$$.asObservable();
 
-    private readonly _selectedAlphabet$$ = new BehaviorSubject<AlphabetVariantOption | undefined>(undefined);
-    public get selectedAlphabet() { return this._selectedAlphabet$$.value; }
+    private readonly _alphabetVariant$$ = new BehaviorSubject<AlphabetVariantOption | undefined>(undefined);
+    public get alphabetVariant() { return this._alphabetVariant$$.value; }
     @Input()
-    public set selectedAlphabet(value: AlphabetVariantOption | undefined) { this._selectedAlphabet$$.next(value); }
+    public set alphabetVariant(value: AlphabetVariantOption | undefined) { this._alphabetVariant$$.next(value); }
     @Output()
-    public readonly selectedAlphabet$ = this._selectedAlphabet$$.pipe(distinctUntilChanged());
+    public readonly alphabetVariant$ = this._alphabetVariant$$.pipe(distinctUntilChanged());
 
-    private readonly _categories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
-    public get categories() { return this._categories$$.value; }
+    private readonly _alphabetVariantId$$ = new BehaviorSubject<AlphabetVariantOption['id'] | undefined>(undefined);
+    public get alphabetVariantId() { return this._alphabetVariantId$$.value; }
     @Output()
-    public readonly categories$ = this.selectedAlphabet$.pipe(
-        switchMap(alphabetVariant => {
-            if (alphabetVariant == null)
-                return of(undefined);
-            return this._gameService.getCategoryOptionsAsync(alphabetVariant.id).pipe(
-                catchError(() => of(undefined)),
-                startWith(undefined));
-        }),
-        multicast(() => this._categories$$),
+    public readonly alphabetVariantId$ = this.alphabetVariant$.pipe(
+        map(alphabetVariant => alphabetVariant?.id),
+        multicast(() => this._alphabetVariantId$$),
         refCount(),
         distinctUntilChanged(),
-        tap(categories => logEvent(this, "categories", categories)),
+        tap(value => logEvent(this, 'alphabetVariantId', value)),
         shareReplay({ bufferSize: 1, refCount: true }));
 
     private readonly _selectedCategories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
@@ -65,7 +56,7 @@ export class NewMatchEditorComponent extends ReactiveComponent implements OnInit
     private readonly _alphabetChars$$ = new BehaviorSubject<Partial<Record<Char, CharMetadata>> | undefined>(undefined);
     public get alphabetChars() { return this._alphabetChars$$.value; }
     @Output()
-    public readonly alphabetChars$ = this.selectedAlphabet$.pipe(
+    public readonly alphabetChars$ = this.alphabetVariant$.pipe(
         map(alphabetVariant => {
             if (alphabetVariant == null)
                 return undefined;
@@ -108,13 +99,13 @@ export class NewMatchEditorComponent extends ReactiveComponent implements OnInit
 
     private readonly _canCreateMatch$$ = new BehaviorSubject<boolean>(
         allTrue([
-            isNotNil(this.selectedAlphabet),
+            isNotNil(this.alphabetVariant),
             !isNilOrEmpty(this.selectedCategories)
         ]));
     public get canCreateMatch() { return this._canCreateMatch$$.value; }
     @Output()
     public readonly canCreateMatch$ = combineLatest([
-        this.selectedAlphabet$.pipe(map(isNotNil), distinctUntilChanged()),
+        this.alphabetVariant$.pipe(map(isNotNil), distinctUntilChanged()),
         this.selectedCategories$.pipe(map(isNilOrEmpty), mapInvertedBool(), distinctUntilChanged())
     ]).pipe(
         map(allTrue),
@@ -133,13 +124,14 @@ export class NewMatchEditorComponent extends ReactiveComponent implements OnInit
 
     ngOnInit(): void {
         this.subscribe([
-            this.categories$,
+            // this.alphabetVariants$,
+            this.alphabetVariant$,
+            this.alphabetVariantId$,
             this.roundsCount$,
             this.selectedChars$,
             this.secondsPerWord$,
             this.alphabetChars$,
-            this.alphabetVariants$,
-            this.selectedAlphabet$,
+            this.alphabetVariant$,
             this.selectedCategories$,
             this.selectedLanguageId$,
         ]);
@@ -147,7 +139,7 @@ export class NewMatchEditorComponent extends ReactiveComponent implements OnInit
 
     public createMatch(): void {
         // const matchConfig: MatchConfigDto = {};
-        // matchConfig.alphabetId = this.selectedAlphabet.id;
+        // matchConfig.alphabetId = this.alphabetVariant.id;
         // matchConfig.categoryIds = this.categories$.
     }
 }

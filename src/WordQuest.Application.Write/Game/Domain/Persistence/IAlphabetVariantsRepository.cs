@@ -1,8 +1,7 @@
-﻿//using WordQuest.Domain.Persistence;
-//using WordQuest.Game.Domain.Entities;
+﻿using WordQuest.Domain.Persistence;
 
-//namespace WordQuest.Game.Domain.Persistence;
+namespace WordQuest.Game.Domain.Persistence;
 
-//public interface IAlphabetVariantsRepository : IRepository<IAlphabetVariant, Guid>, IAlphabetVariantFactory
-//{
-//}
+public interface IAlphabetVariantsRepository : IRepository<IAlphabetVariant, Guid>, IAlphabetVariantFactory
+{
+}

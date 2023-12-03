@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, tap } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { } from 'src/app/root/models/core';
 import { Language } from 'src/app/root/models/culture.DTOs';
 import { MatchService } from '../../services/match.service';

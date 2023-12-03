@@ -1,7 +1,10 @@
 export const APP_NAME: string = "WordQuest";
 
 export interface IEnvironment {
-    readonly isInProduction: boolean;
+    readonly mode: {
+        readonly code: 'dev' | 'prod';
+        readonly label: string;
+    },
     readonly website: {
         readonly displayName: string;
     };

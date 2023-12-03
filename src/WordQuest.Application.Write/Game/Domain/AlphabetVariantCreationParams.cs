@@ -1,4 +1,4 @@
-﻿namespace WordQuest.Game.Domain.Entities;
+﻿namespace WordQuest.Game.Domain;
 
 public class AlphabetVariantCreationParams
 {

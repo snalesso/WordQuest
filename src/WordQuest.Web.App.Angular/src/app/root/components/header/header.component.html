@@ -1,16 +1,17 @@
 <nav class="navbar bg-body-secondary navbar-expand-lg p-1">
 
-    <a class="navbar-brand"
+    <a class="navbar-brand d-flex gap-2 align-items-center"
        routerLink="/">
-        <span class="me-2 align-middle">
-            <fa-icon [icon]="['fas', 'spell-check']"
-                     size="2x"
-                     [fixedWidth]="true"></fa-icon>
-            <!-- <i class="fab fa-accessible-icon fa-2x fa-fw"></i> -->
-        </span>
+        <fa-icon [icon]="['fas', 'spell-check']"
+                 size="2x"
+                 class="align-middle"
+                 [fixedWidth]="true">
+        </fa-icon>
         <span class="align-middle"
-              [title]="hostAddress">{{appDisplayName}}</span>
-        <!-- <span>Il gioco delle SEDIE</span> -->
+              [title]="hostAddress">{{logoLabel}}</span>
+        <span *ngIf="isEnvLabelVisible"
+              class="align-middle badge bg-info"
+              [title]="envLabel">{{envLabel}}</span>
     </a>
 
     <!-- TODO: make 3 cols to center menu voices -->
@@ -37,26 +38,26 @@
                    [routerLinkActiveOptions]="{ exact: true }">Create</a>
             </li>
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link"
                    routerLink="./matches/eCbS7eKs87o"
                    routerLinkActive="active"
                    [routerLinkActiveOptions]="{ exact: true }">Fake match</a>
-            </li>
+            </li> -->
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link"
                    routerLink="./guide"
                    routerLinkActive="active"
                    [routerLinkActiveOptions]="{ exact: true }">Guide</a>
-            </li>
+            </li> -->
 
-            <li class="nav-item">
+            <!-- <li class="nav-item">
                 <a class="nav-link"
                    routerLink="./matches/test"
                    routerLinkActive="active"
                    [routerLinkActiveOptions]="{ exact: true }">Tests</a>
-            </li>
+            </li> -->
 
         </ul>
 

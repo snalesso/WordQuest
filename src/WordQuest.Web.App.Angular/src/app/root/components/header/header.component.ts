@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Output } from '@angular/core';
 import { defaultIfEmpty, map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
 import { SystemService } from 'src/app/common/services/system.service';
 import { environment } from 'src/environments/environment.dev';
@@ -21,9 +21,10 @@ export class HeaderComponent extends ReactiveComponent {
         super(cdr);
     }
 
-    // TODO: use rx
-    public get appDisplayName(): string { return environment.website.displayName; }
-    public get hostAddress(): string { return environment.api.getHostAddress(); }
+    public readonly logoLabel = environment.website.displayName; // + ((environment.env.label?.length ?? 0) > 0 ? ` - ${environment.env.label}` : '');
+    public readonly envLabel = environment.mode.label;
+    public readonly isEnvLabelVisible = environment.mode.code === 'dev';
+    public readonly hostAddress = environment.api.getHostAddress();
 
     @Output()
     public readonly languages$ = this._globalizationSvc.languages$;

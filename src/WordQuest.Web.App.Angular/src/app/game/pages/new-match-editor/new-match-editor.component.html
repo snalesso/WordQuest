@@ -8,8 +8,7 @@
                        for="languageSelect">
                     <b>Language & Alphabet</b>
                 </label>
-                <app-alphabet-variant-selector [alphabetVariants]="this.alphabetVariants$ | ngrxPush"
-                                               (selectedAlphabetVariant$)="selectedAlphabet = $event">
+                <app-alphabet-variant-selector (selectedAlphabetVariant$)="alphabetVariant = $event">
                 </app-alphabet-variant-selector>
             </div>
         </div>
@@ -20,7 +19,7 @@
                 <label class="form-label">
                     <b>Categories</b>
                 </label>
-                <app-categories-selector [categories]="this.categories$ | ngrxPush"
+                <app-categories-selector [alphabetVariantId]="alphabetVariantId$ | ngrxPush"
                                          (selectedCategories$)="selectedCategories = $event">
                 </app-categories-selector>
             </div>
@@ -32,7 +31,7 @@
                 <label class="form-label">
                     <b>Letters</b>
                 </label>
-                <app-letters-selector [alphabetChars]="this.alphabetChars$ | ngrxPush"
+                <app-letters-selector [alphabetChars]="alphabetChars$ | ngrxPush"
                                       (selectedChars$)="selectedChars = $event">
                 </app-letters-selector>
             </div>
@@ -55,7 +54,7 @@
                            [max]="SecondsPerWord_MAX"
                            step="1"
                            [(ngModel)]="secondsPerWord">
-                    <span class="input-group-text">{{this.secondsPerWord$ | ngrxPush | number : '2.0'}}</span>
+                    <span class="input-group-text">{{secondsPerWord$ | ngrxPush | number : '2.0'}}</span>
                 </div>
             </div>
 
@@ -74,7 +73,7 @@
                            [(ngModel)]="roundsCount"
                            step="1">
                     <span class="input-group-text"
-                          for="roundsCountRangeInput">{{this.roundsCount$ | ngrxPush | number : '2.0'}}</span>
+                          for="roundsCountRangeInput">{{roundsCount$ | ngrxPush | number : '2.0'}}</span>
                 </div>
             </div>
 

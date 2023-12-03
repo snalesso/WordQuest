@@ -1,8 +1,7 @@
-﻿//using WordQuest.Domain.Persistence;
-//using WordQuest.Game.Domain.Entities;
+﻿using WordQuest.Domain.Persistence;
 
-//namespace WordQuest.Game.Domain.Persistence;
+namespace WordQuest.Game.Domain.Persistence;
 
-//public interface ICategoriesRepository : IRepository<Category, Guid>
-//{
-//}
+public interface ICategoriesRepository : IRepository<ICategory, Guid>
+{
+}

@@ -1,6 +1,4 @@
-﻿using WordQuest.Game.Domain.Entities;
-
-namespace WordQuest.Game.Domain.Persistence;
+﻿namespace WordQuest.Game.Domain.Persistence;
 
 public class EfCoreLanguagesRepository : ILanguagesRepository
 {

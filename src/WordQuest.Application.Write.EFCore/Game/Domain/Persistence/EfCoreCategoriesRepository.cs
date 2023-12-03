@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WordQuest.Game.Domain.Entities;
+using WordQuest.Domain.Persistence;
 
 namespace WordQuest.Game.Domain.Persistence;
 
@@ -12,7 +12,7 @@ public class EfCoreCategoriesRepository : ICategoriesRepository
         this._categories = categories ?? throw new ArgumentNullException(nameof(categories));
     }
 
-    public async Task AddAsync(Entities.Category entity, CancellationToken cancellationToken = default)
+    public async Task AddAsync(Category entity, CancellationToken cancellationToken = default)
     {
         await this._categories.AddAsync(
             new Category
@@ -25,7 +25,7 @@ public class EfCoreCategoriesRepository : ICategoriesRepository
             cancellationToken);
     }
 
-    public Task UpdateAsync(Entities.Category entity, CancellationToken cancellationToken = default)
+    public Task UpdateAsync(Category entity, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -35,12 +35,32 @@ public class EfCoreCategoriesRepository : ICategoriesRepository
         throw new NotImplementedException();
     }
 
-    public Task<Entities.Category?> GetAsync(Guid identity, CancellationToken cancellationToken = default)
+    public Task<Category?> GetAsync(Guid identity, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IReadOnlyList<Entities.Category>> GetAllAsync(CancellationToken cancellationToken = default)
+    public Task<IReadOnlyList<Category>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task AddAsync(Domain.ICategory entity, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(Domain.ICategory entity, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<Domain.ICategory?> IRepository<Domain.ICategory, Guid>.GetAsync(Guid identity, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task<IReadOnlyList<Domain.ICategory>> IRepository<Domain.ICategory, Guid>.GetAllAsync(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
 import { catchError, distinctUntilChanged, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { logEvent } from 'src/app/common/utils/dev.utils';
 import { ISelectable } from 'src/app/root/models/core';
 import { Char, CharMetadata } from 'src/app/root/models/culture.DTOs';

@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, combineLatest, of } from 'rxjs';
-import { catchError, distinctUntilChanged, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { BehaviorSubject, combineLatest, defer } from 'rxjs';
+import { distinctUntilChanged, finalize, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
 import { allTrue, isNilOrEmpty, isNotNil } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
+import { tapOnSub } from 'src/app/common/utils/rxjs.utils';
 import { AlphabetVariantOption } from 'src/app/root/models/culture.DTOs';
 import { GameService } from '../../services/game.service';
 import { MatchService } from '../../services/match.service';
@@ -17,16 +18,38 @@ import { MatchService } from '../../services/match.service';
 })
 export class AlphabetVariantSelectorComponent extends ReactiveComponent implements OnInit {
 
+  private readonly _isLoading$$ = new BehaviorSubject<boolean>(false);
+  public get isLoading() { return this._isLoading$$.value; }
+  private set isLoading(value: boolean) { this._isLoading$$.next(value); }
+  @Output() public readonly isLoading$ = this._isLoading$$.pipe(
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'isLoading', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  // private readonly _alphabetVariants$$ = new BehaviorSubject<readonly AlphabetVariantOption[] | undefined>(undefined);
+  // public get alphabetVariants() { return this._alphabetVariants$$.value; }
+  // @Input()
+  // public set alphabetVariants(value: readonly AlphabetVariantOption[] | undefined) { this._alphabetVariants$$.next(value); }
+  // @Output()
+  // public readonly alphabetVariants$ = this._alphabetVariants$$.pipe(
+  //   catchError(() => of(undefined)),
+  //   distinctUntilChanged(),
+  //   tap(value => logEvent(this, 'alphabetVariants', value)),
+  //   shareReplay({ bufferSize: 1, refCount: true }));
+
   private readonly _alphabetVariants$$ = new BehaviorSubject<readonly AlphabetVariantOption[] | undefined>(undefined);
   public get alphabetVariants() { return this._alphabetVariants$$.value; }
-  @Input()
-  public set alphabetVariants(value: readonly AlphabetVariantOption[] | undefined) { this._alphabetVariants$$.next(value); }
   @Output()
-  public readonly alphabetVariants$ = this._alphabetVariants$$.pipe(
-    catchError(() => of(undefined)),
-    distinctUntilChanged(),
-    tap(value => logEvent(this, 'alphabetVariants', value)),
-    shareReplay({ bufferSize: 1, refCount: true }));
+  public readonly alphabetVariants$ = defer(() => this._gameService.getAlphabetVariantOptionsAsync()
+    .pipe(
+      tapOnSub(() => this.isLoading = true),
+      finalize(() => this.isLoading = false)))
+    .pipe(
+      multicast(() => this._alphabetVariants$$),
+      refCount(),
+      distinctUntilChanged(),
+      tap(value => logEvent(this, 'alphabetVariants', value)),
+      shareReplay({ bufferSize: 1, refCount: true }));
 
   private readonly _areAlphabetVariantsAvailable$$ = new BehaviorSubject<boolean>(!isNilOrEmpty(this.alphabetVariants));
   public get areAlphabetVariantsAvailable() { return !isNilOrEmpty(this.alphabetVariants); }
@@ -88,6 +111,7 @@ export class AlphabetVariantSelectorComponent extends ReactiveComponent implemen
 
   ngOnInit(): void {
     this.subscribe([
+      this.isLoading$,
       this.isEnabled$,
       this.alphabetVariants$,
       this.areAlphabetVariantsAvailable$,
@@ -96,6 +120,7 @@ export class AlphabetVariantSelectorComponent extends ReactiveComponent implemen
       this.isAlphabetVariantSelected$,
     ]);
 
+    /** Select first alphabet variant */
     this.subscribe(this.alphabetVariants$, {
       next: alphabetVariants => {
         this.selectedAlphabetVariant = alphabetVariants == null || alphabetVariants.length <= 0

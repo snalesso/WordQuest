@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
-import { BehaviorSubject, combineLatest } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
+import { BehaviorSubject, combineLatest, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, finalize, map, multicast, refCount, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
+import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { allTrue, isNilOrEmpty } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
+import { tapOnSub } from 'src/app/common/utils/rxjs.utils';
 import { ISelectable, randomInt } from 'src/app/root/models/core';
+import { AlphabetVariantOption } from 'src/app/root/models/culture.DTOs';
 import { generateNumbers } from 'src/app/root/models/utils';
 import { Tag } from '../../models/game';
 import { CategoryOption } from '../../models/game.DTOs';
@@ -23,10 +25,38 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
 
   private readonly _isLoading$$ = new BehaviorSubject<boolean>(false);
   public get isLoading() { return this._isLoading$$.value; }
+  private set isLoading(value) { this._isLoading$$.next(value); }
   @Output()
   public readonly isLoading$ = this._isLoading$$.pipe(
     distinctUntilChanged(),
     tap(value => logEvent(this, 'isLoading', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
+
+  private readonly _alphabetVariantId$$ = new BehaviorSubject<AlphabetVariantOption['id'] | undefined>(undefined);
+  public get alphabetVariantId() { return this._alphabetVariantId$$.value; }
+  @Input()
+  public set alphabetVariantId(value) { this._alphabetVariantId$$.next(value); }
+  @Output()
+  public readonly alphabetVariantId$ = this._alphabetVariantId$$.pipe(distinctUntilChanged());
+
+  private readonly _categories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
+  public get categories() { return this._categories$$.value; }
+  @Output()
+  public readonly categories$ = this.alphabetVariantId$.pipe(
+    switchMap(alphabetVariantId => {
+      if (alphabetVariantId == null || Number.isNaN(alphabetVariantId))
+        return of(undefined);
+      return this._gameService.getCategoryOptionsAsync(alphabetVariantId).pipe(
+        tapOnSub(() => this.isLoading = true),
+        catchError(() => of(undefined)),
+        startWith(undefined),
+        distinctUntilChanged(),
+        finalize(() => this.isLoading = false));
+    }),
+    multicast(() => this._categories$$),
+    refCount(),
+    distinctUntilChanged(),
+    tap(categories => logEvent(this, "categories", categories)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
   private readonly _isEnabled$$ = new BehaviorSubject<boolean>(false);
@@ -39,15 +69,15 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     tap(value => logEvent(this, 'isEnabled', value)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
-  private readonly _categories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
-  public get categories() { return this._categories$$.value; }
-  @Input()
-  public set categories(value) { this._categories$$.next(value); }
-  @Output()
-  public readonly categories$ = this._categories$$.pipe(
-    distinctUntilChanged(),
-    tap(value => logEvent(this, 'categories', value)),
-    shareReplay({ bufferSize: 1, refCount: true }));
+  // private readonly _categories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
+  // public get categories() { return this._categories$$.value; }
+  // @Input()
+  // public set categories(value) { this._categories$$.next(value); }
+  // @Output()
+  // public readonly categories$ = this._categories$$.pipe(
+  //   distinctUntilChanged(),
+  //   tap(value => logEvent(this, 'categories', value)),
+  //   shareReplay({ bufferSize: 1, refCount: true }));
 
   private readonly _selectableCategories$$ = new BehaviorSubject<readonly ISelectable<CategoryOption>[] | undefined>(undefined);
   public get selectableCategories() { return this._selectableCategories$$.value; }
