@@ -1,6 +1,5 @@
 import { getRandomItem } from "./array.utils";
 import { generateIntegers } from "./number.utils";
-import { isNil } from "./utils";
 
 export function generateChars(start: string, end: string): string[] {
     const startCode = start.charCodeAt(0);
@@ -12,7 +11,7 @@ export function getRandomString(length: number, values: string[]): string {
 
     if (length < 0)
         throw new Error('Length cannot be negative');
-    if (isNil(values) || values.length <= 0)
+    if (values == null || values.length <= 0)
         throw new Error('Ranges not defined');
 
     let randString = '';
@@ -24,3 +23,21 @@ export function getRandomString(length: number, values: string[]): string {
 
     return randString;
 }
+
+export function formatStr(format: string, ...values: any[]) {
+    if (arguments.length > 1) {
+        for (let i = 1; i < arguments.length; i++) {
+            const arg = arguments[i];
+            const regex = new RegExp(`\\{${i - 1}\\}`, 'gi');
+            switch (typeof arg) {
+                case 'string':
+                    format = format.replace(regex, arg);
+                    break;
+                default:
+                    format = format.replace(regex, JSON.stringify(arg));
+            }
+        }
+    }
+
+    return format;
+};

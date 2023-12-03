@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, combineLatest, defer } from 'rxjs';
 import { distinctUntilChanged, finalize, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/reactive.component';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
+import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
 import { allTrue, isNilOrEmpty, isNotNil } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
 import { tapOnSub } from 'src/app/common/utils/rxjs.utils';
@@ -39,8 +39,7 @@ export class AlphabetVariantSelectorComponent extends ReactiveComponent implemen
 
   private readonly _alphabetVariants$$ = new BehaviorSubject<readonly AlphabetVariantOption[] | undefined>(undefined);
   public get alphabetVariants() { return this._alphabetVariants$$.value; }
-  @Output()
-  public readonly alphabetVariants$ = defer(() => this._gameService.getAlphabetVariantOptionsAsync()
+  @Output() public readonly alphabetVariants$ = defer(() => this._gameService.getAlphabetVariantOptionsAsync()
     .pipe(
       tapOnSub(() => this.isLoading = true),
       finalize(() => this.isLoading = false)))
@@ -53,52 +52,52 @@ export class AlphabetVariantSelectorComponent extends ReactiveComponent implemen
 
   private readonly _areAlphabetVariantsAvailable$$ = new BehaviorSubject<boolean>(!isNilOrEmpty(this.alphabetVariants));
   public get areAlphabetVariantsAvailable() { return !isNilOrEmpty(this.alphabetVariants); }
-  @Output()
-  public readonly areAlphabetVariantsAvailable$ = this.alphabetVariants$.pipe(
-    map(x => !isNilOrEmpty(x)),
+  @Output() public readonly areAlphabetVariantsAvailable$ = this.alphabetVariants$.pipe(
+    map(x => {
+      const result = !isNilOrEmpty(x);
+      return result;
+    }),
     multicast(() => this._areAlphabetVariantsAvailable$$),
     refCount(),
     distinctUntilChanged(),
-    tap(value => logEvent(this, 'are alphabet variants available', value)),
+    tap(value => {
+      return logEvent(this, 'are alphabet variants available', value);
+    }),
     shareReplay({ bufferSize: 1, refCount: true }));
 
   private readonly _selectedAlphabetVariant$$ = new BehaviorSubject<AlphabetVariantOption | undefined>(undefined);
-  @Input()
-  public get selectedAlphabetVariant() { return this._selectedAlphabetVariant$$.value; }
+  @Input() public get selectedAlphabetVariant() { return this._selectedAlphabetVariant$$.value; }
   public set selectedAlphabetVariant(value: AlphabetVariantOption | undefined) { this._selectedAlphabetVariant$$.next(value); }
-  @Output()
-  public readonly selectedAlphabetVariant$ = this._selectedAlphabetVariant$$.pipe(distinctUntilChanged());
+  @Output() public readonly selectedAlphabetVariant$ = this._selectedAlphabetVariant$$.pipe(distinctUntilChanged());
 
   private readonly _isAlphabetVariantSelected$$ = new BehaviorSubject<boolean>(isNotNil(this.selectedAlphabetVariant));
   public get isAlphabetVariantSelected() { return this._isAlphabetVariantSelected$$.value; }
-  @Output()
-  public readonly isAlphabetVariantSelected$ = this.selectedAlphabetVariant$.pipe(
+  @Output() public readonly isAlphabetVariantSelected$ = this.selectedAlphabetVariant$.pipe(
     map(isNotNil),
     multicast(() => this._isAlphabetVariantSelected$$),
     refCount(),
     distinctUntilChanged());
 
   private readonly _isEnabled$$ = new BehaviorSubject<boolean>(true);
-  @Input()
-  public set isEnabled(value: boolean) { this._isEnabled$$.next(value); }
+  @Input() public set isEnabled(value: boolean) { this._isEnabled$$.next(value); }
   public get isEnabled() { return this._isEnabled$$.value; }
-  @Output()
-  public readonly isEnabled$ = this._isEnabled$$.pipe(
+  @Output() public readonly isEnabled$ = this._isEnabled$$.pipe(
     distinctUntilChanged(),
     tap(value => logEvent(this, 'is enabled', value)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
   private readonly _canSelectAlphabetVariant$$ = new BehaviorSubject<boolean>(allTrue([this.isEnabled, this.areAlphabetVariantsAvailable]));
   public get canSelectAlphabetVariant() { return this._canSelectAlphabetVariant$$.value; }
-  @Output()
-  public readonly canSelectAlphabetVariant$ = combineLatest([
+  @Output() public readonly canSelectAlphabetVariant$ = combineLatest([
     this.isEnabled$,
     this.areAlphabetVariantsAvailable$
   ]).pipe(
     map(allTrue),
     multicast(() => this._canSelectAlphabetVariant$$),
     refCount(),
-    distinctUntilChanged());
+    distinctUntilChanged(),
+    tap(value => logEvent(this, 'canSelectAlphabetVariant', value)),
+    shareReplay({ bufferSize: 1, refCount: true }));
 
   constructor(
     cdr: ChangeDetectorRef,

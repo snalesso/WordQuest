@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { PushModule } from '@ngrx/component';
+import { PushPipe } from '@ngrx/component';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routes.module';
 import { GameModule } from './game/game.module';
@@ -20,7 +20,7 @@ import { RootModule } from './root/root.module';
     FormsModule,
     ReactiveFormsModule,
 
-    PushModule,
+    PushPipe,
     FontAwesomeModule,
 
     RootModule,

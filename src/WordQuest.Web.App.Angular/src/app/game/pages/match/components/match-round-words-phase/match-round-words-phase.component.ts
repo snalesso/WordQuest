@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/reactive.component';
+import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
 import { MatchSettings } from 'src/app/game/models/game.DTOs';
 import { MatchService } from '../../../../services/match.service';
 
@@ -19,8 +19,7 @@ export class MatchRoundWordsPhaseComponent extends ReactiveComponent {
         super(changeDetectorRef);
     }
 
-    @Input()
-    public matchSettings: MatchSettings | null = null;
+    @Input() public matchSettings: MatchSettings | null = null;
 
     public get match$() { return this._matchService.matchSnapshot$; }
     public get categories$() { return this._matchService.matchSnapshot$.pipe(map(x => x.currentRound.categories)); }

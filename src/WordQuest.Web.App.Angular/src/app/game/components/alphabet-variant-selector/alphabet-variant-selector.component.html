@@ -1,42 +1,47 @@
 <!-- <p>{{alphabetsSource.isLoading$ | ngrxPush | json}}</p> -->
 
-<select class="form-control"
-        [isEnabled]="canSelectAlphabetVariant$ | ngrxPush | throwIfNil"
+<select id="alphabetVariantSelect"
+        class="form-control"
+        [disabled]="canSelectAlphabetVariant$ | ngrxPush | throwIfNil | negate"
         [ngModel]="selectedAlphabetVariant$ | ngrxPush"
         (ngModelChange)="selectedAlphabetVariant = $event">
 
-    <ng-template #lloading>
-        <option [ngValue]="undefined"
+    <ng-container *ngIf="{ 
+        isLoading: isLoading$ | ngrxPush | throwIfNil,
+        areAlphabetVariantsAvailable: areAlphabetVariantsAvailable$ | ngrxPush | throwIfNil
+    } as conditions;">
+
+        <option *ngIf="conditions.isLoading; else isLoaded;"
+                [ngValue]="undefined"
                 disabled
                 hidden>
             <span>Loading ...</span>
         </option>
-    </ng-template>
 
-    <ng-template #lloaded>
-        <option *ngIf="(areAlphabetVariantsAvailable$ | ngrxPush | throwIfNil | negate); else alphabetVariants;"
-                [ngValue]="undefined"
-                disabled
-                hidden>
-            <span>No alphabet variant available</span>
-        </option>
-
-        <ng-template #alphabetVariants>
-            <option [ngValue]="undefined"
+        <ng-template #isLoaded>
+            <option *ngIf="!conditions.areAlphabetVariantsAvailable; else alphabetVariants"
+                    [ngValue]="undefined"
                     disabled
                     hidden>
-                <span>No alphabet variant selected</span>
+                <span>No alphabet variant available</span>
             </option>
-            <option [ngValue]="av"
-                    *ngFor="let av of (alphabetVariants$ | ngrxPush)">
-                <span>{{av.languageNativeName}}</span>
-                <span>&nbsp;</span>
-                <span>({{av.alphabetFamilyInvariantCultureName}})</span>
-            </option>
-        </ng-template>
-    </ng-template>
 
-    <ng-container *ngIf="(isLoading$ | ngrxPush); then lloading; else lloaded;"></ng-container>
+            <ng-template #alphabetVariants>
+                <option [ngValue]="undefined"
+                        disabled
+                        hidden>
+                    <span>No alphabet variant selected</span>
+                </option>
+                <option [ngValue]="av"
+                        *ngFor="let av of (alphabetVariants$ | ngrxPush | throwIfNil)">
+                    <span>{{av.languageNativeName}}</span>
+                    <span>&nbsp;</span>
+                    <span>({{av.alphabetFamilyInvariantCultureName}})</span>
+                </option>
+            </ng-template>
+        </ng-template>
+
+    </ng-container>
 
 </select>
 

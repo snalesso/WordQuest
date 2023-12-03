@@ -31,8 +31,9 @@
                 <label class="form-label">
                     <b>Letters</b>
                 </label>
-                <app-letters-selector [alphabetChars]="alphabetChars$ | ngrxPush"
-                                      (selectedChars$)="selectedChars = $event">
+                <app-letters-selector [isSelectingEnabled]="true"
+                                      [alphabetVariantId]="alphabetVariantId$ | ngrxPush"
+                                      (selectedCharSet$)="selectedChars = $event">
                 </app-letters-selector>
             </div>
         </div>
@@ -229,7 +230,7 @@
             <div class="col">
                 <button type="submit"
                         class="btn btn-primary btn-lg btn-block d-sm-none"
-                        [isEnabled]="canCreateMatch$ | ngrxPush | throwIfNil"
+                        [disabled]="canCreateMatch$ | ngrxPush | throwIfNil | negate"
                         (click)="createMatch()">
                     <span>Create match</span>
                     <span>&nbsp;</span>
@@ -238,7 +239,7 @@
 
                 <button type="submit"
                         class="btn btn-primary btn-lg d-none d-sm-inline"
-                        [isEnabled]="canCreateMatch$ | ngrxPush | throwIfNil">
+                        [disabled]="canCreateMatch$ | ngrxPush | throwIfNil | negate">
                     <span>Create match</span>
                     <span>&nbsp;</span>
                     <fa-icon [icon]="['fas', 'spell-check']"

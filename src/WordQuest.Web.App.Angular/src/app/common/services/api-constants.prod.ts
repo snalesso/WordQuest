@@ -1,1 +1,0 @@
-export function getAapiHostAddress(): string { return window.location.host + "/api"; };

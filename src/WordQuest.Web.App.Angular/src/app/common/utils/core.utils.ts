@@ -30,43 +30,13 @@ export type Optional<T, Keys extends keyof T> = Omit<T, Keys> & Partial<Pick<T, 
 export type Nullable<T> = T | null;
 export type Nillable<T> = T | null | undefined;
 
-export function isValidId(id: number | null | undefined) {
-
-    if (isNotNil(id)) {
-        var x = id;
-    }
-    else {
-        var k = id;
-    }
-
-    return id !== null && id !== undefined && !Number.isNaN(id) && Number.isInteger(id) && id > 0;
-}
-
-/**
- * Determina se 2 oggetti possono essere considerati equivalenti.
- * @param left 
- * @param right 
- * @param compareContent Funzione per il confronto semantico: confronta il contenuto dell'oggetto. Se undefined il confronto viene fatto solo sul riferimento.
- * @returns Una booleana che indica se i 2 oggetti posso essere considerati equivalenti.
- */
-export function areEqualCore<T>(left: T, right: T, compareContent?: (l: T, r: T) => boolean): boolean {
-    if (isNil(left) && isNil(right))
-        return true;
-    if (logicalXOR(isNil(left), isNil(right)))
-        return false;
-    if (left === right)
-        return true;
-    return compareContent?.(left, right) ?? false;
-}
-
-export function areIdsEqual(leftId: number | undefined, rightId: number | undefined) {
-    return leftId === rightId
-        || (!isValidId(leftId) && !isValidId(rightId));
+export function isPositiveInteger(id: any): id is number {
+    return id != null && !Number.isNaN(id) && Number.isInteger(id) && id > 0;
 }
 
 
-type ComparisonResult = -1 | 0 | 1;
-type ComparerFn<T> = (left: T, right: T) => ComparisonResult;
+export type ComparisonResult = -1 | 0 | 1;
+export type ComparerFn<T> = (left: T, right: T) => ComparisonResult;
 
 export interface IIncludes<T> {
     includes(value: T): boolean;
@@ -85,9 +55,9 @@ export abstract class Range<T> implements IIncludes<T> {
         public readonly upper: RangeBound<T>,
         public readonly comparerFn: ComparerFn<T>) {
 
-        if (isNil(lower))
+        if (lower == null)
             throw new Error(propNameOf<Range<T>>('lower') + ' not defined');
-        if (isNil(upper))
+        if (upper == null)
             throw new Error(propNameOf<Range<T>>('upper') + ' not defined');
     }
 
@@ -165,6 +135,15 @@ export function isNilOrEmpty(
     if (value instanceof Map || value instanceof Set)
         return value.size <= 0;
     throw new Error('Unsupported type.');
+}
+
+export function isNotNilNorEmpty(
+    value:
+        null | undefined
+        | string | Array<unknown> | ReadonlyArray<unknown> | Set<unknown> | ReadonlySet<unknown>
+        | Map<unknown, unknown> | ReadonlyMap<unknown, unknown>
+): boolean {
+    return !isNilOrEmpty(value);
 }
 
 export function allEqualTo<T>(

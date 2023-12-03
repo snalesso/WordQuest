@@ -1,14 +1,13 @@
 import { identity, Observable } from "rxjs";
 import { delay } from "rxjs/operators";
-import { environment } from "src/environments/environment.dev";
-import { isNil } from "./core.utils";
+import { environment } from "src/environments/environment";
 
 export const IS_LOGGING_ENABLED = true;
 export const DEV_FORCED_DELAY: number = 750;
 
 export function getCtorName<T extends Object>(componentOrLabel: T): string | null {
 
-    if (isNil(componentOrLabel))
+    if (componentOrLabel == null)
         throw new Error('Parameter "component" is not defined.');
 
     const ctorName = Object.getPrototypeOf(componentOrLabel)?.constructor?.name as string;
@@ -41,7 +40,7 @@ export function logEvent<TObj extends Object, TValue>(
         console.log(`[${contextName}] ${eventName}`);
 }
 
-export function forceDelayInDev(delayMs: number = DEV_FORCED_DELAY) {
+export function delayInDev(delayMs: number = DEV_FORCED_DELAY) {
     if (environment.mode.code === 'prod' || delayMs <= 0)
         return identity;
     return <T>(source$: Observable<T>) => source$.pipe(delay(delayMs));

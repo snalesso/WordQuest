@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { PushModule } from '@ngrx/component';
+import { PushPipe } from '@ngrx/component';
 import { AppCommonModule } from '../common/app-common.module';
 import { AlphabetVariantSelectorComponent } from './components/alphabet-variant-selector/alphabet-variant-selector.component';
 import { CategoriesSelectorComponent } from './components/categories-selector/categories-selector.component';
@@ -25,21 +25,25 @@ import { TestComponent } from './pages/test/test.component';
 import { GameService } from './services/game.service';
 import { MatchService } from './services/match.service';
 
+const COMPONENTS = [
+    CategoriesSelectorComponent,
+    LettersSelectorComponent,
+    NewMatchEditorComponent,
+    MatchComponent,
+    MatchRoundComponent,
+    MatchRoundPhasesComponent,
+    MatchRoundWordsPhaseComponent,
+    MatchRoundValidationPhaseComponent,
+    WordInputComponent,
+    LanguageSelectorComponent,
+    TestComponent,
+    AlphabetVariantSelectorComponent,
+    Utf16CharToggleComponent,
+];
+
 @NgModule({
     declarations: [
-        CategoriesSelectorComponent,
-        LettersSelectorComponent,
-        NewMatchEditorComponent,
-        MatchComponent,
-        MatchRoundComponent,
-        MatchRoundPhasesComponent,
-        MatchRoundWordsPhaseComponent,
-        MatchRoundValidationPhaseComponent,
-        WordInputComponent,
-        LanguageSelectorComponent,
-        TestComponent,
-        AlphabetVariantSelectorComponent,
-        Utf16CharToggleComponent,
+        ...COMPONENTS
     ],
     imports: [
         CommonModule,
@@ -50,18 +54,10 @@ import { MatchService } from './services/match.service';
         FontAwesomeModule,
         AppCommonModule,
         GameRoutingModule,
-        PushModule
+        PushPipe
     ],
     exports: [
-        CategoriesSelectorComponent,
-        LettersSelectorComponent,
-        NewMatchEditorComponent,
-        MatchComponent,
-        MatchRoundComponent,
-        MatchRoundPhasesComponent,
-        MatchRoundWordsPhaseComponent,
-        MatchRoundValidationPhaseComponent,
-        TestComponent
+        ...COMPONENTS
     ],
     providers: [
         GameService,
@@ -73,7 +69,6 @@ import { MatchService } from './services/match.service';
 export class GameModule {
 
     constructor(library: FaIconLibrary) {
-
         // NG DOCS: https://github.com/FortAwesome/angular-fontawesome#documentation
         // ALL FREE ICONS: https://fontawesome.com/icons?d=gallery&s=brands,regular,solid&m=free
         // library.addIcons(fasSun, fasStar, fasMoon, fabAccessible);

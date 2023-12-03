@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/reactive.component';
+import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
 import { MatchSettings } from 'src/app/game/models/game.DTOs';
 import { MatchService } from 'src/app/game/services/match.service';
 
@@ -22,8 +22,7 @@ export class MatchRoundComponent extends ReactiveComponent {
     }
 
     private readonly _matchSettings$$ = new ReplaySubject<MatchSettings>(1);
-    @Input()
-    public set matchSettings(value: MatchSettings) { this._matchSettings$$.next(value); }
+    @Input() public set matchSettings(value: MatchSettings) { this._matchSettings$$.next(value); }
     // public get matchSettings() { return this._matchSettings$$.value; }
     public get matchSettings$() { return this._matchSettings$$.asObservable(); }
 

@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Output } from '@angular/core';
-import { defaultIfEmpty, map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/reactive.component';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Output } from '@angular/core';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
 import { SystemService } from 'src/app/common/services/system.service';
-import { environment } from 'src/environments/environment.dev';
+import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
+import { shareReplayChangeLog } from 'src/app/common/utils/debug/rxjs';
+import { environment } from 'src/environments/environment';
 import { Language } from '../../models/culture.DTOs';
 
 @Component({
@@ -12,7 +12,7 @@ import { Language } from '../../models/culture.DTOs';
     styleUrls: ['./header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent extends ReactiveComponent {
+export class HeaderComponent extends ReactiveComponent implements OnInit {
 
     constructor(
         cdr: ChangeDetectorRef,
@@ -21,28 +21,34 @@ export class HeaderComponent extends ReactiveComponent {
         super(cdr);
     }
 
+    ngOnInit(): void {
+        this.subscribe([
+            this.languages$,
+            this.areLanguagesAvailable$,
+            this.selectedLanguage$,
+            this.isLanguageSelected$,
+        ]);
+    }
+
     public readonly logoLabel = environment.website.displayName; // + ((environment.env.label?.length ?? 0) > 0 ? ` - ${environment.env.label}` : '');
     public readonly envLabel = environment.mode.label;
     public readonly isEnvLabelVisible = environment.mode.code === 'dev';
     public readonly hostAddress = environment.api.getHostAddress();
 
-    @Output()
-    public readonly languages$ = this._globalizationSvc.languages$;
-    @Output()
-    public readonly areLanguagesAvailable$ = this._globalizationSvc.languages$.pipe(map(languages => languages.size > 0));
+    @Output() public readonly languages$ = this._globalizationSvc.languages$.pipe(shareReplayChangeLog(this, 'languages'));
 
-    public setLanguage(language: Language) { return this._globalizationSvc.setlanguage(language); }
-    @Output()
-    public readonly selectedLanguage$ = this._globalizationSvc.selectedLanguage$;
+    @Output() public readonly areLanguagesAvailable$ = this._globalizationSvc.areLanguagesAvailable$.pipe(shareReplayChangeLog(this, 'areLanguagesAvailable'));
 
-    @Output()
-    public readonly isLanguageSelected$ = this._globalizationSvc.selectedLanguage$.pipe(
-        map(sl => sl !== undefined),
-        defaultIfEmpty(false)); // TODO: check if empty replay subject appears as empty
+    @Output() public readonly selectedLanguage$ = this._globalizationSvc.selectedLanguage$.pipe(shareReplayChangeLog(this, 'selectedLanguage'));
+    public selectLanguage(language: Language) { return this._globalizationSvc.selectLanguage(language); }
+
+    @Output() public readonly isLanguageSelected$ = this._globalizationSvc.isLanguageSelected$.pipe(shareReplayChangeLog(this, 'isLanguageSelected'));
 
     public showSystemInfo() {
-        this._systemSvc.getSystemInfo().subscribe(dateTime => {
-            alert(dateTime);
+        this.subscribe(this._systemSvc.getSystemInfo(), {
+            next: dateTime => {
+                alert(dateTime);
+            }
         });
     }
 }

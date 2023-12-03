@@ -1,9 +1,8 @@
-import { isNil } from "./core.utils";
 import { getRandomInt } from "./number.utils";
 
 export function getRandomIndex<T>(array: readonly T[] | T[] | null | undefined): number {
 
-    if (isNil(array) || array!.length <= 0)
+    if (array == null || array!.length <= 0)
         return -1;
 
     return getRandomInt(0, array!.length - 1);
@@ -11,7 +10,7 @@ export function getRandomIndex<T>(array: readonly T[] | T[] | null | undefined):
 
 export function getRandomItem<T>(array: readonly T[] | T[] | null | undefined): T | undefined {
 
-    if (isNil(array) || array!.length <= 0)
+    if (array == null || array!.length <= 0)
         return undefined;
 
     const i = getRandomInt(0, array!.length - 1);
@@ -27,4 +26,23 @@ export function nullIfEmpty<T = any>(a: T[]) {
 
 export function clearArray<T>(items: T[]) {
     items.splice(0, items.length);
+}
+
+export function areSetsEqual<T>(
+    left: Set<T> | ReadonlySet<T>,
+    right: Set<T> | ReadonlySet<T>,
+    // areEqualFn?: (left: TItems, right: TItems) => boolean
+): boolean {
+    if (left == null)
+        throw new Error('Left set not defined.');
+    if (right == null)
+        throw new Error('Right set not defined.');
+    // const leftItems = left.
+    if (left.size !== right.size)
+        return false;
+    for (const l of left) {
+        if (!right.has(l))
+            return false;
+    }
+    return true;
 }

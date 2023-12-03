@@ -98,7 +98,7 @@
                     aria-labelledby="navbarDropdownMenuLink">
                     <li>
                         <button class="dropdown-item"
-                                (click)="setLanguage(language)"
+                                (click)="selectLanguage(language)"
                                 *ngFor="let language of (this.languages$ | ngrxPush)">
                             <span>{{language.nativeName}}</span>
                         </button>

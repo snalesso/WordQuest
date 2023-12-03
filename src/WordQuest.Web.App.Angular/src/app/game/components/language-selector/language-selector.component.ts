@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, tap } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/reactive.component';
+import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
 import { } from 'src/app/root/models/core';
 import { Language } from 'src/app/root/models/culture.DTOs';
 import { MatchService } from '../../services/match.service';
@@ -62,14 +62,12 @@ export class LanguageSelectorComponent extends ReactiveComponent {
   // private set hasErrors(value: boolean) { this._hasErrors = value; }
 
   // private _availableLanguages$$: BehaviorSubject<Array<ILanguageDto>>;
-  @Input()
-  public languages$: Observable<Array<Language>> | undefined;
+  @Input() public languages$: Observable<Array<Language>> | undefined;
   // @Input()
   // public set availableLanguages(value: Array<ILanguageDto>) { this._availableLanguages$$.next(value); }
   // public get availableLanguages(): Array<ILanguageDto> { return this._availableLanguages$$.value; }
 
-  @Output()
-  public readonly selectedLanguage$: Observable<number>;
+  @Output() public readonly selectedLanguage$: Observable<number>;
   // public get selectedLanguage() { return this._selectedLanguage$$.value; }
   public set selectedLanguage(value: number) { this._selectedLanguage$$.next(value); }
 

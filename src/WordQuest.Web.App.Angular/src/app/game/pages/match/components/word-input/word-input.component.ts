@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { ReactiveComponent } from 'src/app/common/components/reactive.component';
+import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
 import { Category, MatchSettings } from 'src/app/game/models/game.DTOs';
 
 @Component({
@@ -16,11 +16,9 @@ export class WordInputComponent extends ReactiveComponent {
         super(cdr);
     }
 
-    @Input()
-    public matchSettings: MatchSettings | null = null;
+    @Input() public matchSettings: MatchSettings | null = null;
 
-    @Input()
-    public category: Category | null = null;
+    @Input() public category: Category | null = null;
 
     private _isEditable: boolean = false;
     public get isEditable(): boolean { return this._isEditable; }

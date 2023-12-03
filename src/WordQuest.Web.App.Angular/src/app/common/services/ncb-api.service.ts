@@ -1,16 +1,17 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from 'src/environments/environment.dev';
+import { environment } from 'src/environments/environment';
+import { ReactiveObject } from "../components/ReactiveObject";
 
 @Injectable()
-export abstract class NcbApiService {
+export abstract class NcbApiService extends ReactiveObject {
 
-    private readonly ApiAddress: string = environment.api.getHostAddress();
+    private readonly _apiHostAddress: string = environment.api.getHostAddress();
 
-    constructor(protected readonly _http: HttpClient) { }
+    constructor(protected readonly _http: HttpClient) { super() }
 
     protected getEndpoint(...routeSteps: string[]): string {
-        return [this.ApiAddress, ...routeSteps].join("/");
+        return [this._apiHostAddress, ...routeSteps].join("/");
     }
 
     // public get<T>(...endpoint: string[]) {

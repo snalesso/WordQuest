@@ -10,10 +10,10 @@ export function logicalXOR(left: boolean, right: boolean): boolean {
     return (left && !right) || (!left && right);
 }
 export function areBothNil<T>(left: T, right: T): boolean {
-    return isNil(left) && isNil(right);
+    return left == null && right == null;
 }
 export function onlyOneIsNil<T>(left: T, right: T): boolean {
-    return logicalXOR(isNil(left), isNil(right));
+    return logicalXOR(left == null, right == null);
 }
 /**
  * Determina se 2 oggetti possono essere considerati equivalenti. Considera `null` e `undefined` equivalenti.
@@ -22,14 +22,14 @@ export function onlyOneIsNil<T>(left: T, right: T): boolean {
  * @param compareContentFn Funzione per il confronto semantico: confronta il contenuto dell'oggetto. Se undefined il confronto viene fatto solo sul riferimento.
  * @returns Una booleana che indica se i 2 oggetti posso essere considerati equivalenti.
  */
-export function areEqualCore<T>(left: T, right: T, compareContentFn?: (l: T, r: T) => boolean): boolean {
-    if (isNil(left) && isNil(right))
-        return true;
-    if (onlyOneIsNil(left, right))
-        return false;
+export function areEqualCore<T>(left: T, right: T, compareContentFn?: (l: NonNullable<T>, r: NonNullable<T>) => boolean): boolean {
     if (left === right)
         return true;
-    return compareContentFn?.(left, right) ?? false;
+    if (left == null || right == null)
+        return false;
+    if (compareContentFn != null)
+        return compareContentFn(left, right);
+    throw new Error('Couldn not determine equality.');
 }
 
 export type Writeable<T> = { -readonly [P in keyof T]: T[P] };

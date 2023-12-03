@@ -14,10 +14,10 @@ export class IsDisabledDirective {
     if (element === undefined || element === null)
       throw new Error('HTML element not available.');
 
-    if (value == false)
-      element.disabled = undefined as any as boolean;
+    if (value == true)
+      element.setAttribute('disabled', '');
     else
-      element.disabled = true;
+      element.removeAttribute('disabled');
   }
 
   constructor(private readonly _htmlSelectElem: ElementRef<HTMLDisableableElement>) {

@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import { PushModule } from '@ngrx/component';
+import { PushPipe } from '@ngrx/component';
 import { AppCommonModule } from '../common/app-common.module';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -32,7 +32,7 @@ import { TestComponent } from './pages/test/test.component';
     HttpClientModule,
     FontAwesomeModule,
     AppCommonModule,
-    PushModule
+    PushPipe
   ],
   exports: [
     HeaderComponent,

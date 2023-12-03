@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment.dev';
-import { ReactiveComponent } from './common/components/reactive.component';
+import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
+import { environment } from 'src/environments/environment';
 
 const TITLE_PATH_FRAGS_SEPARATOR = " - ";
 
@@ -79,16 +79,4 @@ export class AppComponent extends ReactiveComponent implements OnInit {
           );
         });
   }
-
-  // // TODO: find a better place
-  // public static toFirstCharUppercase(sourceString: string | null) {
-
-  //     if (sourceString == null)
-  //         return null;
-
-  //     return sourceString[0].toUpperCase()
-  //         + (sourceString.length > 1
-  //             ? sourceString.substr(1)
-  //             : "");
-  // }
 }

@@ -6,12 +6,12 @@
                    type="text"
                    placeholder="Filter by name"
                    aria-label="Filter by name"
-                   [isEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
+                   [disabled]="canFilterCategories$ | ngrxPush | throwIfNil | negate"
                    [(ngModel)]="fulltextSearchString">
             <button class="btn btn-outline-danger"
                     type="button"
-                    [isEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil"
-                    (click)="this.fulltextSearchString = ''">
+                    [disabled]="canFilterCategories$ | ngrxPush | throwIfNil | negate"
+                    (click)="fulltextSearchString = ''">
                 <fa-icon [icon]="['fas', 'times']"
                          [fixedWidth]="true"></fa-icon>
             </button>
@@ -25,13 +25,13 @@
             <select id="tagsFilterSelect"
                     class="form-select"
                     placeholder="Filter by tag"
-                    [isEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil">
+                    [disabled]="canFilterCategories$ | ngrxPush | log: 'AAA {0}' | throwIfNil: 'XXX {0}' | log: 'BBB {0}' | negate">
                 <option selected>All</option>
                 <option>Science</option>
             </select>
             <button class="btn btn-outline-danger"
                     type="button"
-                    [isEnabled]="this.canFilterCategories$ | ngrxPush | throwIfNil">
+                    [disabled]="canFilterCategories$ | ngrxPush | throwIfNil | negate">
                 <fa-icon [icon]="['fas', 'times']"
                          [fixedWidth]="true"></fa-icon>
                 <!-- make fixed width app wide via config -->
@@ -56,9 +56,9 @@
             <button *ngFor="let item of (this.filteredCategories$ | ngrxPush); let i = index;"
                     class="btn btn-primary m-1 px-2 py-1"
                     [class.active]="item.isSelected"
-                    [isEnabled]="canChooseCategories$ | ngrxPush | throwIfNil"
+                    [disabled]="canSelectCategories$ | ngrxPush | throwIfNil | negate"
                     (click)="toggle(item)">
-                <span>{{item.value.name}}</span>
+                <span>{{item.item.name}}</span>
             </button>
         </ng-template>
 
@@ -84,7 +84,7 @@
      [class.d-none]="!selectedCategories || selectedCategories.length <= 0">
     <button *ngFor="let item of selectedCategories; let i = index; trackBy: getCategoryId;"
             class="btn btn-outline-primary m-1 px-2 py-1 active"
-            [isEnabled]="isEnabled$ | ngrxPush | throwIfNil"
+            [disabled]="isEnabled$ | ngrxPush | throwIfNil | negate"
             (click)="remove(item)">
         <span>{{i + 1}}° </span>
         <span>{{item.name}}</span>

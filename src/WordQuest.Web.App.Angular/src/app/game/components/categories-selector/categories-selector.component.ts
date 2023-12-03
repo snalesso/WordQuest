@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { BehaviorSubject, combineLatest, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, finalize, map, multicast, refCount, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/reactive.component';
+import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
 import { allTrue, isNilOrEmpty } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
 import { tapOnSub } from 'src/app/common/utils/rxjs.utils';
-import { ISelectable, randomInt } from 'src/app/root/models/core';
+import { Selectable, randomInt } from 'src/app/root/models/core';
 import { AlphabetVariantOption } from 'src/app/root/models/culture.DTOs';
 import { generateNumbers } from 'src/app/root/models/utils';
 import { Tag } from '../../models/game';
@@ -26,23 +26,19 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
   private readonly _isLoading$$ = new BehaviorSubject<boolean>(false);
   public get isLoading() { return this._isLoading$$.value; }
   private set isLoading(value) { this._isLoading$$.next(value); }
-  @Output()
-  public readonly isLoading$ = this._isLoading$$.pipe(
+  @Output() public readonly isLoading$ = this._isLoading$$.pipe(
     distinctUntilChanged(),
     tap(value => logEvent(this, 'isLoading', value)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
   private readonly _alphabetVariantId$$ = new BehaviorSubject<AlphabetVariantOption['id'] | undefined>(undefined);
   public get alphabetVariantId() { return this._alphabetVariantId$$.value; }
-  @Input()
-  public set alphabetVariantId(value) { this._alphabetVariantId$$.next(value); }
-  @Output()
-  public readonly alphabetVariantId$ = this._alphabetVariantId$$.pipe(distinctUntilChanged());
+  @Input() public set alphabetVariantId(value) { this._alphabetVariantId$$.next(value); }
+  @Output() public readonly alphabetVariantId$ = this._alphabetVariantId$$.pipe(distinctUntilChanged());
 
   private readonly _categories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
   public get categories() { return this._categories$$.value; }
-  @Output()
-  public readonly categories$ = this.alphabetVariantId$.pipe(
+  @Output() public readonly categories$ = this.alphabetVariantId$.pipe(
     switchMap(alphabetVariantId => {
       if (alphabetVariantId == null || Number.isNaN(alphabetVariantId))
         return of(undefined);
@@ -61,10 +57,8 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
 
   private readonly _isEnabled$$ = new BehaviorSubject<boolean>(false);
   public get isEnabled() { return this._isEnabled$$.value; }
-  @Input()
-  public set isEnabled(value) { this._isEnabled$$.next(value); }
-  @Output()
-  public readonly isEnabled$ = this._isEnabled$$.pipe(
+  @Input() public set isEnabled(value) { this._isEnabled$$.next(value); }
+  @Output() public readonly isEnabled$ = this._isEnabled$$.pipe(
     distinctUntilChanged(),
     tap(value => logEvent(this, 'isEnabled', value)),
     shareReplay({ bufferSize: 1, refCount: true }));
@@ -79,14 +73,13 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
   //   tap(value => logEvent(this, 'categories', value)),
   //   shareReplay({ bufferSize: 1, refCount: true }));
 
-  private readonly _selectableCategories$$ = new BehaviorSubject<readonly ISelectable<CategoryOption>[] | undefined>(undefined);
+  private readonly _selectableCategories$$ = new BehaviorSubject<readonly Selectable<CategoryOption>[] | undefined>(undefined);
   public get selectableCategories() { return this._selectableCategories$$.value; }
-  @Output()
-  public readonly selectableCategories$ = this.categories$.pipe(
+  @Output() public readonly selectableCategories$ = this.categories$.pipe(
     map(categories => {
       if (categories == null)
         return undefined;
-      return categories.map<ISelectable<CategoryOption>>(category => ({ value: category, isSelected: false }));
+      return categories.map<Selectable<CategoryOption>>(category => new Selectable(category, false));
     }),
     multicast(() => this._selectableCategories$$),
     refCount(),
@@ -95,12 +88,10 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
 
   private readonly _fulltextSearchString$$ = new BehaviorSubject<string>('');
   public get fulltextSearchString() { return this._fulltextSearchString$$.value; }
-  @Input()
-  public set fulltextSearchString(value: string) { this._fulltextSearchString$$.next(value); }
-  @Output()
-  public readonly fulltextSearchString$ = this._fulltextSearchString$$.pipe(distinctUntilChanged());
+  @Input() public set fulltextSearchString(value: string) { this._fulltextSearchString$$.next(value); }
+  @Output() public readonly fulltextSearchString$ = this._fulltextSearchString$$.pipe(distinctUntilChanged());
 
-  private readonly _filteredCategories$$ = new BehaviorSubject<readonly ISelectable<CategoryOption>[] | undefined>(undefined);
+  private readonly _filteredCategories$$ = new BehaviorSubject<readonly Selectable<CategoryOption>[] | undefined>(undefined);
   public get filteredCategories() { return this._filteredCategories$$.value; }
   @Output() public readonly filteredCategories$ = combineLatest([
     this.selectableCategories$,
@@ -114,8 +105,8 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
       const keysSet = new Set(fulltextSearchString.toLowerCase().split(' ').filter(key => key.length > 0));
       const keys = [...keysSet.values()];
       const filteredCategories = categories.filter(category => {
-        const name = category.value.name.toLowerCase();
-        const desription = category.value.description?.toLowerCase();
+        const name = category.item.name.toLowerCase();
+        const desription = category.item.description?.toLowerCase();
         return keys.every(key => name.includes(key) || (desription?.includes(key) ?? false));
       });
       return filteredCategories;
@@ -128,8 +119,7 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
 
   private readonly _areCategoriesAvailable$$ = new BehaviorSubject<boolean>(!isNilOrEmpty(this.categories));
   public get areCategoriesAvailable() { return this._areCategoriesAvailable$$.value; }
-  @Output()
-  public readonly areCategoriesAvailable$ = this.categories$.pipe(
+  @Output() public readonly areCategoriesAvailable$ = this.categories$.pipe(
     map(cats => !isNilOrEmpty(cats)),
     multicast(() => this._areCategoriesAvailable$$),
     refCount(),
@@ -139,14 +129,11 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
 
   private readonly _selectedCategories$$ = new BehaviorSubject<readonly CategoryOption[] | undefined>(undefined);
   public get selectedCategories() { return this._selectedCategories$$.value; }
-  @Input()
-  protected set selectedCategories(value) { this._selectedCategories$$.next(value); }
-  @Output()
-  public readonly selectedCategories$ = this._selectedCategories$$.asObservable();
+  @Input() protected set selectedCategories(value) { this._selectedCategories$$.next(value); }
+  @Output() public readonly selectedCategories$ = this._selectedCategories$$.asObservable();
 
   private readonly _canFilterCategories$$ = new BehaviorSubject<boolean>(allTrue([this.isEnabled, this.areCategoriesAvailable]));
-  @Output()
-  public readonly canFilterCategories$ = this.categories$.pipe(
+  @Output() public readonly canFilterCategories$ = this.categories$.pipe(
     map(cats => !isNilOrEmpty(cats)),
     multicast(() => this._canFilterCategories$$),
     refCount(),
@@ -154,14 +141,13 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     tap(value => logEvent(this, 'canFilterCategories', value)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
-  private readonly _canChooseCategories$$ = new BehaviorSubject<boolean>(allTrue([this.isEnabled, this.areCategoriesAvailable]));
-  @Output()
-  public readonly canChooseCategories$ = this.categories$.pipe(
+  private readonly _canSelectCategories$$ = new BehaviorSubject<boolean>(allTrue([this.isEnabled, this.areCategoriesAvailable]));
+  @Output() public readonly canSelectCategories$ = this.categories$.pipe(
     map(cats => !isNilOrEmpty(cats)),
-    multicast(() => this._canChooseCategories$$),
+    multicast(() => this._canSelectCategories$$),
     refCount(),
     distinctUntilChanged(),
-    tap(value => logEvent(this, 'canChooseCategories', value)),
+    tap(value => logEvent(this, 'canSelectCategories', value)),
     shareReplay({ bufferSize: 1, refCount: true }));
 
   constructor(
@@ -182,7 +168,7 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
       this.filteredCategories$,
       this.fulltextSearchString$,
       this.selectableCategories$,
-      this.canChooseCategories$,
+      this.canSelectCategories$,
     ]);
 
     this.subscribe(this.selectableCategories$, {
@@ -204,7 +190,7 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
   private calculateSelectedCategoryOptions() {
     if (this.selectableCategories == null)
       throw new Error('No selectable category available.');
-    return this.selectableCategories.filter(selectable => selectable.isSelected).map(x => x.value)
+    return this.selectableCategories.filter(selectable => selectable.isSelected).map(x => x.item)
   }
 
   public deselectCategory(index: number) {
@@ -236,7 +222,7 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     if (this.selectedCategories == null || this.selectableCategories == null || item == null)
       return;
 
-    const selectedItemIndex = this.selectableCategories.findIndex(x => x.value.id === item.id);
+    const selectedItemIndex = this.selectableCategories.findIndex(x => x.item.id === item.id);
     if (selectedItemIndex < 0)
       throw new Error('Element is not selected.');
 
@@ -244,7 +230,7 @@ export class CategoriesSelectorComponent extends ReactiveComponent implements On
     selectedItem.isSelected = false;
     this.selectedCategories = this.selectableCategories
       .filter(selectableItem => selectableItem !== selectedItem)
-      .map(x => x.value);
+      .map(x => x.item);
   }
 
   public getTagName(tag: Tag) {

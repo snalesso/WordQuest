@@ -1,0 +1,1 @@
+export type FormStatus = 'DISABLED' | 'INVALID' | 'PENDING' | 'VALID';
