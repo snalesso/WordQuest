@@ -6,13 +6,14 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { PushPipe } from '@ngrx/component';
-import { AppCommonModule } from '../common/app-common.module';
+import { DataModule } from '../data/data.module';
+import { SharedModule } from '../shared/shared.module';
 import { AlphabetVariantSelectorComponent } from './components/alphabet-variant-selector/alphabet-variant-selector.component';
 import { CategoriesSelectorComponent } from './components/categories-selector/categories-selector.component';
 import { LanguageSelectorComponent } from './components/language-selector/language-selector.component';
 import { LettersSelectorComponent } from './components/letters-selector/letters-selector.component';
 import { Utf16CharToggleComponent } from './components/utf16-char-toggle/utf16-char-toggle.component';
-import { GameRoutesModule } from './game.routes.module';
+import { GameRoutingModule } from './game.routing.module';
 import { MatchRoundPhasesComponent } from './pages/match/components/match-round-phases/match-round-phases.component';
 import { MatchRoundValidationPhaseComponent } from './pages/match/components/match-round-validation-phase/match-round-validation-phase.component';
 import { MatchRoundWordsPhaseComponent } from './pages/match/components/match-round-words-phase/match-round-words-phase.component';
@@ -52,8 +53,9 @@ const COMPONENTS = [
         FontAwesomeModule,
         PushPipe,
 
-        AppCommonModule,
-        GameRoutesModule,
+        SharedModule,
+        DataModule,
+        GameRoutingModule,
     ],
     exports: [
         ...COMPONENTS

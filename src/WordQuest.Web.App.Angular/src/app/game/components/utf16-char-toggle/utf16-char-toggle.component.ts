@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Output } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
-import { Char } from 'src/app/root/models/culture.DTOs';
+import { Char } from 'src/app/navigation/models/culture.DTOs';
+import { ReactiveComponent } from 'src/app/shared/components/ReactiveComponent';
 
 @Component({
   selector: 'app-utf16-char-toggle',

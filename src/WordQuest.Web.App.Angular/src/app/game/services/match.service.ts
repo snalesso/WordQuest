@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { NcbApiService } from 'src/app/common/services/ncb-api.service';
-import { isNotNil } from 'src/app/common/utils/core.utils';
+import { NcbApiService } from 'src/app/shared/services/ncb-api.service';
+import { isNotNil } from 'src/app/shared/utils/utils';
 import { MatchSnapshot } from '../models/game.DTOs';
 
 @Injectable({

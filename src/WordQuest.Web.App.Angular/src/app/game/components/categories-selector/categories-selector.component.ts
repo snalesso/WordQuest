@@ -2,16 +2,18 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, O
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, finalize, map, multicast, refCount, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
-import { IListItem, ItemsListBaseComponent } from 'src/app/common/components/items-list-base.component';
-import { DialogService } from 'src/app/common/services/dialog.service';
-import { LoggingService } from 'src/app/common/services/logging.service';
-import { NotificationsService } from 'src/app/common/services/notifications.service';
-import { allTrue, isNilOrEmpty } from 'src/app/common/utils/core.utils';
-import { logEvent } from 'src/app/common/utils/dev.utils';
-import { tapOnSub } from 'src/app/common/utils/rxjs.utils';
-import { randomInt } from 'src/app/root/models/core';
-import { AlphabetVariantOption } from 'src/app/root/models/culture.DTOs';
-import { generateNumbers } from 'src/app/root/models/utils';
+import { randomInt } from 'src/app/navigation/models/core';
+import { AlphabetVariantOption } from 'src/app/navigation/models/culture.DTOs';
+import { generateNumbers } from 'src/app/navigation/models/utils';
+import { IListItem, ItemsListBaseComponent } from 'src/app/shared/components/items-list-base.component';
+import { DialogService } from 'src/app/shared/services/dialog.service';
+import { LoggingService } from 'src/app/shared/services/logging.service';
+import { NotificationsService } from 'src/app/shared/services/notifications.service';
+import { allTrue, isNilOrEmpty } from 'src/app/shared/utils/core.utils';
+import { shareReplayChangeLog } from 'src/app/shared/utils/debug/rxjs';
+import { logEvent } from 'src/app/shared/utils/dev.utils';
+import { tapOnSub } from 'src/app/shared/utils/rxjs.utils';
+import { storeIn } from 'src/app/shared/utils/rxjs/rxjs.utils';
 import { Tag } from '../../models/game';
 import { CategoryOption } from '../../models/game.DTOs';
 import { GameService } from '../../services/game.service';
@@ -39,17 +41,14 @@ export class CategoriesSelectorComponent extends ItemsListBaseComponent<Category
       if (alphabetVariantId == null || Number.isNaN(alphabetVariantId))
         return of(undefined);
       return this._gameService.getCategoryOptionsAsync(alphabetVariantId).pipe(
-        tapOnSub(() => this.isLoading = true),
         catchError(() => of(undefined)),
         startWith(undefined),
         distinctUntilChanged(),
+        tapOnSub(() => this.isLoading = true),
         finalize(() => this.isLoading = false));
     }),
-    multicast(() => this._categories$$),
-    refCount(),
-    distinctUntilChanged(),
-    tap(categories => logEvent(this, "categories", categories)),
-    shareReplay({ bufferSize: 1, refCount: true }));
+    storeIn(() => this._categories$$),
+    shareReplayChangeLog(this, "categories"));
 
   private readonly _fulltextSearchString$$ = new BehaviorSubject<string>('');
   public get fulltextSearchString() { return this._fulltextSearchString$$.value; }

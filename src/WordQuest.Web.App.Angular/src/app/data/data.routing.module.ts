@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { devEnvGuard } from '../guards/dev-env.guard';
+import { devEnvGuard } from '../shared/guards/dev-env.guard';
 
 export const routes: Routes = [
     {
         path: 'tests',
         canActivate: [devEnvGuard],
-        loadChildren: () => import('./tests/ui.tests.module').then(m => m.UiTestsModule),
+        loadChildren: () => import('./tests/data.tests.module').then(m => m.DataTestsModule),
     }
 ];
 
@@ -14,4 +14,4 @@ export const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class UiRoutesModule { }
+export class DataRoutingModule { }

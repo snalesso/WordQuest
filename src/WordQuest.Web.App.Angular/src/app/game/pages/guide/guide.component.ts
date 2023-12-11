@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
   selector: 'app-guide',
   templateUrl: './guide.component.html',
   styleUrls: ['./guide.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GuideComponent implements OnInit {
 

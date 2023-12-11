@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@a
 import { ActivatedRoute } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { MatchSettings } from 'src/app/game/models/game.DTOs';
 import { MatchService } from 'src/app/game/services/match.service';
+import { ReactiveComponent } from 'src/app/shared/components/ReactiveComponent';
 
 @Component({
     selector: 'app-match-round',

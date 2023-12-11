@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UiRoutesModule } from './ui.routes.module';
+import { DataRoutingModule } from './data.routing.module';
 
 const SERVICES: any[] = [];
 const COMPONENTS: any[] = [];
@@ -14,7 +14,7 @@ const COMPONENTS: any[] = [];
         ReactiveFormsModule,
         HttpClientModule,
 
-        UiRoutesModule,
+        DataRoutingModule,
     ],
     declarations: [
         ...COMPONENTS,
@@ -27,4 +27,4 @@ const COMPONENTS: any[] = [];
         ...SERVICES,
     ]
 })
-export class UiModule { }
+export class DataModule { }

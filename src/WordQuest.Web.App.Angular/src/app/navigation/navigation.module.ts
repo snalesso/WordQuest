@@ -7,7 +7,7 @@ import { FaIconLibrary, FontAwesomeModule } from '@fortawesome/angular-fontaweso
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { PushPipe } from '@ngrx/component';
-import { AppCommonModule } from '../common/app-common.module';
+import { SharedModule } from '../shared/shared.module';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
@@ -36,14 +36,14 @@ const COMPONENTS = [
     HttpClientModule,
     FontAwesomeModule,
     PushPipe,
-    AppCommonModule,
+    SharedModule,
   ],
   exports: [
     ...COMPONENTS,
   ],
   providers: []
 })
-export class RootModule {
+export class NavigationModule {
 
   constructor(library: FaIconLibrary) {
 

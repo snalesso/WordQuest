@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { RouteData } from './navigation/models/presentation';
 import { PageNotFoundComponent } from './navigation/pages/page-not-found/page-not-found.component';
+import { devEnvGuard } from './shared/guards/dev-env.guard';
 
 export const routes: Routes = [
   {
@@ -14,8 +15,9 @@ export const routes: Routes = [
     loadChildren: () => import("./game/game.module").then(m => m.GameModule)
   },
   {
-    path: 'common',
-    loadChildren: () => import('./common/app-common.routes.module').then(m => m.AppCommonRoutesModule),
+    path: 'data',
+    canActivate: [devEnvGuard],
+    loadChildren: () => import('./data/data.module').then(m => m.DataModule),
   },
   {
     path: '404',

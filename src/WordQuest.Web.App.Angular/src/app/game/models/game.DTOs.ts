@@ -1,5 +1,5 @@
-import { Dictionary } from "src/app/common/data/models/Dictionary";
-import { Alphabet, Char, Language } from "src/app/root/models/culture.DTOs";
+import { Dictionary } from "src/app/data/models/Dictionary";
+import { Alphabet, Char, Language } from "src/app/navigation/models/culture.DTOs";
 
 export enum MatchMode {
     TimeOut = 1,

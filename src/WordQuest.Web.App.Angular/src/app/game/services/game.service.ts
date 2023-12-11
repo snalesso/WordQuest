@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, of, throwError } from 'rxjs';
-import { NcbApiService } from 'src/app/common/services/ncb-api.service';
-import { delayInDev } from 'src/app/common/utils/dev.utils';
-import { AlphabetVariant, AlphabetVariantOption, Char, CharMetadata, Language } from 'src/app/root/models/culture.DTOs';
+import { AlphabetVariant, AlphabetVariantOption, Char, CharMetadata, Language } from 'src/app/navigation/models/culture.DTOs';
+import { NcbApiService } from 'src/app/shared/services/ncb-api.service';
+import { delayInDev } from 'src/app/shared/utils/dev.utils';
 import { CategoryOption, MatchSettings, MatchSnapshot } from '../models/game.DTOs';
 
 @Injectable({

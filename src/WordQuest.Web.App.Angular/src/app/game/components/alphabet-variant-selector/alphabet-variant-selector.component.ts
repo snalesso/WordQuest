@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { Router } from '@angular/router';
 import { Observable, merge } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ItemsListBaseComponent } from 'src/app/common/components/items-list-base.component';
-import { DialogService } from 'src/app/common/services/dialog.service';
-import { LoggingService } from 'src/app/common/services/logging.service';
-import { NotificationsService } from 'src/app/common/services/notifications.service';
-import { isNotNil } from 'src/app/common/utils/core.utils';
-import { logEvent } from 'src/app/common/utils/dev.utils';
-import { AlphabetVariantOption } from 'src/app/root/models/culture.DTOs';
+import { AlphabetVariantOption } from 'src/app/navigation/models/culture.DTOs';
+import { ItemsListBaseComponent } from 'src/app/shared/components/items-list-base.component';
+import { DialogService } from 'src/app/shared/services/dialog.service';
+import { LoggingService } from 'src/app/shared/services/logging.service';
+import { NotificationsService } from 'src/app/shared/services/notifications.service';
+import { logEvent } from 'src/app/shared/utils/dev.utils';
+import { isNotNil } from 'src/app/shared/utils/utils';
 import { GameService } from '../../services/game.service';
 
 @Component({

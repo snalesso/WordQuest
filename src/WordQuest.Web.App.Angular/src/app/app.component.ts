@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { environment } from 'src/environments/environment';
+import { ReactiveComponent } from './shared/components/ReactiveComponent';
 
 const TITLE_PATH_FRAGS_SEPARATOR = " - ";
 

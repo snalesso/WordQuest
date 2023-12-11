@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PushPipe } from '@ngrx/component';
-import { AppCommonRoutesModule } from './app-common.routes.module';
 import { IsDisabledDirective } from './directives/is-disabled.directive';
 import { IsEnabledDirective } from './directives/is-enabled.directive';
 import { CoalescePipe } from './pipes/coalesce';
@@ -14,6 +13,7 @@ import { LogPipe } from './pipes/log';
 import { NegatePipe } from './pipes/negate';
 import { ThrowIfNilPipe } from './pipes/throwIfNil';
 import { ThrutifyPipe } from './pipes/thruthify';
+import { SharedRoutingModule } from './shared.routing.module';
 
 const PIPES = [
     KeepPipe,
@@ -43,8 +43,7 @@ const COMPONENTS: any[] = [];
     imports: [
         PushPipe,
 
-        AppCommonRoutesModule,
-        // UiModule,
+        SharedRoutingModule,
     ],
     exports: [
         ...COMPONENTS,
@@ -54,4 +53,4 @@ const COMPONENTS: any[] = [];
     providers: [
     ]
 })
-export class AppCommonModule { }
+export class SharedModule { }

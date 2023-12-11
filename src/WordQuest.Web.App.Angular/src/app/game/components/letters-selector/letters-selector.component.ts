@@ -2,16 +2,16 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, O
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, distinctUntilChanged, finalize, map, startWith } from 'rxjs/operators';
-import { ItemsListBaseComponent } from 'src/app/common/components/items-list-base.component';
-import { DialogService } from 'src/app/common/services/dialog.service';
-import { LoggingService } from 'src/app/common/services/logging.service';
-import { NotificationsService } from 'src/app/common/services/notifications.service';
-import { shareReplayChangeLog } from 'src/app/common/utils/debug/rxjs';
-import { tapOnSub } from 'src/app/common/utils/rxjs.utils';
-import { storeIn } from 'src/app/common/utils/rxjs/rxjs.utils';
-import { randomInt } from 'src/app/root/models/core';
-import { AlphabetVariant, Char } from 'src/app/root/models/culture.DTOs';
-import { generateNumbers } from 'src/app/root/models/utils';
+import { randomInt } from 'src/app/navigation/models/core';
+import { AlphabetVariant, Char } from 'src/app/navigation/models/culture.DTOs';
+import { generateNumbers } from 'src/app/navigation/models/utils';
+import { ItemsListBaseComponent } from 'src/app/shared/components/items-list-base.component';
+import { DialogService } from 'src/app/shared/services/dialog.service';
+import { LoggingService } from 'src/app/shared/services/logging.service';
+import { NotificationsService } from 'src/app/shared/services/notifications.service';
+import { shareReplayChangeLog } from 'src/app/shared/utils/debug/rxjs';
+import { tapOnSub } from 'src/app/shared/utils/rxjs.utils';
+import { storeIn } from 'src/app/shared/utils/rxjs/rxjs.utils';
 import { GameService } from '../../services/game.service';
 
 export interface ILettersCriteria {

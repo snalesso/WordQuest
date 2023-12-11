@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Output } from '@angular/core';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
-import { GlobalizationService } from 'src/app/common/services/globalization.service';
-import { SystemService } from 'src/app/common/services/system.service';
-import { shareReplayChangeLog } from 'src/app/common/utils/debug/rxjs';
+import { ReactiveComponent } from 'src/app/shared/components/ReactiveComponent';
+import { GlobalizationService } from 'src/app/shared/services/globalization.service';
+import { SystemService } from 'src/app/shared/services/system.service';
+import { shareReplayChangeLog } from 'src/app/shared/utils/debug/rxjs';
 import { environment } from 'src/environments/environment';
 import { Language } from '../../models/culture.DTOs';
 

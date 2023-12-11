@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, defer, of } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { Language } from '../../root/models/culture.DTOs';
+import { Language } from 'src/app/navigation/models/culture.DTOs';
 import { shareReplayChangeLog } from '../utils/debug/rxjs';
 import { storeIn } from '../utils/rxjs/rxjs.utils';
 import { isNotNil } from '../utils/utils';

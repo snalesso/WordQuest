@@ -1,6 +1,6 @@
 // unicode blocks: https://en.wikipedia.org/wiki/List_of_Unicode_characters
 
-import { Dictionary } from "src/app/common/data/models/Dictionary";
+import { Dictionary } from "src/app/data/models/Dictionary";
 
 export type LatinChar = 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z';
 export type CirillicChar = 'А' | 'Б' | 'В' | 'Г' | 'Д' | 'Е' | 'Ж' | 'З' | 'И' | 'Й' | 'К' | 'Л' | 'М' | 'Н' | 'О' | 'П' | 'Р' | 'С' | 'Т' | 'У' | 'Ф' | 'Х' | 'Ц' | 'Ч' | 'Ш' | 'Щ' | 'Ъ' | 'Ы' | 'Ь' | 'Э' | 'Ю' | 'Я';

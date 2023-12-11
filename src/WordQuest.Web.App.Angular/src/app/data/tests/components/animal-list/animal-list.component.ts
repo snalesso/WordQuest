@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map } from 'rxjs';
-import { ItemsListBaseComponent } from 'src/app/common/components/items-list-base.component';
-import { DialogService } from 'src/app/common/services/dialog.service';
-import { LoggingService } from 'src/app/common/services/logging.service';
-import { NotificationsService } from 'src/app/common/services/notifications.service';
-import { getRandomInt } from 'src/app/common/utils/number.utils';
+import { ItemsListBaseComponent } from 'src/app/shared/components/items-list-base.component';
+import { DialogService } from 'src/app/shared/services/dialog.service';
+import { LoggingService } from 'src/app/shared/services/logging.service';
+import { NotificationsService } from 'src/app/shared/services/notifications.service';
+import { getRandomInt } from 'src/app/shared/utils/number.utils';
 import { IAnimal } from '../../models/IAnimal';
 import { AnimalsService } from '../../services/animals.service';
 

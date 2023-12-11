@@ -3,7 +3,7 @@
 export function isNil(obj: any): obj is undefined | null { return obj === undefined || obj === null; }
 
 /** Returns `true` if `obj` is neither `undefined` or `null` */
-export function isNotNil<T = any>(obj: T): obj is NeverWith<T, undefined | null> { return obj !== undefined && obj !== null; }
+export function isNotNil<T = any>(obj: T): obj is NonNullable<T> { return obj !== undefined && obj !== null; }
 
 /** Implements the logical XOR operator */
 export function logicalXOR(left: boolean, right: boolean): boolean {

@@ -5,8 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PushPipe } from '@ngrx/component';
 import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app.routes.module';
-import { RootModule } from './root/root.module';
+import { AppRoutingModule } from './app.routing.module';
+import { NavigationModule } from './navigation/navigation.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,7 @@ import { RootModule } from './root/root.module';
     PushPipe,
     FontAwesomeModule,
 
-    RootModule,
+    NavigationModule,
     AppRoutingModule,
   ],
   providers: [],

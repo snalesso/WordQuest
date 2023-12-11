@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RouteData } from '../root/models/presentation';
+import { RouteData } from '../navigation/models/presentation';
 import { GuideComponent } from './pages/guide/guide.component';
 import { MatchComponent } from './pages/match/match.component';
 import { NewMatchEditorComponent } from './pages/new-match-editor/new-match-editor.component';
@@ -64,4 +64,4 @@ export const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class GameRoutesModule { }
+export class GameRoutingModule { }

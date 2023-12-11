@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
-import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { Category, MatchSettings } from 'src/app/game/models/game.DTOs';
+import { ReactiveComponent } from 'src/app/shared/components/ReactiveComponent';
 
 @Component({
     selector: 'app-word-input',
