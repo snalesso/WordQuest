@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, O
 import { UntypedFormBuilder } from '@angular/forms';
 import { BehaviorSubject, combineLatest } from 'rxjs';
 import { distinctUntilChanged, map, multicast, refCount, shareReplay, tap } from 'rxjs/operators';
+import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { GlobalizationService } from 'src/app/common/services/globalization.service';
-import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
 import { allTrue, isNilOrEmpty, isNotNil } from 'src/app/common/utils/core.utils';
 import { shareReplayChangeLog } from 'src/app/common/utils/debug/rxjs';
 import { logEvent } from 'src/app/common/utils/dev.utils';

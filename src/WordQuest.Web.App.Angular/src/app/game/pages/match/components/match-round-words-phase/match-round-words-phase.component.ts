@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { MatchSettings } from 'src/app/game/models/game.DTOs';
 import { MatchService } from '../../../../services/match.service';
 

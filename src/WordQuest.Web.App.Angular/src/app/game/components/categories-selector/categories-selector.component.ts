@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, O
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, finalize, map, multicast, refCount, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
+import { IListItem, ItemsListBaseComponent } from 'src/app/common/components/items-list-base.component';
 import { DialogService } from 'src/app/common/services/dialog.service';
 import { LoggingService } from 'src/app/common/services/logging.service';
 import { NotificationsService } from 'src/app/common/services/notifications.service';
-import { IListItem, ItemsListBaseComponent } from 'src/app/common/ui/components/items-list-base.component';
 import { allTrue, isNilOrEmpty } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
 import { tapOnSub } from 'src/app/common/utils/rxjs.utils';

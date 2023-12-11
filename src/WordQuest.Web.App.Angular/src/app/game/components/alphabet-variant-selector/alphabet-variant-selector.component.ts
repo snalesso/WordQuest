@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { Router } from '@angular/router';
 import { Observable, merge } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { ItemsListBaseComponent } from 'src/app/common/components/items-list-base.component';
 import { DialogService } from 'src/app/common/services/dialog.service';
 import { LoggingService } from 'src/app/common/services/logging.service';
 import { NotificationsService } from 'src/app/common/services/notifications.service';
-import { ItemsListBaseComponent } from 'src/app/common/ui/components/items-list-base.component';
 import { isNotNil } from 'src/app/common/utils/core.utils';
 import { logEvent } from 'src/app/common/utils/dev.utils';
 import { AlphabetVariantOption } from 'src/app/root/models/culture.DTOs';

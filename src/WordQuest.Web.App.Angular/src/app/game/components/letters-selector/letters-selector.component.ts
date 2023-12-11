@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, O
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, distinctUntilChanged, finalize, map, startWith } from 'rxjs/operators';
+import { ItemsListBaseComponent } from 'src/app/common/components/items-list-base.component';
 import { DialogService } from 'src/app/common/services/dialog.service';
 import { LoggingService } from 'src/app/common/services/logging.service';
 import { NotificationsService } from 'src/app/common/services/notifications.service';
-import { ItemsListBaseComponent } from 'src/app/common/ui/components/items-list-base.component';
 import { shareReplayChangeLog } from 'src/app/common/utils/debug/rxjs';
 import { tapOnSub } from 'src/app/common/utils/rxjs.utils';
 import { storeIn } from 'src/app/common/utils/rxjs/rxjs.utils';
@@ -144,7 +144,7 @@ export class LettersSelectorComponent
 // import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 // import { BehaviorSubject, Subject, of } from 'rxjs';
 // import { catchError, distinctUntilChanged, finalize, map, multicast, refCount, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
-// import { ReactiveComponent } from ''src/app/common/ui/components/ReactiveComponent';
+// import { ReactiveComponent } from ''src/app/common/components/ReactiveComponent';
 // import { areSetsEqual } from 'src/app/common/utils/array.utils';
 // import { logEvent } from 'src/app/common/utils/dev.utils';
 // import { tapOnSub } from 'src/app/common/utils/rxjs.utils';

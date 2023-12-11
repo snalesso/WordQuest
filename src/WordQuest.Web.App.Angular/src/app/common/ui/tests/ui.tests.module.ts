@@ -3,10 +3,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PushPipe } from '@ngrx/component';
-import { AppCommonModule } from '../app-common.module';
-import { AnimalListComponent } from './tests/components/animal-list/animal-list.component';
-import { IndexComponent } from './tests/components/index/index.component';
-import { AnimalsService } from './tests/services/animals.service';
+import { AppCommonModule } from '../../app-common.module';
+import { AnimalListComponent } from './components/animal-list/animal-list.component';
+import { IndexComponent } from './components/index/index.component';
+import { AnimalsService } from './services/animals.service';
 import { UiTestsRoutesModule } from './ui.tests.routes.module';
 
 const SERVICES: any[] = [
@@ -14,7 +14,7 @@ const SERVICES: any[] = [
 ];
 const COMPONENTS = [
     IndexComponent,
-    AnimalListComponent
+    AnimalListComponent,
 ];
 
 @NgModule({

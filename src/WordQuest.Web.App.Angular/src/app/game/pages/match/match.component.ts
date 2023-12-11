@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { MatchService } from '../../services/match.service';
 
 @Component({

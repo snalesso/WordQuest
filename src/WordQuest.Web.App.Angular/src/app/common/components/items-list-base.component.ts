@@ -1,18 +1,18 @@
 import { ChangeDetectorRef, Directive, Input, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject, Observable, Subject, Subscription, catchError, combineLatest, distinctUntilChanged, filter, finalize, map, of, pairwise, repeat, share, shareReplay, skipWhile, switchMap } from "rxjs";
-import { IDisposable } from "../../components/IDisposable";
-import { ReactiveObject } from "../../components/ReactiveObject";
-import { DialogService } from "../../services/dialog.service";
-import { LoggingService } from "../../services/logging.service";
-import { NotificationsService } from "../../services/notifications.service";
-import { inlineThrow } from "../../utils/core";
-import { allTrue, isNotNilNorEmpty } from "../../utils/core.utils";
-import { shareLog, shareReplayChangeLog, tapLogEvent } from "../../utils/debug/rxjs";
-import { areArraysSequentiallyEqual } from "../../utils/primitives/array.utils";
-import { ofEmptyReadonlyArray } from "../../utils/rxjs/rxjs.array.utils";
-import { forever, negate, onSubscription, storeIn, typedUsing } from "../../utils/rxjs/rxjs.utils";
-import { isNotNil } from "../../utils/utils";
+import { ReactiveObject } from "../components/ReactiveObject";
+import { DialogService } from "../services/dialog.service";
+import { LoggingService } from "../services/logging.service";
+import { NotificationsService } from "../services/notifications.service";
+import { inlineThrow } from "../utils/core";
+import { allTrue, isNotNilNorEmpty } from "../utils/core.utils";
+import { shareLog, shareReplayChangeLog, tapLogEvent } from "../utils/debug/rxjs";
+import { areArraysSequentiallyEqual } from "../utils/primitives/array.utils";
+import { ofEmptyReadonlyArray } from "../utils/rxjs/rxjs.array.utils";
+import { forever, negate, onSubscription, storeIn, typedUsing } from "../utils/rxjs/rxjs.utils";
+import { isNotNil } from "../utils/utils";
+import { IDisposable } from "./IDisposable";
 import { ReactiveComponent } from "./ReactiveComponent";
 
 export interface IListItem<T> {
@@ -51,11 +51,6 @@ class ListItem<T> extends ReactiveObject implements IListItem<T>, IDisposable {
 export abstract class ItemsListBaseComponent<TItem, TItemIdentity, TContext = undefined, TCriteria = undefined>
     extends ReactiveComponent
     implements OnInit {
-
-    protected readonly _ngRouter: Router;
-    protected readonly _errorsMngSvc: LoggingService;
-    protected readonly _dialogSvc: DialogService;
-    protected readonly _notificationsSvc: NotificationsService;
 
     private readonly _isEnabled$$ = new BehaviorSubject<boolean>(true);
     public get isEnabled() { return this._isEnabled$$.value; }
@@ -224,16 +219,11 @@ export abstract class ItemsListBaseComponent<TItem, TItemIdentity, TContext = un
 
     constructor(
         cdr: ChangeDetectorRef,
-        ngRouter: Router,
-        errorsMngSvc: LoggingService,
-        dialogSvc: DialogService,
-        notificationsSvc: NotificationsService) {
+        private readonly _ngRouter: Router,
+        private readonly _errorsMngSvc: LoggingService,
+        private readonly _dialogSvc: DialogService,
+        private readonly _notificationsSvc: NotificationsService) {
         super(cdr);
-
-        this._ngRouter = ngRouter;
-        this._errorsMngSvc = errorsMngSvc;
-        this._dialogSvc = dialogSvc;
-        this._notificationsSvc = notificationsSvc;
     }
 
     public ngOnInit(): void {

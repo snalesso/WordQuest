@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { ReactiveComponent } from 'src/app/common/ui/components/ReactiveComponent';
+import { ReactiveComponent } from 'src/app/common/components/ReactiveComponent';
 import { MatchService } from 'src/app/game/services/match.service';
 
 @Component({

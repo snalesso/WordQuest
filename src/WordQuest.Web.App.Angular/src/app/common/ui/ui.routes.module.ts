@@ -6,7 +6,7 @@ export const routes: Routes = [
     {
         path: 'tests',
         canActivate: [devEnvGuard],
-        loadChildren: () => import('./ui.tests.module').then(m => m.UiTestsModule),
+        loadChildren: () => import('./tests/ui.tests.module').then(m => m.UiTestsModule),
     }
 ];
 

@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Directive, OnDestroy } from "@angular/core";
-import { ReactiveObject } from "../../components/ReactiveObject";
+import { ReactiveObject } from "../components/ReactiveObject";
 
 @Directive()
 export abstract class ReactiveComponent
