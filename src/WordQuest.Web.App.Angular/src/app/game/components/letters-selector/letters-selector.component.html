@@ -12,23 +12,23 @@
         <span>Loading ...</span>
     </div>
 
-    <div *ngIf="(isLoading$ | ngrxPush | throwIfNil | negate) && (rows$ | ngrxPush | isNilOrEmpty)"
+    <div *ngIf="(isLoading$ | ngrxPush | throwIfNil | negate) && (listItems$ | ngrxPush | isNilOrEmpty)"
          class="alert alert-danger py-2 px-3"
          role="status">
         <span>No letters available</span>
     </div>
 
-    <div *ngIf="rows$ | ngrxPush | isNilOrEmpty | negate"
+    <div *ngIf="listItems$ | ngrxPush | isNilOrEmpty | negate"
          class="d-flex flex-wrap"
          style="gap: 0.5rem;">
-        <button *ngFor="let row of (rows$ | ngrxPush)"
+        <button *ngFor="let listItem of (listItems$ | ngrxPush)"
                 class="btn btn-outline-primary px-3 py-2 position-relative"
-                [attr.aria-pressed]="row.isSelected$ | ngrxPush"
-                [class.active]="row.isSelected$ | ngrxPush"
+                [attr.aria-pressed]="listItem.isSelected$ | ngrxPush"
+                [class.active]="listItem.isSelected$ | ngrxPush"
                 type="button"
-                (click)="row.toggleSelection()">
-            <span class="font-monospace m-0">{{row.item}}</span>
-            <span *ngIf="row.isSelected$ | ngrxPush"
+                (click)="listItem.toggleSelection()">
+            <span class="font-monospace m-0">{{listItem.item}}</span>
+            <span *ngIf="listItem.isSelected$ | ngrxPush"
                   class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">✓</span>
         </button>
     </div>

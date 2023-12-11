@@ -1,0 +1,46 @@
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <table class="w-100">
+                <thead>
+                    <th width="50"
+                        style="text-align: center;">Sel</th>
+                    <th width="120">Name</th>
+                    <th width="120">Biome</th>
+                </thead>
+                <tbody>
+                    <ng-container *ngIf="isLoading$ | ngrxPush; then loading; else loaded;"></ng-container>
+                    <ng-template #loading>
+                        <tr *ngFor="let p of [1, 2, 3]">
+                            <td>
+                                <div class="placeholder-wave"
+                                     style="height: 1rem; background-color: gray; border-radius: 0.25rem;"></div>
+                            </td>
+                            <td>
+                                <div class="placeholder-wave"
+                                     style="height: 1rem; background-color: gray; border-radius: 0.25rem;"></div>
+                            </td>
+                            <td>
+                                <div class="placeholder-wave"
+                                     style="height: 1rem; background-color: gray; border-radius: 0.25rem;"></div>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template #loaded>
+                        <tr *ngFor="let item of listItems$ | ngrxPush"
+                            [style.text-decoration]="(item.isSelected$ | ngrxPush) ? 'underline' : 'none'">
+                            <td style="text-align: center;">
+                                <input type="checkbox"
+                                       [(ngModel)]="item.isSelected">
+                            </td>
+                            <td>{{item.item.name}}</td>
+                            <td>{{item.item.biome}}</td>
+                        </tr>
+                    </ng-template>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

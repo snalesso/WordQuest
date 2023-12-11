@@ -6,8 +6,6 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PushPipe } from '@ngrx/component';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routes.module';
-import { GameModule } from './game/game.module';
-import { GameRoutingModule } from './game/game.routes.module';
 import { RootModule } from './root/root.module';
 
 @NgModule({
@@ -25,9 +23,6 @@ import { RootModule } from './root/root.module';
 
     RootModule,
     AppRoutingModule,
-
-    GameModule,
-    GameRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

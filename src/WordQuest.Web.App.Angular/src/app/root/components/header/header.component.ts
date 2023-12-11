@@ -21,7 +21,7 @@ export class HeaderComponent extends ReactiveComponent implements OnInit {
         super(cdr);
     }
 
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.subscribe([
             this.languages$,
             this.areLanguagesAvailable$,

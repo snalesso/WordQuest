@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { PushPipe } from '@ngrx/component';
+import { AppCommonRoutesModule } from './app-common.routes.module';
 import { IsDisabledDirective } from './directives/is-disabled.directive';
 import { IsEnabledDirective } from './directives/is-enabled.directive';
 import { CoalescePipe } from './pipes/coalesce';
@@ -13,35 +14,8 @@ import { LogPipe } from './pipes/log';
 import { NegatePipe } from './pipes/negate';
 import { ThrowIfNilPipe } from './pipes/throwIfNil';
 import { ThrutifyPipe } from './pipes/thruthify';
-import { GlobalizationService } from './services/globalization.service';
-import { SystemService } from './services/system.service';
-
-// @NgModule({
-//     declarations: [
-//         // NcbApiService,
-//         ReactiveComponent,
-//         FalsyToNull,
-//         IsNil,
-//         IsDisabledDirective
-//     ],
-//     imports: [
-//         HttpClientModule
-//     ],
-//     exports: [
-//         // NcbApiService,
-//         ReactiveComponent,
-//         FalsyToNull,
-//         IsNil,
-//         IsDisabledDirective
-//     ],
-//     providers: [
-//         GlobalizationService
-//     ],
-//     bootstrap: []
-// })
 
 const PIPES = [
-    // PushPipe,
     KeepPipe,
     NegatePipe,
     CoalescePipe,
@@ -64,21 +38,20 @@ const COMPONENTS: any[] = [];
     declarations: [
         ...COMPONENTS,
         ...PIPES,
-        ...DIRECTIVES
+        ...DIRECTIVES,
     ],
     imports: [
-        PushPipe
+        PushPipe,
+
+        AppCommonRoutesModule,
+        // UiModule,
     ],
     exports: [
         ...COMPONENTS,
         ...PIPES,
-        ...DIRECTIVES
+        ...DIRECTIVES,
     ],
     providers: [
-        SystemService,
-        GlobalizationService,
     ]
 })
-export class AppCommonModule {
-    constructor() { }
-}
+export class AppCommonModule { }

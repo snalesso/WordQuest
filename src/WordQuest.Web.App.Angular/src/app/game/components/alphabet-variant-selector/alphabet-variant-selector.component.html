@@ -2,24 +2,24 @@
 
 <select id="alphabetVariantSelect"
         class="form-control"
-        [disabled]="canSelectAlphabetVariant$ | ngrxPush | throwIfNil | negate"
-        [ngModel]="selectedAlphabetVariant$ | ngrxPush"
-        (ngModelChange)="selectedAlphabetVariant = $event">
+        [disabled]="canSelectItems$ | ngrxPush | throwIfNil | negate"
+        [ngModel]="selectedListItem$ | ngrxPush"
+        (ngModelChange)="selectedListItem = $event">
 
     <ng-container *ngIf="{ 
         isLoading: isLoading$ | ngrxPush | throwIfNil,
-        areAlphabetVariantsAvailable: areAlphabetVariantsAvailable$ | ngrxPush | throwIfNil
+        areListItemsLoaded: areListItemsLoaded$ | ngrxPush | throwIfNil
     } as conditions;">
 
-        <option *ngIf="conditions.isLoading; else isLoaded;"
+        <option *ngIf="conditions.isLoading as isLoading; else isLoaded;"
                 [ngValue]="undefined"
                 disabled
                 hidden>
-            <span>Loading ...</span>
+            <span>Loading ... ({{isLoading}})</span>
         </option>
 
         <ng-template #isLoaded>
-            <option *ngIf="!conditions.areAlphabetVariantsAvailable; else alphabetVariants"
+            <option *ngIf="!conditions.areListItemsLoaded; else alphabetVariants;"
                     [ngValue]="undefined"
                     disabled
                     hidden>
@@ -32,11 +32,11 @@
                         hidden>
                     <span>No alphabet variant selected</span>
                 </option>
-                <option [ngValue]="av"
-                        *ngFor="let av of (alphabetVariants$ | ngrxPush | throwIfNil)">
-                    <span>{{av.languageNativeName}}</span>
+                <option [ngValue]="listItem.item"
+                        *ngFor="let listItem of (listItems$ | ngrxPush | throwIfNil)">
+                    <span>{{listItem.item.languageNativeName}}</span>
                     <span>&nbsp;</span>
-                    <span>({{av.alphabetFamilyInvariantCultureName}})</span>
+                    <span>({{listItem.item.alphabetFamilyInvariantCultureName}})</span>
                 </option>
             </ng-template>
         </ng-template>

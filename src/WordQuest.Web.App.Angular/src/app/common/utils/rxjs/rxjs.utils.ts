@@ -1,4 +1,4 @@
-import { BehaviorSubject, combineLatest, defer, iif, isObservable, NEVER, noop, Observable, ObservableInput, of, PartialObserver, Subject, Subscription, Unsubscribable } from 'rxjs';
+import { BehaviorSubject, combineLatest, defer, iif, isObservable, NEVER, noop, Observable, ObservableInput, of, PartialObserver, Subject, Subscription, TeardownLogic } from 'rxjs';
 import { filter, finalize, first, map, multicast, refCount, repeatWhen, shareReplay, startWith, switchMap, tap } from 'rxjs/operators';
 import { getIsIncludedInFn } from '../collections/common';
 import { AnyArray, AnyCollection } from '../collections/types.utils';
@@ -210,20 +210,29 @@ export function combineConditions(operator: 'ANY' | 'ALL', conditions: AnyArray<
     }
 }
 
-export function typedUsing<TUnsub extends Unsubscribable, TValue>(
-    resourceFactory: () => TUnsub,
-    observableFactoryOrAction: (resource: TUnsub) => ObservableInput<TValue> | void)
+export function typedUsing<TTeardownLogic extends TeardownLogic, TValue>(
+    teardownLogicFactory: () => TTeardownLogic,
+    observableFactory: (teardownLogic: TTeardownLogic) => ObservableInput<TValue>)
     : Observable<TValue> {
 
+    if (teardownLogicFactory == null)
+        throw new Error(`Teardown logic factory not defined.`);
+    if (observableFactory == null)
+        throw new Error(`Observable factory not provided.`);
+
     return new Observable<TValue>(subscriber => {
-        const resource = resourceFactory();
-        const obsOrVoid = observableFactoryOrAction(resource);
-        const subscription = !isObservable(obsOrVoid)
-            ? new Subscription()
-            : obsOrVoid.subscribe(subscriber);
+        const teardownLogic = teardownLogicFactory();
+        const obsOrVoid = observableFactory(teardownLogic);
+        if (!isObservable(obsOrVoid))
+            throw new Error(`No observable provided.`);
+        const subscription = obsOrVoid.subscribe(subscriber);
         return () => {
             subscription.unsubscribe();
-            resource.unsubscribe();
+            if (teardownLogic == null)
+                return;
+            if (typeof teardownLogic === 'function')
+                return teardownLogic();
+            return teardownLogic.unsubscribe();
         };
     });
 }

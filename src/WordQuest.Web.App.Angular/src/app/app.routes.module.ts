@@ -1,17 +1,21 @@
 import { NgModule } from '@angular/core';
-import { Route, RouterModule, Routes, } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { RouteData } from './root/models/presentation';
 import { PageNotFoundComponent } from './root/pages/page-not-found/page-not-found.component';
 
-export const appRoutes: ReadonlyArray<Route> = [
+export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'matches',
+    redirectTo: 'game',
     pathMatch: 'full'
   },
   {
-    path: "matches",
+    path: "game",
     loadChildren: () => import("./game/game.module").then(m => m.GameModule)
+  },
+  {
+    path: 'common',
+    loadChildren: () => import('./common/app-common.routes.module').then(m => m.AppCommonRoutesModule),
   },
   {
     path: '404',
@@ -28,13 +32,10 @@ export const appRoutes: ReadonlyArray<Route> = [
   }
 ];
 
-// export const appRoutes: ReadonlyArray<Route> = routes;
-
 @NgModule({
-  imports: [RouterModule.forRoot(
-    appRoutes as Routes,
-    //  { preloadingStrategy: PreloadAllModules }
-  )],
+  imports: [
+    RouterModule.forRoot(routes)
+  ],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

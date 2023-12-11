@@ -3,7 +3,7 @@ import { delay } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 
 export const IS_LOGGING_ENABLED = true;
-export const DEV_FORCED_DELAY: number = 750;
+export const DEV_FORCED_DELAY: number = 0;
 
 export function getCtorName<T extends Object>(componentOrLabel: T): string | null {
 

@@ -1,37 +1,44 @@
 import { Directive, Input, OnInit, Output } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { BehaviorSubject, EMPTY, Observable, Subject, Subscription, catchError, combineLatest, filter, finalize, map, merge, of, scan, switchMap, tap, throwError } from "rxjs";
-import { Selectable } from "src/app/root/models/core";
 import { SubsTracker } from "../../model/SubsTracker";
 import { NotImplementedError } from "../../model/exceptions";
 import { IChoiceDialogConfig } from "../../services/dialog.service";
 import { allTrue } from "../../utils/core.utils";
 import { shareReplayChangeLog } from "../../utils/debug/rxjs";
 import { toVoid } from "../../utils/rxjs.utils";
-import { ImmutableArrayHandlers, ItemReplacement, onSubscription, storeIn, throwWhen, typedUsing } from "../../utils/rxjs/rxjs.utils";
+import { ImmutableArrayHandlers, ItemReplacement, negate, onSubscription, storeIn, throwWhen, typedUsing } from "../../utils/rxjs/rxjs.utils";
 import { isNil } from "../../utils/utils";
-import { ItemsListBaseComponent } from "./items-list-base.component";
+import { IListItem, ItemsListBaseComponent } from "./items-list-base.component";
 
 @Directive()
 export abstract class ItemsListManagerBaseComponent
     <
-        TListItem,
+        TItem,
         TItemIdentity,
         TContext,
         TCriteria,
         TCrudItem
     >
-    extends ItemsListBaseComponent<TListItem, TItemIdentity, TContext, TCriteria>
+    extends ItemsListBaseComponent<TItem, TItemIdentity, TContext, TCriteria>
     implements OnInit {
 
-    private readonly _appendItemsTrigger$$ = new Subject<readonly Selectable<TListItem>[]>();
+    private readonly _appendItemsTrigger$$ = new Subject<readonly IListItem<TItem>[]>();
     private readonly _appendItemsSignal$ = this._appendItemsTrigger$$.asObservable();
 
-    private readonly _removeItemsTrigger$$ = new Subject<readonly Selectable<TListItem>[]>();
+    private readonly _removeItemsTrigger$$ = new Subject<readonly IListItem<TItem>[]>();
     private readonly _removeItemsSignal$ = this._removeItemsTrigger$$.asObservable();
 
-    private readonly _replaceItemsTrigger$$ = new Subject<readonly ItemReplacement<Selectable<TListItem>>[]>();
+    private readonly _replaceItemsTrigger$$ = new Subject<readonly ItemReplacement<IListItem<TItem>>[]>();
     private readonly _replaceItemsSignal$ = this._replaceItemsTrigger$$.asObservable();
+
+    private readonly _isReadOnly$$ = new BehaviorSubject<boolean>(true);
+    public get isReadOnly() { return this._isReadOnly$$.value; }
+    @Input() public set isReadOnly(value: boolean) { this._isReadOnly$$.next(value); }
+    @Output() public readonly isReadOnly$ = this._isReadOnly$$.pipe(shareReplayChangeLog(this, 'isReadOnly'));
+
+    public get isNotReadOnly() { return !this.isReadOnly; }
+    @Output() public readonly isNotReadOnly$ = this.isReadOnly$.pipe(negate(), shareReplayChangeLog(this, 'isNotReadOnly'));
 
     public readonly _isEditingEnabled$$ = new BehaviorSubject<boolean>(true);
     public get isEditingEnabled() { return this._isEditingEnabled$$.value; }
@@ -105,6 +112,8 @@ export abstract class ItemsListManagerBaseComponent
     public override ngOnInit(): void {
         super.ngOnInit();
         this.subscribe([
+            this.isReadOnly$,
+            this.isNotReadOnly$,
             // add
             this.isAddingEnabled$,
             this.canAdd$,
@@ -122,40 +131,50 @@ export abstract class ItemsListManagerBaseComponent
         ]);
     }
 
-    protected override transformRows$(rows$: Observable<readonly Selectable<TListItem>[]>): Observable<readonly Selectable<TListItem>[]> {
+    protected abstract getListItemCore$(id: TItemIdentity, criteria: TCriteria): Observable<IListItem<TItem> | undefined>;
+    protected getListItem$(id: TItemIdentity): Observable<IListItem<TItem> | undefined> {
+        return this.getListItemCore$(id, this.criteria).pipe(
+            catchError((error: Error) =>
+                this._errorsMngSvc.log('error', this.composeListItemRequestErrorMessageTitle(id, error), error).pipe(
+                    switchMap(() => EMPTY))),
+            onSubscription(() => this.isLoading = true),
+            finalize(() => this.isLoading = false));
+    }
+
+    protected override transformListItems$(rows: readonly IListItem<TItem>[]): Observable<readonly IListItem<TItem>[]> {
         const transformedListItems$ = merge(
-            rows$.pipe(map(ImmutableArrayHandlers.getItemsChangedHandler)),
+            of(rows).pipe(map(ImmutableArrayHandlers.getItemsChangedHandler)),
             this._appendItemsSignal$.pipe(map(ImmutableArrayHandlers.getAppendItemsHandler)),
             this._removeItemsSignal$.pipe(map(ImmutableArrayHandlers.getRemoveItemsHandler)),
-            this._replaceItemsSignal$.pipe(map(ImmutableArrayHandlers.getReplaceItemsHandler)))
-            .pipe(
-                scan((items, handler) => handler(items), [] as readonly Selectable<TListItem>[]));
+            this._replaceItemsSignal$.pipe(map(ImmutableArrayHandlers.getReplaceItemsHandler))
+        ).pipe(
+            scan((items, handler) => handler(items), [] as readonly IListItem<TItem>[]));
         return transformedListItems$;
     }
 
     protected abstract getIdentityFromCrudItem(crudItem: TCrudItem): TItemIdentity;
 
-    protected replaceListItem(replacement: ItemReplacement<Selectable<TListItem>>) {
+    protected replaceListItem(replacement: ItemReplacement<IListItem<TItem>>) {
         this._replaceItemsTrigger$$.next([replacement]);
     }
-    protected replaceListItems(replacements: readonly ItemReplacement<Selectable<TListItem>>[] | ItemReplacement<Selectable<TListItem>>[]) {
+    protected replaceListItems(replacements: readonly ItemReplacement<IListItem<TItem>>[] | ItemReplacement<IListItem<TItem>>[]) {
         this._replaceItemsTrigger$$.next(replacements);
     }
-    protected removeListItem(listItem: Selectable<TListItem>) {
+    protected removeListItem(listItem: IListItem<TItem>) {
         this._removeItemsTrigger$$.next([listItem]);
     }
-    protected removeListItems(listItems: readonly Selectable<TListItem>[] | Selectable<TListItem>[]) {
+    protected removeListItems(listItems: readonly IListItem<TItem>[] | IListItem<TItem>[]) {
         this._removeItemsTrigger$$.next(listItems);
     }
-    protected appendListItem(listItem: Selectable<TListItem>) {
+    protected appendListItem(listItem: IListItem<TItem>) {
         this._appendItemsTrigger$$.next([listItem]);
     }
-    protected appendListItems(listItems: readonly Selectable<TListItem>[] | Selectable<TListItem>[]) {
+    protected appendListItems(listItems: readonly IListItem<TItem>[] | IListItem<TItem>[]) {
         this._appendItemsTrigger$$.next(listItems);
     }
 
-    protected updateListItem$(id: TItemIdentity): Observable<void> {
-        const oldListItem = this.getRowById(id);
+    protected reloadListItem$(id: TItemIdentity): Observable<void> {
+        const oldListItem = this.getById(id);
         if (oldListItem == null)
             return throwError(() => new Error(`Item with ID ${id} is not present in currently loaded items collection.`));
         return this.getListItem$(id).pipe(
@@ -283,10 +302,10 @@ export abstract class ItemsListManagerBaseComponent
                 }));
             }),
             map(newListItem => {
-                const oldListItem = this.findRow(row => this.getIdentityFromListItem(row.item) === id)
+                const oldListItem = this.listItems?.find(row => this.getIdentityFromItem(row.item) === id)
                 if (oldListItem == null)
                     throw new Error(`Cannot find item to replace.`);
-                return [oldListItem, newListItem] as ItemReplacement<Selectable<TListItem>>;
+                return [oldListItem, newListItem] as ItemReplacement<IListItem<TItem>>;
             }),
             tap(replacement => {
                 this.replaceListItem(replacement);
@@ -320,22 +339,22 @@ export abstract class ItemsListManagerBaseComponent
     public startEditing(itemToEdit: TCrudItem): void {
         this.subscribe(this.editing$(itemToEdit));
     }
-    public editingListItem$(listItemToEdit: TListItem) {
-        const id = this.getIdentityFromListItem(listItemToEdit);
+    public editingListItem$(listItemToEdit: TItem) {
+        const id = this.getIdentityFromItem(listItemToEdit);
         return this.getSingleCrudModelCore$(id).pipe(
             catchError((error: Error) =>
                 this._errorsMngSvc.log('error', this.composeCrudModelRequestErrorMessageTitle(error), error).pipe(
                     switchMap(() => EMPTY))),
             switchMap(crudModel => this.editing$(crudModel)));
     }
-    public startEditingByListItem(listItemToEdit: TListItem): void {
+    public startEditingByListItem(listItemToEdit: TItem): void {
         this.subscribe(this.editingListItem$(listItemToEdit));
     }
 
-    protected duplicate$(griditem: TListItem): Observable<TItemIdentity> {
+    protected duplicate$(griditem: TItem): Observable<TItemIdentity> {
         return throwError(() => new NotImplementedError('duplicate$', this));
     }
-    public startDuplicatingByGridItem(griditem: TListItem): void {
+    public startDuplicatingByGridItem(griditem: TItem): void {
         this.subscribe(this.duplicate$(griditem))
     }
 
@@ -363,7 +382,7 @@ export abstract class ItemsListManagerBaseComponent
                 }
             }),
             map(() => {
-                const listItem = this.findRow(row => this.getIdentityFromListItem(row.item) === id);
+                const listItem = this.listItems?.find(row => this.getIdentityFromItem(row.item) === id);
                 if (listItem == null)
                     throw new Error(`Could not identify item to remove.`);
                 return listItem;
@@ -376,8 +395,8 @@ export abstract class ItemsListManagerBaseComponent
     public delete(id: TItemIdentity): void {
         this.subscribe(this.deleting$(id));
     }
-    public deleteByListItem(listItem: TListItem): void {
-        const id = this.getIdentityFromListItem(listItem);
+    public deleteByListItem(listItem: TItem): void {
+        const id = this.getIdentityFromItem(listItem);
         this.subscribe(this.deleting$(id));
     }
     private deleting$(id: TItemIdentity): Observable<void> {
@@ -411,11 +430,11 @@ export abstract class ItemsListManagerBaseComponent
     public startDeleting(id: TItemIdentity): void {
         this.subscribe(this.deleting$(id));
     }
-    public deletingListItem$(listItem: TListItem) {
-        const id = this.getIdentityFromListItem(listItem);
+    public deletingListItem$(listItem: TItem) {
+        const id = this.getIdentityFromItem(listItem);
         return this.deleting$(id);
     }
-    public startDeletingByListItem(listItem: TListItem): void {
+    public startDeletingByListItem(listItem: TItem): void {
         this.subscribe(this.deletingListItem$(listItem));
     }
 }

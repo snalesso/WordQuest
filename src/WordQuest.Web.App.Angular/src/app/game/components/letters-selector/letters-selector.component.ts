@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, distinctUntilChanged, finalize, map, startWith } from 'rxjs/operators';
 import { DialogService } from 'src/app/common/services/dialog.service';
 import { LoggingService } from 'src/app/common/services/logging.service';
@@ -9,7 +9,7 @@ import { ItemsListBaseComponent } from 'src/app/common/ui/components/items-list-
 import { shareReplayChangeLog } from 'src/app/common/utils/debug/rxjs';
 import { tapOnSub } from 'src/app/common/utils/rxjs.utils';
 import { storeIn } from 'src/app/common/utils/rxjs/rxjs.utils';
-import { Selectable, randomInt } from 'src/app/root/models/core';
+import { randomInt } from 'src/app/root/models/core';
 import { AlphabetVariant, Char } from 'src/app/root/models/culture.DTOs';
 import { generateNumbers } from 'src/app/root/models/utils';
 import { GameService } from '../../services/game.service';
@@ -28,11 +28,8 @@ export class LettersSelectorComponent
     extends ItemsListBaseComponent<Char, Char, undefined, ILettersCriteria | undefined>
     implements OnInit {
 
-    protected override getIdentityFromListItem(listItem: Char): Char {
+    protected override getIdentityFromItem(listItem: Char): Char {
         return listItem;
-    }
-    protected override getListItemCore$(id: Char, criteria: ILettersCriteria): Observable<Selectable<Char> | undefined> {
-        return throwError(() => new Error('Method not implemented.'));
     }
 
     protected readonly loadingPlaceholders = generateNumbers(1, 30).map(() => generateNumbers(1, randomInt(3, 12)).join(''));
@@ -97,7 +94,10 @@ export class LettersSelectorComponent
     protected override createDefaultCriteria(): ILettersCriteria | undefined {
         return undefined;
     }
-    protected override getRowsCore$(context: undefined, criteria: ILettersCriteria | undefined): Observable<readonly Selectable<Char>[] | undefined> {
+    protected override getListItemsCore$(
+        context: undefined,
+        criteria: ILettersCriteria | undefined)
+        : Observable<readonly [item: Char, isSelected: boolean][] | undefined> {
         if (criteria?.alphabetVariantId == null)
             return of(undefined);
         return this._gameSvc.getAlphabetVariantCharOptionsAsync(criteria.alphabetVariantId).pipe(
@@ -107,15 +107,38 @@ export class LettersSelectorComponent
             map(map => {
                 if (map == null)
                     throw new Error(`Could not load alphabet variant char options.`);
-                const rows: Selectable<Char>[] = [];
+                const rows: [item: Char, isSelected: boolean][] = [];
                 const entries = map.entries();
                 for (const [key, value] of entries) {
-                    rows.push(new Selectable(key, value.isUncommon === false));
+                    rows.push([key, value.isUncommon === false]);
                 }
                 return rows;
             }),
             startWith(undefined));
     }
+    // protected override getListItemsCore$(
+    //     context: undefined,
+    //     criteria: ILettersCriteria | undefined,
+    //     createListItem: (item: Char, isSelected: boolean) => IListItem<Char>)
+    //     : Observable<readonly IListItem<Char>[] | undefined> {
+    //     if (criteria?.alphabetVariantId == null)
+    //         return of(undefined);
+    //     return this._gameSvc.getAlphabetVariantCharOptionsAsync(criteria.alphabetVariantId).pipe(
+    //         catchError(() => of(undefined)),
+    //         tapOnSub(() => this.isLoading = true),
+    //         finalize(() => this.isLoading = false),
+    //         map(map => {
+    //             if (map == null)
+    //                 throw new Error(`Could not load alphabet variant char options.`);
+    //             const rows: IListItem<Char>[] = [];
+    //             const entries = map.entries();
+    //             for (const [key, value] of entries) {
+    //                 rows.push(createListItem(key, value.isUncommon === false));
+    //             }
+    //             return rows;
+    //         }),
+    //         startWith(undefined));
+    // }
 }
 
 // import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Output } from '@angular/core';

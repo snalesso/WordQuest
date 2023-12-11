@@ -15,14 +15,18 @@ import { HomeComponent } from './pages/home/home.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { TestComponent } from './pages/test/test.component';
 
+const COMPONENTS = [
+  HeaderComponent,
+  FooterComponent,
+  NavMenuComponent,
+  PageNotFoundComponent,
+  HomeComponent,
+  TestComponent,
+];
+
 @NgModule({
   declarations: [
-    HeaderComponent,
-    FooterComponent,
-    NavMenuComponent,
-    PageNotFoundComponent,
-    HomeComponent,
-    TestComponent
+    ...COMPONENTS,
   ],
   imports: [
     CommonModule,
@@ -31,19 +35,13 @@ import { TestComponent } from './pages/test/test.component';
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,
+    PushPipe,
     AppCommonModule,
-    PushPipe
   ],
   exports: [
-    HeaderComponent,
-    FooterComponent,
-    NavMenuComponent,
-    PageNotFoundComponent,
-    HomeComponent,
-    TestComponent
+    ...COMPONENTS,
   ],
-  providers: [],
-  bootstrap: []
+  providers: []
 })
 export class RootModule {
 

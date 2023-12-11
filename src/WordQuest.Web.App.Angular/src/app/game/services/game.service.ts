@@ -47,7 +47,7 @@ export class GameService extends NcbApiService {
 
   public getAlphabetVariantOptionsAsync() {
     return this._http.get<readonly AlphabetVariantOption[]>(this.getEndpoint("GetAlphabetVariantOptions")).pipe(
-      delayInDev(3000),
+      delayInDev(),
       // map(alphabets => new Set(alphabets) as ReadonlySet<Alphabet>),
       // tap(value => logEvent(this, 'alphabet options', value)),
       //   catchError(error => EMPTY))
@@ -59,7 +59,7 @@ export class GameService extends NcbApiService {
     let queryParams: HttpParams = new HttpParams();
     if (!!alphabetVariantId) queryParams = queryParams.append("alphabetVariantId", alphabetVariantId.toString());
     return this._http.get<readonly CharMetadata[]>(this.getEndpoint("GetAlphabetVariantCharOptions"), { params: queryParams }).pipe(
-      delayInDev(3000),
+      delayInDev(),
       map(charMetadataMap => {
         const map = new Map<Char, CharMetadata>();
         const entries = Object.entries(charMetadataMap) as [Char, CharMetadata][];

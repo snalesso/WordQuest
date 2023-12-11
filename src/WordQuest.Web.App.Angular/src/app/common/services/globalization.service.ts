@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, defer, of } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Language } from '../../root/models/culture.DTOs';
 import { shareReplayChangeLog } from '../utils/debug/rxjs';
 import { storeIn } from '../utils/rxjs/rxjs.utils';
@@ -21,18 +21,32 @@ export class GlobalizationService extends NcbApiService {
             this.areLanguagesAvailable$,
             this.selectedLanguage$,
         ]);
+
+        this.subscribe(
+            this.languages$.pipe(
+                filter(langsSet => this.selectedLanguage == null || !langsSet.has(this.selectedLanguage)),
+                map(langsSet => {
+                    if (langsSet.size <= 0)
+                        throw new Error(`No languages available.`);
+                    const langs = [...langsSet.keys()];
+                    return langs[0];
+                })), {
+            next: firstAvailableLanguage => {
+                this.selectedLanguage = firstAvailableLanguage;
+            }
+        });
     }
 
-    private getAvailableLanguages(): ReadonlySet<Language> {
-        return new Set<Language>([
+    private getAvailableLanguages$(): Observable<ReadonlySet<Language>> {
+        return of(new Set<Language>([
             { id: 1033, nativeName: 'English' },
             { id: 1040, nativeName: 'Italiano' }
-        ]);
+        ]));
     }
 
     private readonly _languages$$ = new BehaviorSubject<ReadonlySet<Language>>(new Set());
     public get languages() { return this._languages$$.value; }
-    public readonly languages$ = of(this.getAvailableLanguages()).pipe(
+    public readonly languages$ = defer(() => this.getAvailableLanguages$()).pipe(
         storeIn(() => this._languages$$),
         shareReplayChangeLog(this, 'languages'));
 

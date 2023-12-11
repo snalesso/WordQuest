@@ -1,43 +1,9 @@
-import { BehaviorSubject } from "rxjs";
-import { IDisposable } from "src/app/common/components/IDisposable";
-import { ReactiveObject } from "src/app/common/components/ReactiveObject";
-import { shareReplayChangeLog } from "src/app/common/utils/debug/rxjs";
 
 export interface IRange<T> {
     readonly start: T;
     readonly end: T;
     readonly exclusions?: ReadonlySet<T>;
 }
-
-export class Selectable<T> extends ReactiveObject implements IDisposable {
-
-    private readonly _isSelected$$ = new BehaviorSubject<boolean>(false);
-    public get isSelected() { return this._isSelected$$.value; }
-    public set isSelected(value: boolean) { this._isSelected$$.next(value); }
-    public readonly isSelected$ = this._isSelected$$.pipe(shareReplayChangeLog(this, 'isSelected'));
-
-    constructor(
-        public readonly item: T,
-        isSelected: boolean = false) {
-
-        super();
-        this.isSelected = isSelected;
-    }
-
-    public override dispose(): void {
-        this._isSelected$$.complete();
-        super.dispose();
-    }
-
-    public toggleSelection() {
-        this.isSelected = !this.isSelected;
-    }
-}
-
-// export interface ILocalizedLanguageOption {
-//     readonly language: Language;
-//     readonly selfLocalizedName: string;
-// }
 
 export function randomInt(min: number, max: number) {
     return Math.floor(Math.random() * (max - min + 1) + min);
